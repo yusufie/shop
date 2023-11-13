@@ -1,5 +1,5 @@
 import React from 'react';
-export const CloseSquareO = (props) => (
+export const CloseSquareO = (props: any) => (
   <svg {...props} viewBox='64 -65 897 897'>
     <g>
       <path
