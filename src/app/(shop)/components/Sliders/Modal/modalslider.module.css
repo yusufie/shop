@@ -1,0 +1,102 @@
+.modalslider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 800px;
+}
+
+.customDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 5rem;
+  width: 5rem;
+  border: 1px solid rgb(229, 231, 235);
+  border-radius: 0.4rem;
+}
+
+.customDotActive {
+  border-color: rgb(0, 159, 127);
+}
+
+.customDotImage {
+  width: 95%;
+  height: 95%;
+  display: block;
+  position: relative;
+  border-radius: 0.2rem;
+}
+
+.productImage {
+  border-radius: 0.4rem;
+}
+
+.leftArrow {
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #009e7f;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  margin-top: -20px;
+  z-index: 2;
+}
+
+.leftArrow:hover {
+  background-color: #009e7f;
+  color: #fff;
+}
+
+.leftArrow:hover img {
+  filter: invert(100%);
+}
+
+.rightArrow {
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #009e7f;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  margin-top: -20px;
+  z-index: 2;
+}
+
+.rightArrow:hover {
+  background-color: #009e7f;
+  color: #fff;
+}
+
+.rightArrow:hover img {
+  filter: invert(100%);
+}
+
+/* media query */
+/* 
+@media screen and (max-width: 1024px) {
+  .modalslider {
+  }
+}
+ */

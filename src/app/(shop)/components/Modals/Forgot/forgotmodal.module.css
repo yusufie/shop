@@ -1,0 +1,134 @@
+.forgotmodal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.forgotModalContent {
+  position: relative;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 30.5rem;
+  width: 100%;
+  z-index: 3;
+}
+
+.forgotModalContent p {
+  margin: 1.8rem;
+  color: rgb(133, 132, 132);
+}
+
+.forgotModalContent .email,
+.password {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.forgotModalContent label {
+  font-size: small;
+  font-weight: bold;
+  margin: 0.6rem 0;
+}
+
+.forgotModalContent input {
+  padding: 0.8rem;
+  border: lightgray solid 1px;
+  border-radius: 4px;
+}
+
+.forgotModalContent input:focus {
+  border: 1px solid #009f7f;
+  outline: none;
+}
+
+.forgotModalContent .btn {
+  background-color: #009f7f;
+  width: 100%;
+  padding: 1rem;
+  color: white;
+  margin: 2rem 0;
+  border: none;
+  border-radius: 0.3rem;
+  font-size: medium;
+  cursor: pointer;
+}
+
+.forgotModalContent .btn:hover {
+  background-color: #048e72;
+}
+
+.account {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  color: rgb(117, 113, 113);
+}
+
+.account button {
+  margin-left: 0.6rem;
+  font-size: 1rem;
+  padding-top: 1px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  color: #009f7f;
+  text-decoration: underline;
+}
+
+.account button:hover {
+  color: #06725c;
+  text-decoration: none;
+}
+
+.horizontal {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 1.4rem 0;
+}
+.horizontal hr {
+  border: 0.1px solid rgb(237, 228, 228);
+  width: 100%;
+}
+
+.horizontal span {
+  position: absolute;
+  top: -8px;
+  background-color: white;
+  padding: 0 6px;
+  color: #55585b;
+}
+
+.closeForgot {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: none;
+  background-color: transparent;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.closeForgot:hover {
+  color: red;
+}
+
+.error {
+  font-size: small;
+  color: tomato;
+}

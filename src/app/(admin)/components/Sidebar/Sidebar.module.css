@@ -1,0 +1,88 @@
+.sidebar {
+  position: fixed;
+  top: 5.4rem;
+  left: 0;
+  width: 18rem;
+  background-color: #FFFFFF;
+  color: #161F81;
+  padding: 0.5rem 1rem;
+  height: 62%; /* Değişiklik burada, sayfanın yüksekliğine yüzde olarak ayarlandı */
+  overflow-y: auto;
+  z-index: 500;
+}
+
+.side {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 45px 0;
+}
+
+.icon2 {
+  cursor: pointer;
+ margin-left: 0.7rem;
+}
+
+.icon {
+  width: 30px;
+  margin-right: 10px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.link {
+  width: calc(100% - 30px);
+  outline: 0;
+  align-items: center;
+  text-decoration: none;
+  transition: 0.15s ease-in-out;
+  align-items: center;
+  display: flex;
+  padding: 10px;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+}
+
+.logo {
+   position: fixed;
+  top: 70% ; /* Değişiklik burada, sayfanın altına yüzde olarak ayarlandı */
+  left: 0;
+  width: 18rem;
+  height: 32%;
+  background-color: #FFFFFF;
+  color: #161F81;
+  padding: 60px;
+  border: none;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.logout {
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.active {
+  color: #00C59A;
+  background-color: #F7F7F7;
+  border-radius: 10px 0 0 10px;
+}
+
+@media screen and (max-width: 1200px) {
+  .sidebar {
+    display: none;
+  }
+  .logo {
+    display: none;
+  }
+}

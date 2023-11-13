@@ -1,0 +1,170 @@
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 1.2rem;
+  border-radius: 0.3rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 25.5rem;
+  text-align: center;
+  width: 100%;
+  padding: 40px 30px;
+}
+
+.modalContent p {
+  margin: 1.8rem;
+  color: rgb(133, 132, 132);
+}
+
+.modalContent .email,
+.password {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.forgotPassword {
+  display: flex;
+  justify-content: space-between;
+}
+.forgotPassword span {
+  font-size: 0.7rem;
+  padding-top: 1rem;
+  color: #009f7f;
+}
+
+.forgotPassword span:hover {
+  cursor: pointer;
+}
+.modalContent label {
+  font-size: small;
+  font: bold;
+  margin: 0.6rem 0;
+}
+
+.modalContent input {
+  padding: 0.8rem;
+  border: lightgray solid 1px;
+  border-radius: 4px;
+}
+
+.modalContent input:focus {
+  border: 1px solid #009f7f;
+  outline: none;
+}
+
+.modalContent .btn {
+  background-color: #009f7f;
+  width: 100%;
+  padding: 1rem;
+  color: white;
+  margin: 2rem 0;
+  border-radius: 0.3rem;
+  font-size: medium;
+}
+.modalContent .btn:hover {
+  background-color: #048e72;
+}
+.modalOpen {
+  overflow: hidden;
+}
+
+.horizontal {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 1.4rem 0;
+}
+.horizontal hr {
+  border: 0.3px solid rgb(237, 228, 228);
+  width: 100%;
+}
+
+.horizontal span {
+  position: absolute;
+  top: -8px;
+  background-color: white;
+  padding: 0 6px;
+  color: #55585b;
+}
+.auth {
+  display: flex;
+  flex-direction: column;
+  margin: 40px 0;
+}
+
+.auth button {
+  padding: 1rem;
+  border-radius: 0.4rem;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.auth .google {
+  background-color: #4285f4;
+}
+
+.auth .google:hover {
+  background-color: #3c7ade;
+}
+
+.auth .iconsgoogle {
+  margin-right: 14px;
+}
+
+.auth .iconsphone {
+  margin-right: 14px;
+}
+
+.auth .mobile {
+  background-color: #6b7280;
+}
+
+.auth .mobile:hover {
+  background-color: #656b77;
+}
+
+.horizontalLinea hr {
+  border: 0.3px solid rgb(237, 228, 228);
+}
+
+.account {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  color: rgb(117, 113, 113);
+}
+
+.account button {
+  margin-left: 0.6rem;
+  font-size: 1rem;
+  padding-top: 1px;
+  color: #009f7f;
+  text-decoration: underline;
+}
+
+/* ----------------------------------- */
+.termsPolicy {
+  color: #009f7f;
+  text-decoration: underline;
+}
+
+.termsPolicy:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+/*   
+.closeButton { 
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+} */

@@ -1,0 +1,32 @@
+/* WaveformChart.module.css */
+
+.chartContainer {
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 30px;
+  }
+
+  .lineChartCard {
+    width: 700px;
+    background-color: white;
+    margin-right: 30px;
+    padding: 30px;
+  }
+
+  .doughnutChartCard {
+    width: 250px;
+    background-color: #ffffff;
+    padding: 30px;
+  }
+
+  .chartTitle {
+    color: rgb(22, 31, 127);
+  }
+
+  .salesTitle {
+    margin-bottom: 20px;
+  }
+
+  .doughnutChart {
+    margin-top: 50px;
+  }

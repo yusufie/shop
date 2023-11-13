@@ -1,0 +1,41 @@
+.groceryBackground {
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  top: 0;
+  width: 100%;
+  height: 91.2vh;
+  /* height: 100vh; */
+
+  background-image: url('/images/grocery1.png');
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  /* z-index: -1; */
+}
+
+.groceryTitle {
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: rgb(31, 41, 55);
+}
+
+.groceryText {
+  margin: 2.5rem 0;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: rgb(31, 41, 55);
+}
+
+/* media query */
+
+@media screen and (max-width: 1024px) {
+  .groceryBackground {
+    display: none;
+  }
+}

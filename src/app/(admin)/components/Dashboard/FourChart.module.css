@@ -1,0 +1,35 @@
+.chartContainer {
+    margin-top: 60px;
+  }
+
+  .chartItem {
+    width: 200px;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    margin-right: 20px;
+    background-color: white;
+  }
+
+  .icon {
+    margin-bottom: 10px;
+  }
+
+  .title {
+    color: rgb(22, 31, 106);
+    font-size: 16px;
+  }
+
+  .value {
+    font-size: 18px;
+    color: rgb(22, 31, 106);
+  }
+
+  .details {
+    color: #7f8c8d;
+    font-size: 12px;
+  }
+
+  .link {
+    font-size: 14px;
+  }

@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "src": "/images/offer-1.png",
+    "alt": "Express Delivery"
+  },
+  {
+    "id": 2,
+    "src": "/images/offer-2.png",
+    "alt": "Cash on Delivery"
+  },
+  {
+    "id": 3,
+    "src": "/images/offer-3.png",
+    "alt": "Gift Voucher"
+  },
+  {
+    "id": 4,
+    "src": "/images/offer-4.png",
+    "alt": "Free Delivery"
+  },
+  {
+    "id": 5,
+    "src": "/images/offer-5.png",
+    "alt": "Coupon Savings"
+  }
+]

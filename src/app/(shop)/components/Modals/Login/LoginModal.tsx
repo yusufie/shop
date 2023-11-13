@@ -1,0 +1,174 @@
+"use client";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema } from '@/utils/formSchema'
+import { useUserStore } from '@/stores/userStore';
+import Image from 'next/image';
+import styles from './loginmodal.module.css'
+// import ConfirmationModal from "@/components/Modal/ConfirmationModal";
+// import RegisterModal from '@/app/(shop)/components/Modals/Register/RegisterModal';
+
+interface LoginModalProps {
+  onClose: () => void;
+  openRegisterModal: () => void;
+  openForgotPasswordModal: () => void;
+}
+
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: LoginModalProps) => {
+
+  const userStore = useUserStore();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  // send data to the "/api/users" route
+  const onSubmit = async (data: FormValues,) => {
+
+    try {
+      const userData = {
+        email: data.email,
+        password: data.password,
+      }
+      console.log('Submitted Data:', userData);
+
+      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      console.log('Response:', response);
+
+      if (response.ok) {
+        reset();
+        alert('Login successful');
+
+        // Extract and store user data
+        const responseData = await response.json();
+        const { accessToken, refreshToken, user } = responseData.data;
+
+        // Store the tokens and user data in state management system and local storage
+        userStore.setLoggedIn(accessToken, refreshToken, user);
+
+        console.log('User is logged in', user);
+
+        // Close the modal or navigate to another page
+        onClose();
+
+      } else {
+        alert('Login failed');
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  return (
+    <section className={styles.loginmodal}>
+      <div className={styles.loginModalContent}>
+
+      {
+          <Image
+            className={styles.logo}
+            src={"/images/logo.png"}
+            alt="logo"
+            width={160}
+            height={26}
+          />
+        }
+        <p>Login with your email & password</p>
+
+        <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
+
+        <div className={styles.email}>
+          <label htmlFor="email">Email</label>
+          <input {...register("email")} id="email" placeholder="Enter your email..."/>
+          {errors.email && <span className={styles.error}>{errors.email.message}</span>}
+        </div>
+
+        <div className={styles.password}>
+
+          <div className={styles.forgotPassword}>
+            <label htmlFor="password">Password:</label>
+            <span 
+              onClick={openForgotPasswordModal}
+            >
+              Forgot Password?
+            </span>
+          </div>
+
+          <input {...register("password")} id="password" placeholder="Enter your password..."/>
+          {errors.password && <span className={styles.error}>{errors.password.message}</span>}
+        </div>
+
+          <button type="submit" value="submit" className={styles.btn}>
+            Login
+          </button>
+
+        </form>
+
+        <div className={styles.horizontal}>
+          <hr />
+          <span>Or</span>
+        </div>
+
+        <div className={styles.auth}>
+          {
+            <button className={styles.google}>
+              <Image
+                className={styles.iconsgoogle}
+                src={"/icons/google.svg"}
+                alt="google"
+                width={16}
+                height={16}
+              />{" "}
+              Login with Google
+            </button>
+          }
+          {
+            <button className={styles.mobile}>
+              <Image
+                className={styles.iconsphone}
+                src={"/icons/phone.svg"}
+                alt="phone"
+                width={20}
+                height={20}
+              />{" "}
+              Login with Mobile number
+            </button>
+          }
+        </div>
+
+        <div className={styles.horizontalLinea}>
+          <hr />
+        </div>
+
+        <div className={styles.account}>
+          Don&apos;t have any account?{" "}
+          <button 
+            onClick={openRegisterModal}
+          >
+            Register</button>
+        </div>
+
+        <button onClick={onClose} className={styles.closeLogin}>x</button>
+      </div>
+    </section>
+  )
+}
+
+export default LoginModal

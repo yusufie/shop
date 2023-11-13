@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.9 16.9" fill="#009F7F" class="h-full w-full">
+  <g data-name="Group 12320" fill="none" stroke="#009F7F" stroke-width=".9">
+    <g data-name="Group 12319" stroke-linejoin="round">
+      <path data-name="Line 10" d="M11.456 10.968h.963"/>
+      <path data-name="Line 11" d="M13.801 10.968h.963"/>
+      <path data-name="Line 12" d="M16.147 10.968h.963"/>
+    </g>
+    <path data-name="Path 17428" d="m25.258 7.957 3.192-.59v-1.15h-3.192Z" stroke-linejoin="round"/>
+    <path data-name="Path 17429" d="M3.642 7.957.45 7.367v-1.15h3.192Z" stroke-linejoin="round"/>
+    <path data-name="Path 17430" d="M14.391 2.389A17.212 17.212 0 0 0 3.642 6.218h21.615a17.751 17.751 0 0 0-10.866-3.829Z" stroke-linejoin="round"/>
+    <path data-name="Line 13" stroke-miterlimit="10" d="M14.391 2.389V.45"/>
+    <path data-name="Line 14" stroke-miterlimit="10" d="M12.647.45h3.606"/>
+    <path data-name="Path 17431" d="M25.258 6.182s-.333 10.268-5.321 10.268H8.963c-4.988 0-5.321-10.268-5.321-10.268Z" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+.accordion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  height: 100vh;
+  max-width: 16rem;
+}
+
+.accordionItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 12.5rem;
+  cursor: pointer;
+}
+
+.accordionTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(75, 85, 99);
+}
+
+.accordionContent {
+  margin-bottom: 0.5rem;
+}
+
+.accordionContent p {
+  padding: 0.5rem 2.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(75, 85, 99);
+}
+
+/* media query */
+
+@media screen and (max-width: 1280px) {
+  .accordion {
+    display: none;
+  }
+}

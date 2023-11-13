@@ -1,0 +1,176 @@
+.flyImage {
+  position: fixed;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background-size: cover;
+  transition: all 1s cubic-bezier(0.8, 0.8, 0.8, 0.8);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  padding: 2rem;
+  background-color: rgb(243, 244, 246);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  gap: 1rem;
+  /* width: auto; */
+  height: 25rem;
+
+  border-radius: 0.4rem;
+  border: 1px solid rgb(229, 231, 235);
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover .flyImage {
+  display: none; /* Hide to resolve the bug*/
+}
+
+.cardImage img {
+  border-radius: 0.4rem;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  cursor: pointer;
+  padding: 0.1rem;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.cardContent p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(107, 114, 128);
+}
+.cardPrice {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: rgb(31, 41, 55);
+}
+
+.beforeButton {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  width: 100%;
+  height: 2.25rem;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: rgb(243, 244, 246);
+  cursor: pointer;
+}
+
+.beforeButton:hover {
+  background-color: rgb(0, 159, 127);
+  color: rgb(255, 255, 255);
+}
+
+.beforeButton span:first-child {
+  margin-left: 40%;
+}
+
+.beforeButton span:last-child {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+
+  height: 2.25rem;
+  padding: 0 1rem;
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  background-color: rgb(229, 231, 235);
+}
+
+.beforeButton:hover span:last-child {
+  background-color: rgb(1, 147, 118);
+  color: rgb(255, 255, 255);
+}
+
+.afterButton {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 2.25rem;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: rgb(0, 159, 127);
+  color: rgb(255, 255, 255);
+}
+
+.afterButton button:first-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 2.25rem;
+  padding: 0 1rem;
+  cursor: pointer;
+  border: none;
+  border-top-left-radius: 0.4rem;
+  border-bottom-left-radius: 0.4rem;
+  background-color: rgb(0, 159, 127);
+  color: rgb(255, 255, 255);
+}
+
+.afterButton button:first-child:hover {
+  background-color: rgb(1, 147, 118);
+}
+
+.afterButton button:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 2.25rem;
+  padding: 0 1rem;
+  cursor: pointer;
+  border: none;
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  background-color: rgb(0, 159, 127);
+  color: rgb(255, 255, 255);
+}
+
+.afterButton button:last-child:hover {
+  background-color: rgb(1, 147, 118);
+}
+
+/* media query */
+
+@media screen and (max-width: 1024px) {
+  .flyImage {
+    display: none; /* Hide to resolve the bug*/
+  }
+}
