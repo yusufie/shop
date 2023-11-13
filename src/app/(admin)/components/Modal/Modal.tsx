@@ -1,5 +1,4 @@
 import Image from "next/image";
-import useBasketStore from "@/stores/basketStore";
 import styles from "@/app/(admin)/components/Modal/Modal.module.css";
 import { useState } from "react";
 
@@ -38,10 +37,12 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
             className={styles.upInput}
           />
           {selectedImage && (
-            <img
+            <Image
               src={URL.createObjectURL(selectedImage)}
               alt="Selected Image"
               className={styles.selectedImage}
+              width={200}
+              height={200}
             />
           )}
 

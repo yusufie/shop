@@ -61,8 +61,8 @@ const Sidebar: React.FC = () => {
     <>
       <div className={styles.sidebar}>
         <div className={styles.side}>
-          {sidebarMenus.map((item) => (
-            <Link className={styles.link} href={item.link}>
+          {sidebarMenus.map((item, index) => (
+            <Link className={styles.link} href={item.link} key={index}>
               <div className={styles.menu}>
               <div className={`${styles.navItem} ${pathname === item.link ? styles.active : ''}`}>
                   <span className={styles.icon}>{item.icon}</span>
