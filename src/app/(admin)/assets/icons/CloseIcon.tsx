@@ -1,5 +1,5 @@
 import React from 'react';
-export const CloseIcon = (props) => {
+export const CloseIcon = (props: any) => {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10.003 10' {...props}>
       <path
