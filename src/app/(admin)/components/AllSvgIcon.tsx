@@ -1410,7 +1410,7 @@ export const Facebook = () => {
   );
 };
 
-export const MinusSquareO = ({ color, ...props }) => (
+export const MinusSquareO = ({ color, ...props }: { color: string, props: any }) => (
   <svg {...props} viewBox="64 -65 897 897">
     <g>
       <path
@@ -1422,7 +1422,7 @@ export const MinusSquareO = ({ color, ...props }) => (
   </svg>
 );
 
-export const PlusSquareO = ({ color, ...props }) => (
+export const PlusSquareO = ({ color, ...props }: { color: string, props: any }) => (
   <svg {...props} viewBox="64 -65 897 897">
     <g>
       <path
@@ -1434,7 +1434,7 @@ export const PlusSquareO = ({ color, ...props }) => (
   </svg>
 );
 
-export const CloseSquareO = ({ color, ...props }) => (
+export const CloseSquareO = ({ color, ...props }: { color: string, props: any }) => (
   <svg {...props} viewBox="64 -65 897 897">
     <g>
       <path
