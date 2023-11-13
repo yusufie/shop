@@ -1,13 +1,13 @@
 import React from 'react';
-import { FaDollarSign, FaPercent, FaArrowUp, FaUsers } from 'react-icons/fa';
-import styles from './fourchart.module.css';
+// import { FaDollarSign, FaPercent, FaArrowUp, FaUsers } from 'react-icons/fa';
+import styles from './FourChart.module.css';
 
 const FourChart: React.FC = () => {
   const data = [
     {
       title: 'Total Revenue',
       value: '$711.66',
-      icon: <FaDollarSign size={24} color="#3498db" />,
+      // icon: <FaDollarSign size={24} color="#3498db" />,
       details: [
         '(Last 30 Days)',
         'Revenue up',
@@ -18,7 +18,7 @@ const FourChart: React.FC = () => {
     {
       title: 'Total Order',
       value: '88,568',
-      icon: <FaPercent size={24} color="#2ecc71" />,
+      // icon: <FaPercent size={24} color="#2ecc71" />,
       details: [
         '(Last 30 Days)',
         'Order down',
@@ -29,7 +29,7 @@ const FourChart: React.FC = () => {
     {
       title: 'New Customer',
       value: '5,678',
-      icon: <FaArrowUp size={24} color="#e74c3c" />,
+      // icon: <FaArrowUp size={24} color="#e74c3c" />,
       details: [
         '(Last 30 Days)',
         'Customer up',
@@ -40,7 +40,7 @@ const FourChart: React.FC = () => {
     {
       title: 'Total Delivery',
       value: '78,000',
-      icon: <FaUsers size={24} color="#f39c12" />,
+      // icon: <FaUsers size={24} color="#f39c12" />,
       details: [
         '(Last 30 Days)',
         'Delivery up',
@@ -55,7 +55,9 @@ const FourChart: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '20px' }}>
         {data.map((item, index) => (
           <div key={index} className={ `${styles.chartItem}`} >
-            <div className={styles.icon}>{item.icon}</div>
+            <div className={styles.icon}>
+              {/* {item.icon} */}
+              </div>
             <h3 className={styles.title}>{item.title}</h3>
             <p className={styles.value}>{item.value}</p>
             {item.details.map((detail, i) => (
