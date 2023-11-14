@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useStore } from '@/stores/SearchStore';
 import Accordion from '@/app/(shop)/components/Accordion/Accordion'
 import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
 import ProductCard from '../Cards/Product/ProductCard';
@@ -11,6 +12,8 @@ interface Props {
 
 const Filterbox: React.FC<Props> = ({datas}) => {
 
+  const { searchQuery } = useStore();
+
   const [isProductModalVisible, setIsProductModalVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
@@ -19,14 +22,17 @@ const Filterbox: React.FC<Props> = ({datas}) => {
     setIsProductModalVisible(!isProductModalVisible);
   };
 
+  const filteredData = datas.data.filter((data: any) =>
+  data.title.toLowerCase().includes(searchQuery.toLowerCase())
+);
   // console.log(datas);
 
   return (
-    <section className={styles.filterbox}>
+    <section className={styles.filterbox} id="filterbox">
       <Accordion />
 
       <article className={styles.cards}>
-        {datas.data.map((data:any) => (
+        {filteredData.map((data:any) => (
           <ProductCard
             key={data._id}
             data={data}

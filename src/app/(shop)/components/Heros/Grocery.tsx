@@ -1,4 +1,4 @@
-import Search from "@/app/(shop)/components/Search/Search";
+import Searchbox from "@/app/(shop)/components/Search/Searchbox/Searchbox";
 import styles from "./grocery.module.css";
 
 const Grocery: React.FC = () => {
@@ -9,7 +9,7 @@ const Grocery: React.FC = () => {
         Get your healthy foods & snacks delivered at your doorsteps all day
         everyday
       </p>
-      <Search />
+      <Searchbox />
     </section>
   );
 };
