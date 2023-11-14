@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/utils/formSchema'
@@ -22,6 +23,7 @@ type FormValues = {
 const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: LoginModalProps) => {
 
   const userStore = useUserStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -32,10 +34,12 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
     resolver: zodResolver(loginSchema),
   });
 
-  // send data to the "/api/users" route
+  // send data to the "/api/v1/auth/login" route
   const onSubmit = async (data: FormValues,) => {
 
     try {
+      setIsSubmitting(true);
+
       const userData = {
         email: data.email,
         password: data.password,
@@ -54,7 +58,6 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
 
       if (response.ok) {
         reset();
-        alert('Login successful');
 
         // Extract and store user data
         const responseData = await response.json();
@@ -74,6 +77,8 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
 
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+        setIsSubmitting(false); // Re-enable submit button
     }
   }
 
@@ -115,8 +120,16 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
           {errors.password && <span className={styles.error}>{errors.password.message}</span>}
         </div>
 
-          <button type="submit" value="submit" className={styles.btn}>
-            Login
+          <button type="submit" value="submit" disabled={isSubmitting}
+            className={`${styles.btn} ${isSubmitting ? styles.loading : ''}`}>
+              {isSubmitting ? (
+                <>
+                  <span className={styles.spinner} /> {/* spinner */}
+                  <span>Logging in...</span> {/* while submitting */}
+                </>
+              ) : (
+                <span>Login</span>
+              )}
           </button>
 
         </form>

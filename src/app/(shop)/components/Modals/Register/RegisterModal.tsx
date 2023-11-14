@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from '@/utils/formSchema'
@@ -10,12 +11,16 @@ interface RegisterModalProps {
 }
 
 type FormValues = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
+  passwordConfirmation: string;
 };
 
 const RegisterModal = ({ onClose }: RegisterModalProps) => {
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -30,10 +35,14 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
   const onSubmit = async (data: FormValues,) => {
 
     try {
+      setIsSubmitting(true);
+
       const userData = {
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         password: data.password,
+        passwordConfirmation: data.passwordConfirmation,
       }
       console.log('Submitted Data:', userData);
 
@@ -49,14 +58,19 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
 
       if (response.ok) {
         reset();
-        alert('Registration successful');
+        // Close the modal or navigate to another page
+        onClose();
+        alert('Registration successful!')
+
       } else {
         alert('Registration failed');
       }
 
     } catch (error) {
       console.error('Error:', error);
-    }
+    } finally {
+      setIsSubmitting(false); // Re-enable submit button
+  }
   }
 
   return (
@@ -80,9 +94,15 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
         <form className={styles.registerForm} onSubmit={handleSubmit(onSubmit)}>
 
           <div className={styles.email}>
-            <label htmlFor="name">Name</label>
-            <input {...register("name")} id="name" placeholder="Enter your name..."/>
-            {errors.name && <span className={styles.error}>{errors.name.message}</span>}
+            <label htmlFor="firstName">First Name</label>
+            <input {...register("firstName")} id="firstName" placeholder="Enter your first name..."/>
+            {errors.firstName && <span className={styles.error}>{errors.firstName.message}</span>}
+          </div>
+
+          <div className={styles.email}>
+            <label htmlFor="lastName">Last Name</label>
+            <input {...register("lastName")} id="lastName" placeholder="Enter your last name..."/>
+            {errors.lastName && <span className={styles.error}>{errors.lastName.message}</span>}
           </div>
 
           <div className={styles.email}>
@@ -97,8 +117,22 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
             {errors.password && <span className={styles.error}>{errors.password.message}</span>}
           </div>
 
-          <button type="submit" value="submit" className={styles.btn}>
-            Register
+          <div className={styles.password}>
+            <label htmlFor="passwordConfirmation">Confirm Password:</label>
+            <input {...register("passwordConfirmation")} id="passwordConfirmation" placeholder="Confirm your password..."/>
+            {errors.passwordConfirmation && <span className={styles.error}>{errors.passwordConfirmation.message}</span>}
+          </div>
+
+          <button type="submit" value="submit" disabled={isSubmitting}
+            className={`${styles.btn} ${isSubmitting ? styles.loading : ''}`}>
+              {isSubmitting ? (
+                <>
+                  <span className={styles.spinner} /> {/* spinner */}
+                  <span>Registering...</span> {/* while submitting */}
+                </>
+              ) : (
+                <span>Register</span>
+              )}
           </button>
 
         </form>
