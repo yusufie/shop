@@ -8,6 +8,7 @@ import AuthModal from '@/app/(shop)/components/Modals/Authorization/AuthModal';
 import Image from 'next/image'
 import Link from 'next/link';
 import styles from './header.module.css'
+import Searchbar from '@/app/(shop)/components/Search/Searchbar/Searchbar';
 
 const Header: React.FC = () => {
   const pathname = usePathname();
@@ -86,12 +87,7 @@ const Header: React.FC = () => {
           <Image src="/icons/arrow-dropdown.svg" alt="arrow" width={10} height={10} />
         </button>
 
-        <form className={styles.searchForm}>
-          <input className={styles.searchInput} type="text" placeholder="Search your products here" />
-          <button className={styles.searchButton} type="submit">
-            <Image src="/icons/search-gray.svg" alt="search" width={20} height={20} />
-          </button>
-        </form>
+        <Searchbar />
 
       </div>
 
