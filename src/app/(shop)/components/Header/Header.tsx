@@ -32,6 +32,10 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
   }
 
+  const closeProfileMenu = () => {
+    setShowProfilemenu(false);
+  };
+
   const toggleProfilemenu = () => {
     setShowProfilemenu(!showProfilemenu);
   };
@@ -62,6 +66,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     userStore.setLoggedOut();
+    setShowProfilemenu(false);
   };
 
   return (
@@ -127,7 +132,7 @@ const Header: React.FC = () => {
 
       {showNavmenu && <Navmenu handleSelection={handleSelection} selectedItem={selectedItem} />}
 
-      {showProfilemenu && <Profilemenu handleLogout={handleLogout} />}
+      {showProfilemenu && <Profilemenu handleLogout={handleLogout} closeMenu={closeProfileMenu} />}
 
       {loginModal && <AuthModal onClose={handleAuthModal} />}
 
