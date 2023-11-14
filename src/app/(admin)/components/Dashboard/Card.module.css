@@ -1,24 +1,21 @@
+/* Cardmodule.css */
 .cardContainer {
-    display: flex;
-  }
+  display: flex;
+}
 
-  .doughnutCard {
-    width: 250px;
-    background-color: #ffffff;
-    padding: 30px;
-    margin-right: 30px;
-  }
+.doughnutCard {
+  width: 250px;
+  background-color: #ffffff;
+  padding: 30px;
+  margin-right: 30px;
+}
 
-  .doughnutCard p {
-    color: 'rgb(22,31,127)';
-  }
+.doughnutCard p {
+  color: 'rgb(22,31,127)';
+}
 
-  .lineChartCard {
-    background-color: white;
-    padding: 30px;
-  }
-
-  .lineChartCard div {
-    margin-bottom: '20px';
-     width: '550px';
-  }
+.lineChartCard {
+  background-color: white;
+  padding: 30px;
+  width: 700px;
+}

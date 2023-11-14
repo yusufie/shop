@@ -1,35 +1,62 @@
+/* FourChart.module.css */
+
 .chartContainer {
-    margin-top: 60px;
-  }
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
 
-  .chartItem {
-    width: 200px;
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
-    margin-right: 20px;
-    background-color: white;
-  }
+.chartItem {
+  width: 240px;
+  padding: 20px;
+  border-radius: 10px;
+  margin-right: 14px;
+  background-color: white;
+}
 
-  .icon {
-    margin-bottom: 10px;
-  }
+.header{
+  display: flex;
+  justify-content: space-between;
+}
 
-  .title {
-    color: rgb(22, 31, 106);
-    font-size: 16px;
-  }
+.date{
+  color: rgb(133,109,151);
+  font-size: small;
+  font: 900;
+}
+.icon {
 
-  .value {
-    font-size: 18px;
-    color: rgb(22, 31, 106);
-  }
+}
 
-  .details {
-    color: #7f8c8d;
-    font-size: 12px;
-  }
+.title {
+  color: rgb(22, 31, 106);
+  font-size: 16px;
+}
 
-  .link {
-    font-size: 14px;
-  }
+.value {
+  font-size: 20px;
+  color: rgb(22, 31, 106);
+  margin-top: 40px;
+
+}
+
+.details {
+  color: #7f8c8d;
+  font-size: 12px;
+  margin-bottom: 50px;
+}
+
+.upArrow{
+  color: blue;
+}
+
+.downArrow{
+color: red;
+}
+.link {
+  font-size: 14px;
+  text-decoration: none;
+  color: #7b5ca2;
+  font-weight: 700;
+}
