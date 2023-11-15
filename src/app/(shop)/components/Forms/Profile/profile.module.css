@@ -1,0 +1,47 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.personal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem 2.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  background-color: rgb(255, 255, 255);
+}
+
+.email {
+  display: flex;
+  width: 100%;
+  padding: 2rem 2.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  background-color: rgb(255, 255, 255);
+}
+
+.contact {
+  display: flex;
+  width: 100%;
+  padding: 2rem 2.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  background-color: rgb(255, 255, 255);
+}
+
+.address {
+  display: flex;
+  width: 100%;
+  padding: 2rem 2.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  background-color: rgb(255, 255, 255);
+}

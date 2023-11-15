@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import Profile from '@/app/(shop)/components/Pages/Profile/Profile';
+import Points from '../Points/Points';
+import Navigation from '../Navigation/Navigation';
 import styles from "./aside.module.css";
 
 interface AsideProps {
@@ -10,7 +11,11 @@ const Aside: React.FC<AsideProps> = ({ children }) => {
 
   return (
         <main className={styles.mainAside}>
-            <Profile />
+
+            <aside className={styles.aside}>
+              <Points />
+              <Navigation />
+            </aside>
         
             {children}
         </main>
