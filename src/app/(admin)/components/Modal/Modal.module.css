@@ -2,179 +2,180 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 66rem;
+  width: 60rem;
   height: 100%;
-  background-color:#F7F7F7 ;
+  background-color: #f7f7f7;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
   transform: translateX(100%);
   z-index: 9999;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9998;
+  display: none;
+}
+
+.basketmodal.open + .overlay {
+  display: block;
 }
 
 .open {
   transform: translateX(0);
 }
-.container{
-  height: 80%;
-  overflow-y: scroll;
+.container {
+  padding: 1.5rem 3.8rem;
 }
-.upload{
+
+.header {
+  font-size: 1.2rem;
+  color: #161f6a;
+}
+
+.fileAdd {
   display: flex;
- justify-content: center;
-gap: 17rem;
-margin: 1rem auto;
-margin-bottom: 5rem;
- 
+  justify-content: space-between;
+  width: 100%;
+  height: 12.5rem;
+  margin-top: 1.8rem;
 }
-.upInput{
+
+.leftTitle {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: #7d87b1;
+  width: 30%;
+  flex-wrap: wrap;
+}
+.imageAdd {
   background-color: white;
+  width: 65%;
   padding: 2rem;
-  border-radius: 2px;
-}
-.upload h1{
-  color: #6698D1 ;
-  font-size: 1rem;
-}
-.form1{
-  display: flex;
- justify-content: center;
- gap: 11rem;
- margin: 2rem auto;
- border-radius: 2px;
- 
-
-}
-.form1 h1{
-  color: #6698D1 ;
-    font-size: 1rem;
-
-}
-.formInput{
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  width: 20rem;
-  height: 17%;
-  padding: 0 2rem;
-  line-height: 1rem;
-  border-radius: 2px;
-}
-.formInput label{
-  color: #333f96;
-}
-.formInput input{
-  background-color:#F7F7F7 ;
-  padding: 0.5rem;
-}
-.formInput option{
-  background-color:#F7F7F7 ;
-  padding: 0.5rem;
-}
-.form2{
-  display: flex;
-  flex-direction: column;
-    line-height: 1rem;
-}
-.modalHeader {
-  display: flex;
-  justify-content:flex-start;
-  align-items: center;
-  gap: 2rem;
-  padding: 1rem;
-  border-bottom: 1px solid rgb(229, 231, 235);
-  color:#441d68;
-}
-
-.closeButton {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  width: 1.8rem;
-  height: 1.8rem;
-
-  border: none;
-  border-radius: 50%;
-  color: rgb(159, 166, 177);
-  background-color: rgb(243, 244, 246);
   cursor: pointer;
-  z-index: 2;
+}
+.dashed {
+  border: 2px dashed rgb(233, 229, 229);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.closeButton:hover {
-  color: #fff;
-  background-color: rgb(0, 159, 127);
+.dashed label {
+  cursor: pointer;
+}
+.fileAdd .imageAdd input {
+  margin-top: 1.3rem;
+  text-align: center;
+  cursor: pointer;
 }
 
-.modalFooter {
-  position: absolute;
+/*-----------------*/
+
+.inputField {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 12.5rem;
+  margin-top: 1.8rem;
+}
+
+.productAdd {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1.8rem;
+}
+
+.formAdd {
+  background-color: white;
+  width: 65%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.formAdd label {
+  color: #161f6a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+}
+
+.formAdd input {
+  background-color: #eeeeee;
+  border: none;
+  height: 2.6rem;
+  margin-bottom: 1.2rem;
+  padding-left: 1rem;
+}
+
+.formAdd input:focus {
+  outline-color: #1fc58d;
+}
+
+.formAdd textarea {
+  background-color: #eeeeee;
+  border: none;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  height: 5rem;
+}
+
+.formAdd textarea:focus {
+  outline-color: #1fc58d;
+}
+
+/*---------------------*/
+
+.buttons {
+  height: 7rem;
+  width: 100%;
+  background-color: white;
+  position: sticky;
   bottom: 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100%;
-  padding: 1.5rem;
-  background-color:white;
+  box-shadow: 0px -1px 9px -5px rgba(128, 128, 128, 0.5);
 }
 
-.checkoutButton {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  height: 3.5rem;
-  padding: 2rem 9rem;
+.buttons button {
+  padding: 1.2rem;
+  width: 25rem;
   border: none;
-  border-radius: 2px;
-  color: #fff;
-  background-color:#00BD87 ;
   cursor: pointer;
 }
-.checkoutButton1 {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  width: 20%;
-  height: 3.5rem;
-  padding: 2rem 9rem;
-  border: none;
-  border-radius: 2px;
-  color: red;
-  cursor: pointer;
+
+.cancelButton {
+  color: tomato;
+  font-weight: 600;
   background-color: white;
 }
-.checkoutButton1:hover {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  width: 20%;
-  height: 3.5rem;
-  padding: 2rem 9rem;
-  border: none;
-  border-radius: 2px;
-   background-color: rgb(211, 74, 74);
-  cursor: pointer;
+
+.cancelButton:hover {
+  background-color: #eeeeee;
 }
 
-.checkoutButton span {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 700;
-  text-align: center;
-  align-items: center;
+.createProductButton {
+  background-color: #1fc58d;
+  color: white;
+  font-weight: 600;
 }
 
-.checkoutButton .checkoutPrice {
-  background-color: #fff;
-  color: rgb(0, 159, 127);
-  padding: 0.9rem 1.25rem;
-  border-radius: 2rem;
-}
-
-@media screen and (max-width: 1024px) {
+.createProductButton:hover {
+  background-color: #17bc85;
 }
