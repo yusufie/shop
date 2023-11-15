@@ -1,8 +1,10 @@
-import React from 'react'
+import Layout from '@/app/(shop)/components/Layout/Layout'
 
 function OrdersPage() {
   return (
-    <section>OrdersPage</section>
+    <Layout>
+      OrdersPage
+    </Layout>
   )
 }
 

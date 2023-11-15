@@ -1,10 +1,10 @@
-import React from 'react'
+import Layout from '@/app/(shop)/components/Layout/Layout'
 
 function ProfilePage() {
   return (
-    <section>
+    <Layout>
         ProfilePage
-    </section>
+    </Layout>
   )
 }
 
