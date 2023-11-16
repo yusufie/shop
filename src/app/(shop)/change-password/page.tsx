@@ -1,8 +1,9 @@
-import Layout from '@/app/(shop)/components/Layout/Layout'
+import Layout from "@/app/(shop)/components/Layout/Layout"
 import Aside from '@/app/(shop)/components/Aside/Aside'
 import Whishlist from "@/app/(shop)/components/Whishlist/Whishlist"
 
-function WishlistsPage() {
+function ChangePage() {
+
   return (
     <Layout>
         <Aside>
@@ -12,4 +13,4 @@ function WishlistsPage() {
   )
 }
 
-export default WishlistsPage
+export default ChangePage

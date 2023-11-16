@@ -46,7 +46,7 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
       }
       console.log('Submitted Data:', userData);
 
-      const response = await fetch('/api/users', {
+      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

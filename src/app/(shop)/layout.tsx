@@ -3,7 +3,7 @@ interface ShopLayoutProps {
   }
   
   export const metadata = {
-    title: "Shop",
+    title: "Grand Bazaar",
     description: "E-commerce website Shop",
   };
   

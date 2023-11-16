@@ -77,7 +77,7 @@ const Header: React.FC = () => {
 
         <Link href={'/'}>
           <div className={styles.logo}>
-            <Image src="/images/logo.png" alt="logo" width={160} height={26} />
+            <Image src="/images/bazaar.png" alt="logo" width={163} height={66} />
           </div>
         </Link>
 

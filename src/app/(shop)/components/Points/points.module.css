@@ -1,0 +1,42 @@
+.pointsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 20rem;
+  height: 12rem;
+  padding: 2rem 2.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgb(229, 231, 235);
+  background-color: rgb(255, 255, 255);
+  color: rgb(31, 41, 55);
+}
+
+.pointsContainer .pointsHeader {
+  padding-bottom: 1rem;
+  border: none;
+  border-bottom: 1px dashed rgb(229, 231, 235);
+}
+
+.pointsContainer .pointsBody {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pointsBody .values {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.5rem;
+  border: none;
+  border-right: 1px dashed rgb(229, 231, 235);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.pointsBody .values:last-child {
+  border-right: none;
+}

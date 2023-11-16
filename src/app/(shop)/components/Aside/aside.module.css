@@ -1,0 +1,16 @@
+.mainAside {
+  display: flex;
+  flex-direction: row;
+
+  gap: 2rem;
+
+  padding: 3.5rem 4rem;
+  background-color: rgb(243, 244, 246);
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  color: rgb(31, 41, 55);
+}
