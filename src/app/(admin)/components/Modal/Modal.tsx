@@ -5,11 +5,16 @@ import { UploadIcon } from "../../assets/icons/UploadIcon";
 
 interface BasketModalProps {
   onClose: () => void;
+  selectedProduct: Product | null; // Bu satırı ekleyin
+  onUpdate: (updatedData: Partial<Product>) => void;
 }
 
 
-const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
-
+const BasketModal: React.FC<BasketModalProps> = ({
+  onClose,
+  selectedProduct,
+  onUpdate,
+}) => {
   // !!!!------------------POST FUNCTİON---------------!!!!
   const [formData, setFormData] = useState({
     title: "",
@@ -33,7 +38,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
     ) {
       setFormData({
         ...formData,
-        [name]: e.target.files[0], 
+        [name]: e.target.files[0],
       });
     } else {
       setFormData({
@@ -104,6 +109,25 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
       console.error("Error:", error);
     }
   };
+  const handleUpdate = async () => {
+    try {
+      if (selectedProduct) {
+        // Güncellenmiş verileri almak için formData veya başka bir yol kullanın
+        const updatedData = {
+          title: "Yeni Başlık",
+          price: 100,
+          // ... diğer alanlar
+        };
+
+        await updateProduct(selectedProduct._id, updatedData);
+        onUpdate(updatedData); // Ebeveyni güncelleme hakkında bilgilendir
+        onClose(); // Modal'ı kapat veya başka bir işlem yap
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
     <>
@@ -183,9 +207,9 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
               />
               {/* <label htmlFor="discount">Categories</label> */}
               {/* <select name="" id=""> */}
-                {/* <option value="">Category1</option> */}
-                {/* <option value="">Category2</option> */}
-                {/* <option value="">Category3</option> */}
+              {/* <option value="">Category1</option> */}
+              {/* <option value="">Category2</option> */}
+              {/* <option value="">Category3</option> */}
               {/* </select> */}
               <div className={styles.buttons}>
                 <button

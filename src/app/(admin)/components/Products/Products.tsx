@@ -86,54 +86,54 @@ const ProductList: React.FC = () => {
   };
   // !!!!!------------------PUT FUNCTİON------------------------------------------!!!!!
 
-  const openUpdateModal = (product: Product) => {
-    setSelectedProduct(product);
-    setModalOpen(true);
-  };
-  const updateProduct = async (id: number, updatedData: Partial<Product>) => {
-    const accessToken = localStorage.getItem("accessToken");
-    
-    if (!accessToken) {
-      throw new Error("Access token not found");
-    }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-    const response = await fetch(
-      `https://ecommerce-api-5ksa.onrender.com/api/v1/products/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      }
-    );
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-    const handleUpdate = async () => {
-      try {
-        if (selectedProduct) {
-          const updatedData = {
-            // Güncellenmiş verileri burada belirtin
-            title: "Yeni Başlık",
-            price: 100,
-            // ... diğer alanlar
-          };
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-          await updateProduct(selectedProduct._id, updatedData);
-          mutate();
-          closeModal(); // veya başka bir işlem yapabilirsiniz
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  
+  
+  
+  
+  
+  
+  
+  
 
-    if (!response.ok) {
-      throw new Error("Güncelleme işlemi başarısız oldu.");
-    }
+  
+  
+  
 
-    return response.json();
-  };
+  
+  
 
   const handleSelectChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -168,15 +168,15 @@ const ProductList: React.FC = () => {
         <div className={styles.container}>
           <div style={{ color: "#161F6A", fontWeight: "bold" }}>Product</div>
           {/* <div> */}
-            {/* <select */}
-              {/* // className={styles.select} */}
-              {/* // value={selectedOption} */}
-              {/* // onChange={handleSelectChange} */}
-            {/* // > */}
-              {/* <option value="option6">Price</option> */}
-              {/* <option value="option7">Highest to Lowest</option> */}
-              {/* <option value="option8">Lowest To Highest</option> */}
-            {/* </select> */}
+          {/* <select */}
+          {/* // className={styles.select} */}
+          {/* // value={selectedOption} */}
+          {/* // onChange={handleSelectChange} */}
+          {/* // > */}
+          {/* <option value="option6">Price</option> */}
+          {/* <option value="option7">Highest to Lowest</option> */}
+          {/* <option value="option8">Lowest To Highest</option> */}
+          {/* </select> */}
           {/* </div> */}
           <div>
             <input
@@ -216,9 +216,9 @@ const ProductList: React.FC = () => {
                     <p>{item.title}</p>
                     <div className={styles.afterButton}>
                       <DeleteButton id={item._id} />
-                      <button onClick={() => openUpdateModal(item)}>
-                        Güncelle
-                      </button>
+                     
+                     <button>-</button>
+                     
                     </div>
                   </div>
                 </div>
@@ -238,20 +238,12 @@ const ProductList: React.FC = () => {
                     <p>{item.title}</p>
                     <div className={styles.afterButton}>
                       <DeleteButton id={item._id} />
-                      <button onClick={() => openUpdateModal(item)}>
-                        Güncelle
-                      </button>
+                      <button>-</button>                  
                     </div>
                   </div>
                 </div>
               ))}
         </div>
-        {/* {selectedProduct && isModalOpen && ( */}
-          {/* // <Modal onClose={() => closeModal()}> */}
-            {/* Güncelleme için gerekli form veya bileşenleri ekleyin */}
-            {/* <button onClick={() => handleUpdate()}>Güncelle</button> */}
-          {/* </Modal> */}
-        {/* // )} */}
       </div>
     </>
   );
