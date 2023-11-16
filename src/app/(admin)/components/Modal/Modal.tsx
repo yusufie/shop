@@ -1,14 +1,24 @@
-"use client"
+"use client";
 import styles from "@/app/(admin)/components/Modal/Modal.module.css";
 import { useState } from "react";
 import { UploadIcon } from "../../assets/icons/UploadIcon";
 
-interface BasketModalProps {
-  onClose: () => void;
-  selectedProduct: Product | null; // Bu satırı ekleyin
-  onUpdate: (updatedData: Partial<Product>) => void;
+interface Product {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  discount: number;
+  stock: number;
+  images: string[];
 }
 
+interface BasketModalProps {
+  onClose: () => void;
+  selectedProduct: Product;
+  onUpdate: (updatedData: Partial<Product>) => void;
+}
 
 const BasketModal: React.FC<BasketModalProps> = ({
   onClose,
@@ -119,15 +129,14 @@ const BasketModal: React.FC<BasketModalProps> = ({
           // ... diğer alanlar
         };
 
-        await updateProduct(selectedProduct._id, updatedData);
-        onUpdate(updatedData); // Ebeveyni güncelleme hakkında bilgilendir
-        onClose(); // Modal'ı kapat veya başka bir işlem yap
+        // await updateProduct(selectedProduct._id, updatedData);
+        onUpdate(updatedData);
+        onClose();
       }
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <>
@@ -205,12 +214,6 @@ const BasketModal: React.FC<BasketModalProps> = ({
                 value={formData.discount}
                 onChange={handleChange}
               />
-              {/* <label htmlFor="discount">Categories</label> */}
-              {/* <select name="" id=""> */}
-              {/* <option value="">Category1</option> */}
-              {/* <option value="">Category2</option> */}
-              {/* <option value="">Category3</option> */}
-              {/* </select> */}
               <div className={styles.buttons}>
                 <button
                   type="button"
@@ -226,17 +229,6 @@ const BasketModal: React.FC<BasketModalProps> = ({
             </form>
           </div>
         </div>
-        {/*         <div className={styles.buttons}>
-          <button onClick={onClose} className={styles.cancelButton}>
-            Cancel
-          </button>
-          <button
-            onClick={handleAddProduct}
-            className={styles.createProductButton}
-          >
-            Create Product
-          </button>
-        </div> */}
       </section>
       <div className={styles.overlay}></div>
     </>
