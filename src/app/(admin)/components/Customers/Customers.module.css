@@ -32,37 +32,6 @@
   gap: 2rem;
 }
 
-.container2 {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 2rem;
-  height: 70vh;
-  background-color: #FFFFFF;
-  box-shadow: 0 0 5px rgba(83, 83, 83, 0.199);
-  margin-bottom: 2rem;
-}
-
-.container2 ul {
-  display: flex;
-  border-bottom: 2px solid #ccc;
-  color: #1665B9;
-  font-weight: bold;
-  overflow-x: auto;
-}
-
-.container2 li {
-  flex: 1;
-  padding: 10px;
-  text-align: center;
-  list-style: none;
-  border-right: 1px solid #ccc;
-}
-
-.container2 li:last-child {
-  border-right: none;
-}
-
 .select {
   border: none;
   transition: border-color 0.3s;
@@ -84,6 +53,48 @@
 .focused {
   border-color: green;
 }
+
+
+.container2 {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  height: 70vh;
+  background-color: #FFFFFF;
+  box-shadow: 0 0 5px rgba(83, 83, 83, 0.199);
+  margin-bottom: 2rem;
+}
+
+/* styles.module.css */
+
+.tableContainer {
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableContainer th,
+.tableContainer td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.tableContainer th {
+  background-color: #f2f2f2;
+}
+
+.tableContainer tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tableContainer tbody tr:hover {
+  background-color: #ddd;
+}
+
+
+
 
 @media (max-width: 768px) {
   .container {
