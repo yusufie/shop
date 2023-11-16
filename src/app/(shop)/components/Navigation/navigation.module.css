@@ -1,7 +1,7 @@
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   width: 20rem;
   height: 100%;
   padding-top: 2rem;
@@ -21,7 +21,7 @@
 
   width: 100%;
   border: none;
-  padding: 0 2.5rem;
+  padding: 0.5rem 2.5rem;
   background-color: transparent;
   cursor: pointer;
   font-weight: 600;
@@ -31,6 +31,11 @@
 
 .navButton:hover {
   color: rgb(0, 159, 127);
+}
+
+.navButton.active {
+  border-left: 4px solid rgb(0, 159, 127);
+  color: rgb(0, 159, 127) !important;
 }
 
 .navigation .logout {
