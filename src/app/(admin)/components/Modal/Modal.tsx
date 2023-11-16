@@ -16,8 +16,8 @@ interface Product {
 
 interface BasketModalProps {
   onClose: () => void;
-  selectedProduct: Product;
-  onUpdate: (updatedData: Partial<Product>) => void;
+  selectedProduct?: Product;
+  onUpdate?: (updatedData: Product) => void;
 }
 
 const BasketModal: React.FC<BasketModalProps> = ({
@@ -130,7 +130,7 @@ const BasketModal: React.FC<BasketModalProps> = ({
         };
 
         // await updateProduct(selectedProduct._id, updatedData);
-        onUpdate(updatedData);
+        // onUpdate(updatedData);
         onClose();
       }
     } catch (error) {

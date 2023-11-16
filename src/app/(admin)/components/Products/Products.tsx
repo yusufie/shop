@@ -5,6 +5,17 @@ import Modal from "@/app/(admin)/components/Modal/Modal";
 import useSWR from "swr";
 import Image from "next/image";
 
+interface Product {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  discount: number;
+  stock: number;
+  images: string[];
+}
+
 const fetchProducts = (url:any) => fetch(url).then((res) => res.json());
 
 const ProductList: React.FC = () => {
