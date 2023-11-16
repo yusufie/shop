@@ -18,6 +18,10 @@
   cursor: pointer;
 }
 
+.accordionItem:hover .accordionTitle{
+  color: rgb(0, 159, 127);
+}
+
 .accordionTitle {
   display: flex;
   flex-direction: row;
@@ -36,12 +40,17 @@
   margin-bottom: 0.5rem;
 }
 
-.accordionContent p {
+.accordionContent .sub {
   padding: 0.5rem 2.25rem;
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: rgb(75, 85, 99);
+}
+
+.sub:hover {
+  color: rgb(0, 159, 127);
+  cursor: pointer;
 }
 
 /* media query */
