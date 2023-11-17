@@ -28,7 +28,7 @@ const Accordion: React.FC = () => {
           {index === activeIndex && (
             <div className={styles.accordionContent}>
               {item.contents.map((content, index) => (
-                <p key={index}>{content}</p>
+                <p key={index} className={styles.sub}>{content}</p>
               ))}
             </div>
           )}
