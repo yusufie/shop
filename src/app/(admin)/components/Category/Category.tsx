@@ -1,25 +1,31 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useUserStore } from "@/stores/userStore";
+// import { revalidateTag } from "next/cache";
 import styles from "@/app/(admin)/components/Category/Category.module.css";
 
-interface CategoryProps {
+interface DatabaseEntry {
   _id?: string;
   title?: string;
   description?: string;
   slug?: string;
   status?: string;
   isActive?: boolean;
+  products?: any[];
   coverImage?: string;
-
+  parent?: string;
 }
 
-const Category: React.FC<CategoryProps> = () => {
+// data as props
+interface CategoryProps {
+  categories: DatabaseEntry[];
+}
 
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
+const Category: React.FC<CategoryProps> = ({ categories }) => {
   const accessToken = useUserStore((state) => state.accessToken);
+  console.log("accessToken:", accessToken);
 
   const [selectedOption, setSelectedOption] = useState("option1");
   const [isFocused, setIsFocused] = useState(false);
@@ -39,35 +45,6 @@ const Category: React.FC<CategoryProps> = () => {
     setIsChecked(!isChecked);
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(
-          'https://ecommerce-api-5ksa.onrender.com/api/v1/categories',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`, // Include the accessToken in the headers
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
-        const data = await response.json();
-        setCategories(data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    if (accessToken) {
-      fetchCategories();
-    }
-  }, [accessToken]);
-
-  console.log(categories);
-  
-  
   const handleDelete = async (categoryId: string) => {
     try {
       const response = await fetch(
@@ -79,20 +56,18 @@ const Category: React.FC<CategoryProps> = () => {
           },
         }
       );
+      // delete category from database
       if (response.ok) {
-        // Remove the category from the state after deletion
-        setCategories((prevCategories) =>
-          prevCategories.filter((category) => category._id !== categoryId)
-        );
-        console.log(`Category with ID ${categoryId} deleted successfully`);
-      } else {
-        console.error(`Failed to delete category with ID ${categoryId}`);
+        console.log("Category deleted successfully");
+        // await revalidateTag("categoriesData");
+        alert("Category deleted successfully");
+        // refresh page
+        window.location.reload();
       }
     } catch (error) {
-      console.error("Error deleting category:", error);
+      console.log(error);
     }
   };
-
 
   return (
     <>
@@ -131,33 +106,36 @@ const Category: React.FC<CategoryProps> = () => {
           </div>
           <div> </div>
           <Link href={"/admin/category/create"}>
-          <button className={styles.button}>+ Add Category</button>
+            <button className={styles.button}>+ Add Category</button>
           </Link>
         </div>
         <div className={styles.container2}>
-
-        <table className={styles.tableContainer}>
-          {/* Table headers */}
-          <thead className={styles.tableHeader}>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Active</th>
-              <th>Slug</th>
-              <th>Description</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          {/* Table body */}
-          <tbody className={styles.tableBody}>
+          <table className={styles.tableContainer}>
+            {/* Table headers */}
+            <thead className={styles.tableHeader}>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Active</th>
+                <th>Slug</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            {/* Table body */}
+            <tbody className={styles.tableBody}>
               {categories.map((category, index) => (
                 <tr key={category._id}>
-                  <td>{index}</td>
+                  <td>{index + 1}</td>
                   <td>{category.title}</td>
                   <td>{category.status}</td>
                   <td>
-                    <span className={`${styles.circle} ${category.isActive ? styles.active : styles.inactive}`} >
+                    <span
+                      className={`${styles.circle} ${
+                        category.isActive ? styles.active : styles.inactive
+                      }`}
+                    >
                       {category.isActive ? "" : ""}
                     </span>
                   </td>
@@ -168,20 +146,29 @@ const Category: React.FC<CategoryProps> = () => {
                       onClick={() => category._id && handleDelete(category._id)}
                       className={styles.deleteButton}
                     >
-                      <Image src="/icons/trash.svg" alt="delete" width={20} height={20} />
+                      <Image
+                        src="/icons/trash.svg"
+                        alt="delete"
+                        width={20}
+                        height={20}
+                      />
                     </button>
 
                     <Link href={`/admin/category/${category._id}`}>
-                    <button className={styles.updateButton}
-                    >
-                      <Image src="/icons/pen-square.svg" alt="edit" width={20} height={20} />
-                    </button>
+                      <button className={styles.updateButton}>
+                        <Image
+                          src="/icons/pen-square.svg"
+                          alt="edit"
+                          width={20}
+                          height={20}
+                        />
+                      </button>
                     </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
-        </table>
+          </table>
         </div>
       </div>
     </>
