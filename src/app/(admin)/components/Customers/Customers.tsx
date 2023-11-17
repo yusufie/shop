@@ -50,10 +50,10 @@ const Customers = () => {
     const fetchData = async () => {
       try {
         const accessToken =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTIzNGJiMDA0ZDk5YTljZjY2OWM5MCIsImVtYWlsIjoidHVnYmEtZ3VuZGdkdUBnbWFpbC5jb20iLCJpYXQiOjE3MDAxMzI3NDEsImV4cCI6MTcwMDIxOTE0MX0.IwoWXlOgEqvD7guW9lB-F3J1uN2U4QFU2rMy7bEL7vs";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTIzNGJiMDA0ZDk5YTljZjY2OWM5MCIsImVtYWlsIjoidHVnYmEtZ3VuZGdkdUBnbWFpbC5jb20iLCJpYXQiOjE3MDAyMjg4MDgsImV4cCI6MTcwMDMxNTIwOH0.JDbfVzoTCq_edpxGbLx6zBX76qFvzg1J-du1mA7JMXg";
 
         const response = await fetch(
-          "https://ecommerce-api-5ksa.onrender.com/api/v1/users?limit=20",
+          "https://ecommerce-api-5ksa.onrender.com/api/v1/users",
           {
             method: "GET",
             headers: {
@@ -62,6 +62,8 @@ const Customers = () => {
             },
           }
         );
+
+        console.log(response)
 
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -82,9 +84,10 @@ const Customers = () => {
 //  DELETE FUNCTİONS
 
   const handleDelete = async (id: string) => {
+    console.log(id)
     try {
       const accessToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTIzNGJiMDA0ZDk5YTljZjY2OWM5MCIsImVtYWlsIjoidHVnYmEtZ3VuZGdkdUBnbWFpbC5jb20iLCJpYXQiOjE3MDAxMzI3NDEsImV4cCI6MTcwMDIxOTE0MX0.IwoWXlOgEqvD7guW9lB-F3J1uN2U4QFU2rMy7bEL7vs";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTIzNGJiMDA0ZDk5YTljZjY2OWM5MCIsImVtYWlsIjoidHVnYmEtZ3VuZGdkdUBnbWFpbC5jb20iLCJpYXQiOjE3MDAyMjg4MDgsImV4cCI6MTcwMDMxNTIwOH0.JDbfVzoTCq_edpxGbLx6zBX76qFvzg1J-du1mA7JMXg";
 
       const response = await fetch(
         `https://ecommerce-api-5ksa.onrender.com/api/v1/users/${id}`,
@@ -96,6 +99,8 @@ const Customers = () => {
           },
         }
       );
+
+
 
       console.log(response, 'donen response')
 
@@ -153,8 +158,10 @@ const Customers = () => {
       </tr>
     </thead>
     <tbody>
-      {filteredUsers.map((item: any, index: any) => (
-        <tr key={index}>
+      {filteredUsers.map((item: any, index: any) => {
+                console.log(item, 'item')
+        return (
+          <tr key={index}>
           <td>{item.firstName}</td>
           <td>{item.lastName}</td>
           <td>{item.email}</td>
@@ -164,7 +171,11 @@ const Customers = () => {
             <button onClick={() => handleDelete(item._id)}>delete</button>
           </td>
         </tr>
-      ))}
+        )
+      }
+
+        
+      )}
     </tbody>
   </table>
 </div>
