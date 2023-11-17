@@ -5,15 +5,14 @@ import { useUserStore } from "@/stores/userStore";
 import styles from "@/app/(admin)/components/Category/Category.module.css";
 
 interface CategoryProps {
-  _id: string;
-  title: string;
-  description: string;
-  slug: string;
-  status: string;
-  isActive: boolean;
-  coverImage: string;
-  createdAt: Date;
-  updatedAt: Date;
+  _id?: string;
+  title?: string;
+  description?: string;
+  slug?: string;
+  status?: string;
+  isActive?: boolean;
+  coverImage?: string;
+
 }
 
 const Category: React.FC<CategoryProps> = () => {
