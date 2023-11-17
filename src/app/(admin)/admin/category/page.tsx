@@ -24,7 +24,7 @@ async function getCategories() {
 
 async function CategoryPage() {
   const categories = await getCategories();
-  console.log("hello hello:", categories);
+  // console.log("categories:", categories);
 
   return (
     <Layout>
