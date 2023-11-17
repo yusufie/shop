@@ -49,8 +49,7 @@ const Customers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const accessToken =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTIzNGJiMDA0ZDk5YTljZjY2OWM5MCIsImVtYWlsIjoidHVnYmEtZ3VuZGdkdUBnbWFpbC5jb20iLCJpYXQiOjE3MDAyMjg4MDgsImV4cCI6MTcwMDMxNTIwOH0.JDbfVzoTCq_edpxGbLx6zBX76qFvzg1J-du1mA7JMXg";
+        const accessToken = localStorage.getItem("accessToken");
 
         const response = await fetch(
           "https://ecommerce-api-5ksa.onrender.com/api/v1/users",
@@ -86,8 +85,7 @@ const Customers = () => {
   const handleDelete = async (id: string) => {
     console.log(id)
     try {
-      const accessToken =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTIzNGJiMDA0ZDk5YTljZjY2OWM5MCIsImVtYWlsIjoidHVnYmEtZ3VuZGdkdUBnbWFpbC5jb20iLCJpYXQiOjE3MDAyMjg4MDgsImV4cCI6MTcwMDMxNTIwOH0.JDbfVzoTCq_edpxGbLx6zBX76qFvzg1J-du1mA7JMXg";
+      const accessToken = localStorage.getItem("accessToken");
 
       const response = await fetch(
         `https://ecommerce-api-5ksa.onrender.com/api/v1/users/${id}`,
