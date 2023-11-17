@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useUserStore } from "@/stores/userStore";
 import styles from "@/app/(admin)/components/Category/Category.module.css";
 
@@ -162,18 +163,18 @@ const Category: React.FC<CategoryProps> = () => {
                   </td>
                   <td>{category.slug}</td>
                   <td>{category.description}</td>
-                  <td>
+                  <td className={styles.actionButtons}>
                     <button
                       onClick={() => category._id && handleDelete(category._id)}
                       className={styles.deleteButton}
                     >
-                      Delete
+                      <Image src="/icons/trash.svg" alt="delete" width={20} height={20} />
                     </button>
                     <button
                       // onClick={() => handleUpdate(category)}
                       className={styles.updateButton}
                     >
-                      Update
+                      <Image src="/icons/pen-square.svg" alt="edit" width={20} height={20} />
                     </button>
                   </td>
                 </tr>

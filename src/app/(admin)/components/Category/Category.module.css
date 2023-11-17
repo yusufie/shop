@@ -131,6 +131,25 @@
   border-color: green;
 }
 
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.deleteButton {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.updateButton {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
 @media (min-width: 769px) and (max-width: 1200px) {
   .container,
   .container2 {
