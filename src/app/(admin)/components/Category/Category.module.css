@@ -1,7 +1,5 @@
-/* styles/Category.module.css */
-
 .button {
-  background-color: #00BD87;
+  background-color: #00bd87;
   border-radius: 5px;
   padding: 1rem 2rem;
   color: white;
@@ -16,10 +14,9 @@
   align-items: center;
 }
 
-
 .container {
   width: 80%; /* Genişliği artırıldı */
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   height: 7rem;
   box-shadow: 0 0 5px rgba(83, 83, 83, 0.199);
   margin-top: 10rem;
@@ -38,7 +35,7 @@
   margin-right: auto;
   margin-top: 2rem;
   height: 70vh;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   box-shadow: 0 0 5px rgba(83, 83, 83, 0.199);
   margin-bottom: 2rem;
 }
@@ -46,7 +43,7 @@
 .container2 ul {
   display: flex;
   border-bottom: 2px solid #ccc;
-  color: #1665B9;
+  color: #1665b9;
   font-weight: bold;
   overflow-x: auto;
 }
@@ -62,6 +59,55 @@
 .container2 li:last-child {
   border-right: none;
 }
+
+/* Table styles starts */
+.tableContainer {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tableHeader {
+  background-color: #f2f2f2;
+}
+
+.tableHeader th {
+  padding: 10px;
+  text-align: left;
+}
+
+.tableBody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tableBody tr:hover {
+  background-color: #ddd;
+}
+
+.tableBody td {
+  padding: 10px;
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 1rem;
+  height: 1rem;
+  padding: 0.25rem;
+  border-radius: 100%;
+}
+
+.circle.active {
+  background-color: green;
+}
+
+.circle.inactive {
+  background-color: red;
+}
+
+/* Table styles ends */
 
 .select {
   border: none;
@@ -85,7 +131,6 @@
   border-color: green;
 }
 
-
 @media (min-width: 769px) and (max-width: 1200px) {
   .container,
   .container2 {
@@ -93,13 +138,13 @@
     margin: 10rem auto; /* Center the containers */
     margin-right: 5rem;
   }
- .topcontainer{
-  display: flex;
-  align-items: center;
-   width: 100%;
-   margin: auto;
-   margin-right: 10rem;
- }
+  .topcontainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+    margin-right: 10rem;
+  }
   .select,
   #myInput,
   .button {
@@ -139,62 +184,3 @@
     justify-content: center;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

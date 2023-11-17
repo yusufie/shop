@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "@/app/(admin)/components/Customers/Customers.module.css";
-import Modal from './Customer.Modal'
-
+import Modal from "./Customer.Modal";
 
 const Customers = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [users, setUsers] = useState([] as any);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -25,9 +24,6 @@ const Customers = () => {
     setIsFocused(false);
   };
 
-
-  
-
   // SEACRCH FUNCTİONS
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -43,8 +39,7 @@ const Customers = () => {
     );
   }, [searchTerm, users?.data]);
 
-
- // GET FUNCTIONS
+  // GET FUNCTIONS
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,9 +72,7 @@ const Customers = () => {
     fetchData();
   }, []);
 
-
-
-//  DELETE FUNCTİONS
+  //  DELETE FUNCTİONS
 
   const handleDelete = async (id: string) => {
     try {
@@ -97,17 +90,15 @@ const Customers = () => {
         }
       );
 
-      console.log(response, 'donen response')
+      console.log(response, "donen response");
 
-      if(response.ok){
-        console.log('kullanıcı silindi')
+      if (response.ok) {
+        console.log("kullanıcı silindi");
       }
 
       if (!response.ok) {
         throw new Error("Failed to delete user");
       }
-
-
     } catch (error) {
       console.error("Error:", error);
     }
@@ -137,38 +128,42 @@ const Customers = () => {
             />
           </div>
           <div>
-          <button onClick={openModal} className={styles.button}>+ Add Product</button>
-          {isModalOpen && <Modal onClose={closeModal} />}
+            <button onClick={openModal} className={styles.button}>
+              + Add Product
+            </button>
+            {isModalOpen && <Modal onClose={closeModal} />}
           </div>
         </div>
-       <div className={styles.container2}>
-  <table className={styles.tableContainer}>
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>E-mail</th>
-        <th>Contact</th>
-        <th>Address</th>
-      </tr>
-    </thead>
-    <tbody>
-      {filteredUsers.map((item: any, index: any) => (
-        <tr key={index}>
-          <td>{item.firstName}</td>
-          <td>{item.lastName}</td>
-          <td>{item.email}</td>
-          <td>{item.contact}</td>
-          <td>{item.address}</td>
-          <td>
-            <button onClick={() => handleDelete(item._id)}>delete</button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-</div>
+        <div className={styles.container2}>
+          <table className={styles.tableContainer}>
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>E-mail</th>
+                <th>Contact</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.map((item: any, index: any) => (
+                <tr key={index}>
+                  <td>{item.firstName}</td>
+                  <td>{item.lastName}</td>
+                  <td>{item.email}</td>
+                  <td>{item.contact}</td>
+                  <td>{item.address}</td>
+                  <td>
+                    <button onClick={() => handleDelete(item._id)}>
+                      delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </>
   );
 };
