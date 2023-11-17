@@ -170,12 +170,13 @@ const Category: React.FC<CategoryProps> = () => {
                     >
                       <Image src="/icons/trash.svg" alt="delete" width={20} height={20} />
                     </button>
-                    <button
-                      // onClick={() => handleUpdate(category)}
-                      className={styles.updateButton}
+
+                    <Link href={`/admin/category/${category._id}`}>
+                    <button className={styles.updateButton}
                     >
                       <Image src="/icons/pen-square.svg" alt="edit" width={20} height={20} />
                     </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
