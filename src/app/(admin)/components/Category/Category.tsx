@@ -64,7 +64,33 @@ const Category: React.FC<CategoryProps> = () => {
     }
   }, [accessToken]);
 
-  console.log(categories); 
+  console.log(categories);
+  
+  
+  const handleDelete = async (categoryId: string) => {
+    try {
+      const response = await fetch(
+        `https://ecommerce-api-5ksa.onrender.com/api/v1/categories/${categoryId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.ok) {
+        // Remove the category from the state after deletion
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category._id !== categoryId)
+        );
+        console.log(`Category with ID ${categoryId} deleted successfully`);
+      } else {
+        console.error(`Failed to delete category with ID ${categoryId}`);
+      }
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
 
 
   return (
@@ -138,7 +164,7 @@ const Category: React.FC<CategoryProps> = () => {
                   <td>{category.description}</td>
                   <td>
                     <button
-                      // onClick={() => handleDelete(category._id)}
+                      onClick={() => category._id && handleDelete(category._id)}
                       className={styles.deleteButton}
                     >
                       Delete
