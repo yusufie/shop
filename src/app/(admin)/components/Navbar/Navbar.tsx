@@ -1,7 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import styles from   "@/app/(admin)/components/Navbar/navbar.module.css"
-import logo from '@/app/(admin)/assets/image/PickBazar.png';
+// import logo from '@/app/(admin)/assets/image/PickBazar.png';
+import Link from 'next/link';
 import logo2 from '@/app/(admin)/assets/image/user.jpg';
 import Image from 'next/image';
 const Navbar: React.FC = () => {
@@ -14,7 +15,10 @@ const Navbar: React.FC = () => {
   return (
     <div className={styles.navbar}>
       <div className={styles.logos} >
-         <Image   src={logo} alt='logo' width={160} height={26} />
+        <Link href="/">
+         {/* <Image   src={logo} alt='logo' width={160} height={26} /> */}
+         <Image src="/images/grand.png" alt="logo" width={163} height={45} />
+        </Link>
       </div>
 
       <div className={styles.menutoogle} onClick={toggleMenu}>
