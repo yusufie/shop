@@ -6,9 +6,10 @@ import styles from './accordion.module.css'
 interface AccordionProps {
   categories: any[];
   subCategories: any[];
+  onSubcategoryClick: (subcategoryId: string | null) => void;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ categories, subCategories }) => {
+const Accordion: React.FC<AccordionProps> = ({ categories, subCategories, onSubcategoryClick, }) => {
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -21,7 +22,11 @@ const Accordion: React.FC<AccordionProps> = ({ categories, subCategories }) => {
       (sub) => sub.category?._id === categoryId
     );
     return subCategoriesForCategory.map((subCategory) => (
-      <p key={subCategory._id} className={styles.sub}>
+      <p 
+        key={subCategory._id} 
+        className={styles.sub}
+        onClick={() => onSubcategoryClick(subCategory._id)}
+        >
         {subCategory.title}
       </p>
     ));

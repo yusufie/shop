@@ -16,7 +16,7 @@ import Link from "next/link";
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
-  console.log(pathname);
+  // console.log(pathname);
 
   const sidebarMenus = [
     {

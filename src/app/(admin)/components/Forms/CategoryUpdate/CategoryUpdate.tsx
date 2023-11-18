@@ -1,6 +1,6 @@
 "use client";
 import { useUserStore } from "@/stores/userStore";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import Image from "next/image";
 import styles from './CategoryUpdate.module.css'
 
@@ -29,7 +29,7 @@ interface UpdateFormProps {
 const CategoryUpdate: React.FC<UpdateFormProps> = ({categoryData}) => {
 
   const accessToken = useUserStore((state) => state.accessToken);
-  console.log("accessToken:", accessToken);
+  // console.log("accessToken:", accessToken);
 
   return (
     <section className={styles.categoryUpdate}>

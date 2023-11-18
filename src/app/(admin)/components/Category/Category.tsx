@@ -25,7 +25,7 @@ interface CategoryProps {
 
 const Category: React.FC<CategoryProps> = ({ categories }) => {
   const accessToken = useUserStore((state) => state.accessToken);
-  console.log("accessToken:", accessToken);
+  // console.log("accessToken:", accessToken);
 
   const [selectedOption, setSelectedOption] = useState("option1");
   const [isFocused, setIsFocused] = useState(false);

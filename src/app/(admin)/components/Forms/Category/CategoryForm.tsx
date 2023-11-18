@@ -28,7 +28,7 @@ interface CategoryFormProps {
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ categoriesData }) => {
   const accessToken = useUserStore((state) => state.accessToken);
-  console.log("accessToken:", accessToken);
+  // console.log("accessToken:", accessToken);
 
   const { register, handleSubmit } = useForm<FormInputs>();
 
