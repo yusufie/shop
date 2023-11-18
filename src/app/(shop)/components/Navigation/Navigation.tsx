@@ -26,39 +26,9 @@ const Navigation: React.FC = () => {
         </button>
       </Link>
 
-      <Link href={"/downloads"}>
-        <button className={`${styles.navButton} ${pathname === "/downloads" ? styles.active : ""}`}>
-          Downloads
-        </button>
-      </Link>
-
       <Link href={"/wishlists"}>
         <button className={`${styles.navButton} ${pathname === "/wishlists" ? styles.active : ""}`}>
           My Wishlists
-        </button>
-      </Link>
-
-      <Link href={"/questions"}>
-        <button className={`${styles.navButton} ${pathname === "/questions" ? styles.active : ""}`}>
-          My Questions
-        </button>
-      </Link>
-
-      <Link href={"/refunds"}>
-        <button className={`${styles.navButton} ${pathname === "/refunds" ? styles.active : ""}`}>
-          My Refunds
-        </button>
-      </Link>
-
-      <Link href={"/reports"}>
-        <button className={`${styles.navButton} ${pathname === "/reports" ? styles.active : ""}`}>
-          My Reports
-        </button>
-      </Link>
-
-      <Link href={"/cards"}>
-        <button className={`${styles.navButton} ${pathname === "/cards" ? styles.active : ""}`}>
-          My Cards
         </button>
       </Link>
 
