@@ -6,11 +6,13 @@ import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
 import ProductCard from '../Cards/Product/ProductCard';
 import styles from './filterbox.module.css'
 
-interface Props {
-  datas: any
+interface FilterboxProps {
+  datas: any;
+  categories: any[];
+  subCategories: any[];
 }
 
-const Filterbox: React.FC<Props> = ({datas}) => {
+const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories}) => {
 
   const { searchQuery } = useStore();
 
@@ -29,7 +31,7 @@ const Filterbox: React.FC<Props> = ({datas}) => {
 
   return (
     <section className={styles.filterbox} id="filterbox">
-      <Accordion />
+      <Accordion categories={categories} subCategories={subCategories} />
 
       <article className={styles.cards}>
         {filteredData.map((data:any) => (
@@ -46,7 +48,7 @@ const Filterbox: React.FC<Props> = ({datas}) => {
         <ProductModal
           datas={datas}
           handleProductModal={handleProductModal}
-          selectedProductId={selectedProductId} // pass the selected product ID
+          selectedProductId={selectedProductId}
         />
       )}
         
