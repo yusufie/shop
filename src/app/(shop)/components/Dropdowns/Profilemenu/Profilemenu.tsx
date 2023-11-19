@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import Link from "next/link";
 import styles from "./profilemenu.module.css";
 
@@ -12,19 +12,19 @@ const Profilemenu: React.FC<ProfilemenuProps> = ({ handleLogout, closeMenu }) =>
 
   const profilemenuRef = useRef<HTMLDivElement>(null);
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (profilemenuRef.current && !profilemenuRef.current.contains(event.target as Node)) {
       closeMenu(); // Close the Profilemenu if clicked outside
     }
-  };
-
+  }, [closeMenu]);
+  
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
-
+  
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
 
   return (
     <section className={styles.profilemenu} ref={profilemenuRef}>
