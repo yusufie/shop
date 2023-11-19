@@ -105,7 +105,6 @@
 
 .billing .billingInput {
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
 
@@ -122,8 +121,6 @@
   visibility: visible;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
   gap: 0.5rem;
 
   cursor: pointer;
@@ -133,8 +130,6 @@
   visibility: visible;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
   gap: 0.5rem;
 
   cursor: pointer;
@@ -174,7 +169,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
 }
 
 .checkoutInfo .shipping {
@@ -197,7 +192,6 @@
 
 .shipping .shippingInput {
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
 
@@ -214,7 +208,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
 }
 
 .checkoutInfo .delivery {
