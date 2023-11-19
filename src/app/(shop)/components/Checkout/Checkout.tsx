@@ -133,10 +133,33 @@ const Checkout: React.FC = ({}) => {
         </div>
 
         <div className={styles.checkoutCalculate}>
-            <div className={styles.order}>Your Order</div>
-            <div className={styles.items}>Items</div>
-            <div className={styles.subtotal}>Subtotal</div>
-            <button>Check Availability</button>
+            <div className={styles.orderHeader}>
+                <h4>Your Order</h4>
+            </div>
+
+            <div className={styles.orderItems}>
+                <span>1 x Green Beans | 1lb</span>
+                <span>$4.00</span>
+            </div>
+
+            <div className={styles.orderTotal}>
+                <div className={styles.subtotal}>
+                    <span>Subtotal</span>
+                    <span>$4.00</span>
+                </div>
+                <div className={styles.taxtotal}>
+                    <span>Tax</span>
+                    <span>Calculated at checkout</span>
+                </div>
+                <div className={styles.shiptotal}>
+                    <span>Estimated Shipping</span>
+                    <span>Calculated at checkout</span>
+                </div>
+            </div>
+
+            <button className={styles.availableButton}>
+                Check Availability
+            </button>
         </div>
 
     </section>
