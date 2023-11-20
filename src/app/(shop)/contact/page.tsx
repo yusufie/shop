@@ -1,11 +1,12 @@
 import Layout from '@/app/(shop)/components/Layout/Layout'
+import Contact from '@/app/(shop)/components/Contact/Contact'
 
-function Contact() {
+function ContactPage() {
   return (
     <Layout>
-      Contact
+      <Contact />
     </Layout>
   )
 }
 
-export default Contact
+export default ContactPage
