@@ -1,0 +1,42 @@
+[
+  {
+    "_id": 1,
+    "image": "/images/offer-5.webp",
+    "code": "5OFF2"
+  },
+  {
+    "_id": 2,
+    "image": "/images/offer-6.webp",
+    "code": "OFF6"
+  },
+  {
+    "_id": 3,
+    "image": "/images/offer-10.webp",
+    "code": "BAZAR10"
+  },
+  {
+    "_id": 4,
+    "image": "/images/offer-18.webp",
+    "code": "BAZAR18"
+  },
+  {
+    "_id": 5,
+    "image": "/images/offer-15.webp",
+    "code": "HELLO15"
+  },
+  {
+    "_id": 6,
+    "image": "/images/offer-12.webp",
+    "code": "EID12"
+  },
+  {
+    "_id": 7,
+    "image": "/images/offer-8.webp",
+    "code": "FOO"
+  },
+  {
+    "_id": 8,
+    "image": "/images/offer-2.webp",
+    "code": "EID2"
+  }
+]

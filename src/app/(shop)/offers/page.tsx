@@ -1,11 +1,12 @@
 import Layout from '@/app/(shop)/components/Layout/Layout'
+import Offers from '@/app/(shop)/components/Offers/Offers'
 
-function Offers() {
+function OffersPage () {
   return (
     <Layout>
-      Offers
+      <Offers />
     </Layout>
   )
 }
 
-export default Offers
+export default OffersPage
