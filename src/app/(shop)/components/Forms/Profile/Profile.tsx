@@ -20,10 +20,11 @@ const Profile: React.FC = () => {
             <input type="text"  className={styles.nameInput}/>
           </div>
           
-          <div>
-          <label htmlFor="bio">Bio</label>
-          <textarea name="bio" id="" className={styles.textarea}></textarea>
+          <div className={styles.bioField}>
+            <label htmlFor="bio">Bio</label>
+            <textarea name="bio" id="" className={styles.textarea}></textarea>
           </div>
+          
           <button className={styles.saveButton}>Save</button>
 
         </form>
