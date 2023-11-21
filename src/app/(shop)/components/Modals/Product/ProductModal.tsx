@@ -4,6 +4,7 @@ import Link from "next/link";
 import styles from "./productmodal.module.css";
 import useBasketStore from '@/stores/basketStore';
 import ModalSlider from "@/app/(shop)/components/Sliders/Modal/ModalSlider";
+import ProductCard from "@/app/(shop)/components/Cards/Product/ProductCard";
 
 interface ProductModalProps {
   handleProductModal: (id: number | null) => void;
@@ -31,11 +32,18 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const selectedProduct = datas.data.find((product: any) => product._id === selectedProductId);
   if (!selectedProduct) return null;
 
+  // Filter same category as the selectedProduct
+  const relatedProducts = datas.data.filter((product: any) =>
+      JSON.stringify(product.category) === JSON.stringify(selectedProduct.category) &&
+      product._id !== selectedProductId // Exclude the selected product
+  ); 
+
   return (
     <article className={styles.productmodal}>
 
       <div className={styles.modalContent}>
 
+        <button onClick={() => handleProductModal(null)} className={styles.modalClose}>x</button>
         <div className={styles.modalTop}>
 
           <div className={styles.productImages}>
@@ -44,7 +52,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
           <div className={styles.modalinfo}>
 
-            <button onClick={() => handleProductModal(null)} className={styles.modalClose}>x</button>
 
             <div className={styles.infoHeart}>
               
@@ -98,7 +105,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
             <div className={styles.infoSeller}>
               <span>Sellers</span>
               <Link href="/">
-                <p>Grocery Shop</p>
+                <p>Grand Bazaar</p>
               </Link>
             </div>
             
@@ -113,6 +120,15 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
         <div className={styles.modalBottom} >
           <h3>Related Products</h3>
+          <div className={styles.relatedGrid}>
+            {relatedProducts.map((product:any) => (
+              <ProductCard
+                key={product._id}
+                data={product}
+                handleProductModal={handleProductModal}
+              />
+            ))}
+          </div>
         </div>
 
       </div>
