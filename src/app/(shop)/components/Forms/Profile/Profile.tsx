@@ -40,16 +40,30 @@ const Profile: React.FC = () => {
         <div className={styles.contactField}>
           <div className={styles.contactHeader}>
             <p>Contact Number</p>
-            <button className={styles.contactButton}>+ Update
-            </button>
+            <button className={styles.contactButton}>+ Update</button>
           </div>
 
           <input type="text" className={styles.contactinput}/>
         </div>
 
-        <div className={styles.address}>
-          <div>Billing</div>
-          <div>Shipping</div>
+        <div className={styles.addressField}>
+          <div className={styles.addressHeader}>
+            <p>Addresses</p>
+            <button className={styles.addButton}>+ Add</button>
+          </div>
+
+          <div className={styles.adressButtons}>
+            <button className={styles.adressButton}>
+              <p className={styles.title}>Billing</p>
+              <p className={styles.address}>2231 Kidd Avenue, AK, Kipnuk, 99614, United States</p>
+            </button>
+
+            <button className={styles.adressButton}>
+              <p className={styles.title}>Shipping</p>
+              <p className={styles.address}>2231 Kidd Avenue, AK, Kipnuk, 99614, United States</p>
+            </button>
+          </div>
+
         </div>
 
     </section>
