@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import Image from "next/image";
@@ -6,10 +7,18 @@ import Link from "next/link";
 import useBasketStore from '@/stores/basketStore';
 import styles from "./productdetails.module.css";
 import DetailSlider from "../../Sliders/Detail/DetailSlider";
+import ProductCard from "@/app/(shop)/components/Cards/Product/ProductCard";
+import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
+
+interface ProductDetailsProps {
+    products: any;
+    categories: any[];
+    subCategories: any[];
+}
 
 const fetcher = (url: any) => fetch(url).then((res) => res.json());
 
-const ProductDetails = () => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, subCategories}) => {
 
     const { id } = useParams();
     const { data: responseData, error } = useSWR(`https://ecommerce-api-5ksa.onrender.com/api/v1/products/${id}`, fetcher);
@@ -26,12 +35,38 @@ const ProductDetails = () => {
         removeItem(data._id, true);
     };
 
+    const [isProductModalVisible, setIsProductModalVisible] = useState(false);
+    const [productId, setProductId] = useState<number | null>(null);
+
+    const handleProductModal = (id: number | null) => {
+        setProductId(id);
+        setIsProductModalVisible(!isProductModalVisible);
+    };
+
     const selectedProductId = responseData?._id;
     const selectedProduct = responseData;
 
     if (error) return <div>failed to load</div>;
     if (!responseData) return <div>loading...</div>;
-    // console.log(responseData);
+
+    // Find the selected product's category object from the categories array
+    const selectedProductCategory = categories.find((category) => 
+        category._id === selectedProduct.category._id
+    );
+
+    // Find the selected product's subcategory object from the categories array
+    const selectedProductSubcategory = subCategories.find((subcategory) => 
+        subcategory._id === selectedProduct.subcategories[0]._id
+    );
+
+    // Extract the category ID from the selectedProduct
+    const selectedProductCategoryId = selectedProduct.category._id;
+
+    // Filter products based on the selectedProduct's category ID
+    const relatedProducts = products.data.filter((product: any) => {
+        // Check if the product's category matches the selectedProduct's category
+        return product.category[0]._id === selectedProductCategoryId;
+    });
 
   return (
     <section className={styles.productdetails}>
@@ -46,7 +81,7 @@ const ProductDetails = () => {
                             <Image src="/icons/arrow-back.png" alt="back" width={32} height={32}/>
                             Back
                         </Link>
-                        <span className={styles.discount}>20%</span>
+                        <span className={styles.discount}>{responseData.discount}%</span>
                     </div>
                     <DetailSlider responseData={responseData} />
                 </div>
@@ -80,19 +115,19 @@ const ProductDetails = () => {
                             <button onClick={() => addItem(selectedProduct)}>+</button>
                             </div>
                         )}
-                        <span className={styles.available}>10 pieces available</span>
+                        <span className={styles.available}>{selectedProduct.stock} pieces available</span>
                     </div>
 
                     <div className={styles.infoTags}>
                         <span>Categories</span>
-                        <button>Tags</button>
-                        <button>Tags</button>
+                        <button>{selectedProductCategory?.title}</button>
+                        <button>{selectedProductSubcategory?.title}</button>
                     </div>
 
                     <div className={styles.infoSeller}>
                         <span>Sellers</span>
                         <Link href="/">
-                            <p>Grocery Shop</p>
+                            <p>Grand Bazaar</p>
                         </Link>
                     </div>
 
@@ -111,8 +146,28 @@ const ProductDetails = () => {
             </div>        
 
             <div className={styles.detailsBottom} >
-                <h3>Related Products</h3>
+                <h4>Related Products</h4>
+                <div className={styles.relatedGrid}>
+                    {relatedProducts.map((product:any) => (
+                        <ProductCard
+                            key={product._id}
+                            data={product}
+                            handleProductModal={handleProductModal}
+                        />
+                    ))}
+                </div>
             </div>
+
+            {/* Conditionally render the ProductModal */}
+            {isProductModalVisible && (
+                <ProductModal
+                    datas={products}
+                    handleProductModal={handleProductModal}
+                    selectedProductId={productId}
+                    categories={categories}
+                    subCategories={subCategories}
+                />
+            )}
 
         </div>
     </section>

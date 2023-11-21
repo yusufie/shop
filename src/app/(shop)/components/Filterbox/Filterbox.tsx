@@ -68,6 +68,8 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories})
           datas={datas}
           handleProductModal={handleProductModal}
           selectedProductId={selectedProductId}
+          categories={categories}
+          subCategories={subCategories}
         />
       )}
         

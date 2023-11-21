@@ -10,12 +10,16 @@ interface ProductModalProps {
   handleProductModal: (id: number | null) => void;
   datas: any;
   selectedProductId: any;
+  categories: any[];
+  subCategories: any[];
 }
 
 const ProductModal: React.FC<ProductModalProps> = ({
   handleProductModal,
   datas,
   selectedProductId,
+  categories,
+  subCategories,
 }) => {
   const addItem = useBasketStore((state) => state.addItem);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
@@ -36,7 +40,17 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const relatedProducts = datas.data.filter((product: any) =>
       JSON.stringify(product.category) === JSON.stringify(selectedProduct.category) &&
       product._id !== selectedProductId // Exclude the selected product
-  ); 
+  );
+
+  // Find the selected product's category object from the categories array
+  const selectedProductCategory = categories.find(
+    (category) => category._id === selectedProduct.category[0]._id
+  );
+
+  // Find the selected product's subcategory object from the categories array
+  const selectedProductSubcategory = subCategories.find(
+    (subcategory) => subcategory._id === selectedProduct.subcategories[0]
+  );
 
   return (
     <article className={styles.productmodal}>
@@ -68,7 +82,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
             <div className={styles.infoStar}>
               <span>2Pfund</span>
               <div className={styles.infoStarCount}>
-                <span>4.5</span>
+                <span>{selectedProduct.ratingsQuantity}</span>
                 <Image src={"/icons/star.svg"} alt="star" width={12} height={12}/>
               </div>
             </div>
@@ -93,13 +107,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
                   <button onClick={() => addItem(selectedProduct)}>+</button>
                 </div>
               )}
-              <span className={styles.available}>10 pieces available</span>
+              <span className={styles.available}>{selectedProduct.stock} pieces available</span>
             </div>
 
             <div className={styles.infoTags}>
               <span>Categories</span>
-              <button>Tags</button>
-              <button>Tags</button>
+              <button>{selectedProductCategory?.title}</button>
+              <button>{selectedProductSubcategory?.title}</button>
             </div>
 
             <div className={styles.infoSeller}>
@@ -119,7 +133,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         </div>
 
         <div className={styles.modalBottom} >
-          <h3>Related Products</h3>
+          <h4>Related Products</h4>
           <div className={styles.relatedGrid}>
             {relatedProducts.map((product:any) => (
               <ProductCard
