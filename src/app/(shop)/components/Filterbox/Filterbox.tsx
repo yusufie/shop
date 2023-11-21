@@ -25,7 +25,7 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories})
 
   const handleProductModal = (id: number | null) => {
     setSelectedProductId(id);
-    setIsProductModalVisible(!isProductModalVisible);
+    setIsProductModalVisible(true);
   };
 
   // console.log(datas);

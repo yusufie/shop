@@ -40,7 +40,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
 
     const handleProductModal = (id: number | null) => {
         setProductId(id);
-        setIsProductModalVisible(!isProductModalVisible);
+        setIsProductModalVisible(true);
     };
 
     const selectedProductId = responseData?._id;
@@ -56,7 +56,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
 
     // Find the selected product's subcategory object from the categories array
     const selectedProductSubcategory = subCategories.find((subcategory) => 
-        subcategory._id === selectedProduct.subcategories[0]._id
+        subcategory._id === selectedProduct.subcategories[0]?._id
     );
 
     // Extract the category ID from the selectedProduct
