@@ -1,22 +1,22 @@
 .custom-carousel-container-detail {
-  position: relative;
+   position: relative;
   display: flex;
   align-items: center;
   overflow: hidden;
 
-  width: 50rem;
+ /* width: 50rem; */
 }
 
 .custom-dot-list-detail {
-  display: flex;
+   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  width: 50rem;
   margin-top: 3rem;
-
-  list-style: none;
+  
+  list-style: none; 
+  /*width: 50rem;*/
 }
 
 .custom-carousel-item-detail {
@@ -25,11 +25,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50rem;
 
   transform-style: preserve-3d;
   -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  backface-visibility: hidden; 
+  /* width: 50rem;*/
 }
 
 .react-multi-carousel-track {
@@ -45,5 +45,5 @@
   will-change: transform, transition;
   transition: transform 300ms ease-in-out 0s;
   overflow: unset;
-  transform: translate3d(-874px, 0px, 0px);
+  transform: translate3d(-874px, 0px, 0px); 
 }

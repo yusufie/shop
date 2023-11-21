@@ -6,6 +6,9 @@ const nextConfig = {
       "picsum.photos",
       "loremflickr.com",
       "res.cloudinary.com",
+      "www.nordicengros.com",
+      // allow for all domains
+      "*",
     ],
   },
 };

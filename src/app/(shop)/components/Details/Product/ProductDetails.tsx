@@ -138,12 +138,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
             <div className={styles.detailsMiddle} >
                 <h4>Details</h4>
                 <p>{responseData.description}</p>
-            </div>
-
-            <div className={styles.detailsRating} >
-                <h4>Rating</h4>
-                <p>Rating</p>
-            </div>        
+            </div>    
 
             <div className={styles.detailsBottom} >
                 <h4>Related Products</h4>

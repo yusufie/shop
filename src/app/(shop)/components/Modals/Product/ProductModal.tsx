@@ -61,6 +61,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         <div className={styles.modalTop}>
 
           <div className={styles.productImages}>
+            <span className={styles.discount}>{selectedProduct.discount}%</span>
             <ModalSlider selectedProduct={selectedProduct} />
           </div>
 
