@@ -22,11 +22,11 @@ const Accordion: React.FC<AccordionProps> = ({ categories, subCategories, onSubc
       (sub) => sub.category?._id === categoryId
     );
     return subCategoriesForCategory.map((subCategory) => (
-      <p 
-        key={subCategory._id} 
+      <p
+        key={subCategory._id}
         className={styles.sub}
         onClick={() => onSubcategoryClick(subCategory._id)}
-        >
+      >
         {subCategory.title}
       </p>
     ));
@@ -34,7 +34,7 @@ const Accordion: React.FC<AccordionProps> = ({ categories, subCategories, onSubc
 
   return (
     <section className={styles.accordion}>
-      {categories.map((category, index) => (
+      {categories && typeof categories === "object" && categories.length > 0 && categories.map((category, index) => (
         <div className={styles.accordionContainer} key={category._id}>
 
           <div className={`${styles.accordionItem} ${index === activeIndex ? styles.active : ""}`}
@@ -53,7 +53,7 @@ const Accordion: React.FC<AccordionProps> = ({ categories, subCategories, onSubc
               {renderSubCategories(category._id)}
             </div>
           )}
-          
+
         </div>
       ))}
     </section>

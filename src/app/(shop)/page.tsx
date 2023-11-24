@@ -13,24 +13,34 @@ import { revalidateTag } from "next/cache";
 
 async function getData() {
   // Cache data and tag it for revalidation
-  const res = await fetch( "https://ecommerce-api-5ksa.onrender.com/api/v1/products",
-    { next: { tags: ["productData"] }, }
-  );
+  // get products from api and cache it for 1 hour (3600 seconds) and tag it with "products" tag for revalidation 
+  const res = await fetch("https://ecommerce-api-5ksa.onrender.com/api/v1/products", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-  if (res.ok) { await revalidateTag("productData"); }
+  if (res.status !== 200) {
+    throw new Error("Failed to fetch products");
+  }
 
-  if (!res.ok) { throw new Error("Failed to fetch data"); }
+  revalidateTag("products");
 
-  return res.json();
+  const data = await res.json();
+
+  return data.products;
 }
 
 export default async function Home() {
-  const datas = await getData();
-  // console.log(datas)
+  const products = await getData();
+  console.log({ products });
   const categories = await getCategories();
-  // console.log(categories)
+  console.log({ categories });
   const subCategories = await getSubCategories();
-  // console.log(subCategories)
+  console.log({ subCategories });
+
+
 
   return (
     <Layout>
@@ -38,7 +48,7 @@ export default async function Home() {
       <Bag />
       <HomeSlider images={images} />
       <Middlebar />
-      <Filterbox datas={datas} categories={categories} subCategories={subCategories}/>
+      <Filterbox products={products} categories={categories} subCategories={subCategories} />
       <Mobilenav />
     </Layout>
   );

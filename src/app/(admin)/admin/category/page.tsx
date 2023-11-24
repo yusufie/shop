@@ -12,7 +12,7 @@ async function getCategories() {
   );
 
   if (res.ok) {
-    await revalidateTag("categoriesData"); // Revalidate the tagged cache entry
+     revalidateTag("categoriesData"); // Revalidate the tagged cache entry
   }
 
   if (!res.ok) {

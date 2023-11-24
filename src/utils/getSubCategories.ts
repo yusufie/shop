@@ -4,18 +4,22 @@ async function getSubCategories() {
   // Cache data and tag it for revalidation
   const res = await fetch(
     "https://ecommerce-api-5ksa.onrender.com/api/v1/subcategories",
-    { next: { tags: ["subcategories"] } }
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
   );
 
-  if (res.ok) {
-    await revalidateTag("subcategories");
-  }
-
   if (!res.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error("Something went wrong");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  revalidateTag("subcategories");
+  return data.subCategories;
 }
 
 export default getSubCategories;

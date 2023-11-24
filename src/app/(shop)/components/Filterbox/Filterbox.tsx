@@ -7,12 +7,12 @@ import ProductCard from '../Cards/Product/ProductCard';
 import styles from './filterbox.module.css'
 
 interface FilterboxProps {
-  datas: any;
+  products: any[];
   categories: any[];
   subCategories: any[];
 }
 
-const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories}) => {
+const Filterbox: React.FC<FilterboxProps> = ({ products, categories, subCategories }) => {
 
   const { searchQuery } = useStore();
 
@@ -21,37 +21,24 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories})
 
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
-  
+
 
   const handleProductModal = (id: number | null) => {
     setSelectedProductId(id);
     setIsProductModalVisible(true);
   };
 
-  // console.log(datas);
-  useEffect(() => {
-    if (selectedSubcategory) {
-      // Filter products based on the selected subcategory
-      const filtered = datas.data.filter(
-        (data: any) => data.subcategories.includes(selectedSubcategory)
-      );
-      setFilteredProducts(filtered);
-    } else {
-      // If no subcategory is selected, display all products
-      setFilteredProducts(datas.data);
-    }
-  }, [selectedSubcategory, datas]);
 
   return (
     <section className={styles.filterbox} id="filterbox">
-      <Accordion 
-      categories={categories} 
-      subCategories={subCategories}
-      onSubcategoryClick={setSelectedSubcategory}
+      <Accordion
+        categories={categories}
+        subCategories={subCategories}
+        onSubcategoryClick={setSelectedSubcategory}
       />
 
       <article className={styles.cards}>
-      {filteredProducts
+        {products && products
           .filter((data: any) => data.title.toLowerCase().includes(searchQuery.toLowerCase()))
           .map((data: any) => (
             <ProductCard
@@ -65,14 +52,14 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories})
       {/* Conditionally render the ProductModal */}
       {isProductModalVisible && (
         <ProductModal
-          datas={datas}
+          datas={products}
           handleProductModal={handleProductModal}
           selectedProductId={selectedProductId}
           categories={categories}
           subCategories={subCategories}
         />
       )}
-        
+
     </section>
   )
 }
