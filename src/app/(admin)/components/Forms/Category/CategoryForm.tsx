@@ -19,11 +19,12 @@ interface DatabaseEntry {
   products: any[];
   coverImage: string;
   parent: string;
+  categories?: any;
 }
 
 // data as props
 interface CategoryFormProps {
-  categoriesData: DatabaseEntry[];
+  categoriesData: DatabaseEntry;
 }
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ categoriesData }) => {
@@ -100,7 +101,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ categoriesData }) => {
                 className={styles.titleSelect}
               >
                 <option value="">Select Title</option>
-                {categoriesData.map((category) => (
+                {categoriesData.categories.map((category:any) => (
                   <option key={category._id} value={category.title}>
                     {category.title}
                   </option>
@@ -116,34 +117,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ categoriesData }) => {
                 className={styles.slugInput}
               />
             </div>
-
-            {/*           <div className={styles.detailsField}>
-            <label htmlFor="details">Details</label>
-            <textarea name="details" id="details" className={styles.detailsTextarea}></textarea>
-          </div> */}
-
-            {/*         <div className={styles.iconField}>
-        <label htmlFor="status">Status</label>
-              <select {...register('status')} id="status" className={styles.iconSelect}>
-                <option value="status">Select Status</option>
-                <option value="draft">Draft</option>
-              </select>
-        </div> */}
-
-            {/*         <div className={styles.typesField}>
-        <label htmlFor="isActive">isActive:</label>
-          <Controller
-            name="isActive"
-            control={control}
-            defaultValue={true}
-            render={({ field }) => (
-              <select {...field} id="isActive">
-                <option value={true}>True</option>
-                <option value={false}>False</option>
-              </select>
-            )}
-          />
-        </div> */}
           </div>
         </div>
 

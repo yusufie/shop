@@ -16,11 +16,12 @@ interface DatabaseEntry {
   products?: any[];
   coverImage?: string;
   parent?: string;
+  categories?: any;
 }
 
 // data as props
 interface CategoryProps {
-  categories: DatabaseEntry[];
+  categories: DatabaseEntry;
 }
 
 const Category: React.FC<CategoryProps> = ({ categories }) => {
@@ -125,7 +126,7 @@ const Category: React.FC<CategoryProps> = ({ categories }) => {
             </thead>
             {/* Table body */}
             <tbody className={styles.tableBody}>
-              {categories.map((category, index) => (
+              {categories.categories.map((category:any, index:any) => (
                 <tr key={category._id}>
                   <td>{index + 1}</td>
                   <td>{category.title}</td>
