@@ -11,7 +11,6 @@ interface ProductModalProps {
   datas: any;
   selectedProductId: any;
   categories: any;
-  subCategories: any;
 }
 
 const ProductModal: React.FC<ProductModalProps> = ({
@@ -19,7 +18,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
   datas,
   selectedProductId,
   categories,
-  subCategories,
 }) => {
   const addItem = useBasketStore((state) => state.addItem);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
@@ -45,11 +43,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
   // Find the selected product's category object from the categories array
   const selectedProductCategory = categories.categories.find(
     (category:any) => category._id === selectedProduct.category._id
-  );
-
-  // Find the selected product's subcategory object from the categories array
-  const selectedProductSubcategory = subCategories.subCategories.find(
-    (subcategory:any) => subcategory._id === selectedProduct.subcategories[0]
   );
 
   return (
@@ -114,7 +107,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
             <div className={styles.infoTags}>
               <span>Categories</span>
               <button>{selectedProductCategory?.title}</button>
-              <button>{selectedProductSubcategory?.title}</button>
+              <button>Subcategory?</button>
             </div>
 
             <div className={styles.infoSeller}>

@@ -7,8 +7,6 @@ import images from "../../../public/datas/slider.json";
 import Grocery from "@/app/(shop)/components/Heros/Grocery";
 import Mobilenav from "@/app/(shop)/components/Mobilenav/Mobilenav";
 import getCategories from "@/utils/getCategories";
-import getSubCategories from "@/utils/getSubCategories";
-
 import { revalidateTag } from "next/cache";
 
 async function getData() {
@@ -29,8 +27,6 @@ export default async function Home() {
   // console.log(datas)
   const categories = await getCategories();
   // console.log(categories)
-  const subCategories = await getSubCategories();
-  // console.log(subCategories)
 
   return (
     <Layout>
@@ -38,7 +34,7 @@ export default async function Home() {
       <Bag />
       <HomeSlider images={images} />
       <Middlebar />
-      <Filterbox datas={datas} categories={categories} subCategories={subCategories}/>
+      <Filterbox datas={datas} categories={categories} />
       <Mobilenav />
     </Layout>
   );

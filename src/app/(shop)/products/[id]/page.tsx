@@ -2,7 +2,6 @@ import Layout from "@/app/(shop)/components/Layout/Layout";
 import ProductDetails from "@/app/(shop)/components/Details/Product/ProductDetails";
 import Bag from "@/app/(shop)/components/Bag/Bag";
 import getCategories from "@/utils/getCategories";
-import getSubCategories from "@/utils/getSubCategories";
 
 import { revalidateTag } from "next/cache";
 
@@ -26,13 +25,11 @@ async function DynamicPage() {
 
   const categories = await getCategories();
   // console.log(categories)
-  const subCategories = await getSubCategories();
-  // console.log(subCategories)
   
   return (
     <Layout>
 
-      <ProductDetails products={products} categories={categories} subCategories={subCategories} />
+      <ProductDetails products={products} categories={categories} />
       <Bag />
 
     </Layout>
