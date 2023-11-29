@@ -13,12 +13,11 @@ import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
 interface ProductDetailsProps {
     products: any;
     categories: any;
-    subCategories: any;
 }
 
 const fetcher = (url: any) => fetch(url).then((res) => res.json());
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, subCategories}) => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) => {
 
     const { id } = useParams();
     const { data: responseData, error } = useSWR(`https://ecommerce-api-5ksa.onrender.com/api/v1/products/${id}`, fetcher);
@@ -52,11 +51,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
     // Find the selected product's category object from the categories array
     const selectedProductCategory = categories.categories.find((category:any) => 
         category._id === selectedProduct.category._id
-    );
-
-    // Find the selected product's subcategory object from the categories array
-    const selectedProductSubcategory = subCategories.subCategories.find((subcategory:any) => 
-        subcategory._id === selectedProduct.subcategories[0]?._id
     );
 
     // Extract the category ID from the selectedProduct
@@ -121,7 +115,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
                     <div className={styles.infoTags}>
                         <span>Categories</span>
                         <button>{selectedProductCategory?.title}</button>
-                        <button>{selectedProductSubcategory?.title}</button>
+                        <button>Subcategory?</button>
                     </div>
 
                     <div className={styles.infoSeller}>
@@ -160,7 +154,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
                     handleProductModal={handleProductModal}
                     selectedProductId={productId}
                     categories={categories}
-                    subCategories={subCategories}
                 />
             )}
 
