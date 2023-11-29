@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 type LikeStore  = {
   likedProducts: string[]; 
   toggleLikeProduct: (productId: string) => void;
+  removeLikedProduct: (productId: string) => void;
 };
 
 const useLikeStore = create<LikeStore >(
@@ -18,6 +19,11 @@ const useLikeStore = create<LikeStore >(
 
           return { likedProducts: updatedLikedProducts };
         });
+      },
+      removeLikedProduct: (productId: string) => {
+        set((state: LikeStore) => ({
+          likedProducts: state.likedProducts.filter((id) => id !== productId),
+        }));
       },
     }),
     {

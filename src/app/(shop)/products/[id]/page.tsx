@@ -2,7 +2,6 @@ import Layout from "@/app/(shop)/components/Layout/Layout";
 import ProductDetails from "@/app/(shop)/components/Details/Product/ProductDetails";
 import Bag from "@/app/(shop)/components/Bag/Bag";
 import getCategories from "@/utils/getCategories";
-
 import { revalidateTag } from "next/cache";
 
 async function getProducts() {
