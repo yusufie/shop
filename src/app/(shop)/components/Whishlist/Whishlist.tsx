@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import useBasketStore from '@/stores/basketStore';
 import useLikeStore from "@/stores/likeStore";
 import styles from "./whishlist.module.css";
 
@@ -13,6 +14,24 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
 
   const getLikedProductDetails = (productId: string) => {
     return products.products.find((product:any) => product._id === productId);
+  };
+
+  const { removeLikedProduct } = useLikeStore(); // Get the function
+
+  const handleRemove = (productId: string) => {
+    removeLikedProduct(productId); // Call the function on click
+  };
+
+  const addItem = useBasketStore((state) => state.addItem);
+  const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
+  const removeItem = useBasketStore((state) => state.removeItem);
+
+  const handleAddToBasket = (data: any) => {
+      addItem(data);
+  };
+  
+  const handleDecrease = (data: any) => {
+      removeItem(data._id, true);
   };
 
   return (
@@ -51,8 +70,22 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
             </span>
 
             <div className={styles.itemsButtons}>
-              <button className={styles.addButton}>Add to Cart</button>
-              <button className={styles.removeButton}>Remove</button>
+
+              {!addedItemCounts[productId] ? (
+                <button className={styles.addButton} onClick={() => handleAddToBasket(getLikedProductDetails(productId))}>
+                  {addedItemCounts[productId] || 'Add To Cart'}
+                </button>
+              ) : (
+                <div className={styles.afterButton}>
+                  <button onClick={() => handleDecrease(getLikedProductDetails(productId))}>-</button>
+                  <span>{addedItemCounts[productId]}</span>
+                  <button onClick={() => addItem(getLikedProductDetails(productId))}>+</button>
+                </div>
+              )}              
+
+              <button className={styles.removeButton} onClick={() => handleRemove(productId)}>
+                Remove
+              </button>
             </div>
 
           </div>
