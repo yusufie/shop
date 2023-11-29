@@ -1,8 +1,14 @@
+"use client";
 import Image from "next/image";
 import items from "../../../../../public/datas/grocery.json";
+import useLikeStore from "@/stores/likeStore";
 import styles from "./whishlist.module.css";
 
 const Whishlist: React.FC = () => {
+
+  const likedProducts = useLikeStore((state) => state.likedProducts);
+
+  console.log("likedProducts",likedProducts)
 
   return (
     <section className={styles.wishlist}>

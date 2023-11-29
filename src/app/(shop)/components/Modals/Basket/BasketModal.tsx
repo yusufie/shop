@@ -47,13 +47,13 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
                 <div className={styles.basketItemLeft}>
                   <div className={styles.basketItemQuantity}>
                     <button className={styles.basketItemQuantityButton} onClick={() => addItem(item)}>
-                      <span>+</span>
+                      <Image src={"/icons/plus.svg"} alt="plus" width={10} height={10} />
                     </button>
 
                     <span className={styles.basketItemQuantityValue}>{addedItemCounts[item._id]}</span>
 
                     <button className={styles.basketItemQuantityButton} onClick={() => handleDecrease(item)}>
-                      <span>-</span>
+                      <Image src="/icons/minus.svg" alt="minus" width={10} height={10} />
                     </button>
                   </div>
 
