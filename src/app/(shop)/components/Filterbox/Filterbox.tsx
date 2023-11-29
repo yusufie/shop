@@ -32,13 +32,13 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, subCategories})
   useEffect(() => {
     if (selectedSubcategory) {
       // Filter products based on the selected subcategory
-      const filtered = datas.data.filter(
+      const filtered = datas.products.filter(
         (data: any) => data.subcategories.includes(selectedSubcategory)
       );
       setFilteredProducts(filtered);
     } else {
       // If no subcategory is selected, display all products
-      setFilteredProducts(datas.data);
+      setFilteredProducts(datas.products);
     }
   }, [selectedSubcategory, datas]);
 

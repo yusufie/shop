@@ -12,8 +12,8 @@ import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
 
 interface ProductDetailsProps {
     products: any;
-    categories: any[];
-    subCategories: any[];
+    categories: any;
+    subCategories: any;
 }
 
 const fetcher = (url: any) => fetch(url).then((res) => res.json());
@@ -50,12 +50,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
     if (!responseData) return <div>loading...</div>;
 
     // Find the selected product's category object from the categories array
-    const selectedProductCategory = categories.find((category) => 
+    const selectedProductCategory = categories.categories.find((category:any) => 
         category._id === selectedProduct.category._id
     );
 
     // Find the selected product's subcategory object from the categories array
-    const selectedProductSubcategory = subCategories.find((subcategory) => 
+    const selectedProductSubcategory = subCategories.subCategories.find((subcategory:any) => 
         subcategory._id === selectedProduct.subcategories[0]?._id
     );
 
@@ -63,9 +63,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories, su
     const selectedProductCategoryId = selectedProduct.category._id;
 
     // Filter products based on the selectedProduct's category ID
-    const relatedProducts = products.data.filter((product: any) => {
+    const relatedProducts = products.products.filter((product: any) => {
         // Check if the product's category matches the selectedProduct's category
-        return product.category[0]._id === selectedProductCategoryId;
+        return product.category._id === selectedProductCategoryId;
     });
 
   return (

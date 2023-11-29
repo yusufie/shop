@@ -10,8 +10,8 @@ interface ProductModalProps {
   handleProductModal: (id: number | null) => void;
   datas: any;
   selectedProductId: any;
-  categories: any[];
-  subCategories: any[];
+  categories: any;
+  subCategories: any;
 }
 
 const ProductModal: React.FC<ProductModalProps> = ({
@@ -33,23 +33,23 @@ const ProductModal: React.FC<ProductModalProps> = ({
     removeItem(data._id, true);
   };
 
-  const selectedProduct = datas.data.find((product: any) => product._id === selectedProductId);
+  const selectedProduct = datas.products.find((product: any) => product._id === selectedProductId);
   if (!selectedProduct) return null;
 
   // Filter same category as the selectedProduct
-  const relatedProducts = datas.data.filter((product: any) =>
+  const relatedProducts = datas.products.filter((product: any) =>
       JSON.stringify(product.category) === JSON.stringify(selectedProduct.category) &&
       product._id !== selectedProductId // Exclude the selected product
   );
 
   // Find the selected product's category object from the categories array
-  const selectedProductCategory = categories.find(
-    (category) => category._id === selectedProduct.category[0]._id
+  const selectedProductCategory = categories.categories.find(
+    (category:any) => category._id === selectedProduct.category._id
   );
 
   // Find the selected product's subcategory object from the categories array
-  const selectedProductSubcategory = subCategories.find(
-    (subcategory) => subcategory._id === selectedProduct.subcategories[0]
+  const selectedProductSubcategory = subCategories.subCategories.find(
+    (subcategory:any) => subcategory._id === selectedProduct.subcategories[0]
   );
 
   return (
