@@ -1,12 +1,19 @@
 import Layout from '@/app/(shop)/components/Layout/Layout'
 import Aside from '@/app/(shop)/components/Aside/Aside'
 import Whishlist from "@/app/(shop)/components/Whishlist/Whishlist"
+import getProducts from "@/utils/getProducts";
 
-function WishlistsPage() {
+export const dynamic = "force-dynamic";
+
+async function WishlistsPage() {
+
+  const products = await getProducts();
+  console.log("products:", products);
+
   return (
     <Layout>
         <Aside>
-          <Whishlist />
+          <Whishlist products={products} />
         </Aside>
     </Layout>
   )
