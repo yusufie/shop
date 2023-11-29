@@ -97,55 +97,6 @@ const ProductList: React.FC = () => {
   };
   // !!!!!------------------PUT FUNCTİON------------------------------------------!!!!!
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-
-  
-  
-
   const handleSelectChange = (event: any) => {
     setSelectedOption(event.target.value);
   };
@@ -167,7 +118,7 @@ const ProductList: React.FC = () => {
   };
 
   const handleSearch = () => {
-    const filteredResults = datas?.data.filter((item: any) =>
+    const filteredResults = datas?.products.filter((item: any) =>
       item?.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setSearchResults(filteredResults);
@@ -178,17 +129,6 @@ const ProductList: React.FC = () => {
       <div className={styles.topcontainer}>
         <div className={styles.container}>
           <div style={{ color: "#161F6A", fontWeight: "bold" }}>Product</div>
-          {/* <div> */}
-          {/* <select */}
-          {/* // className={styles.select} */}
-          {/* // value={selectedOption} */}
-          {/* // onChange={handleSelectChange} */}
-          {/* // > */}
-          {/* <option value="option6">Price</option> */}
-          {/* <option value="option7">Highest to Lowest</option> */}
-          {/* <option value="option8">Lowest To Highest</option> */}
-          {/* </select> */}
-          {/* </div> */}
           <div>
             <input
               type="text"
@@ -234,7 +174,7 @@ const ProductList: React.FC = () => {
                   </div>
                 </div>
               ))
-            : datas?.data.map((item: any) => (
+            : datas?.products.map((item: any) => (
                 <div className={styles.card} key={item._id}>
                   <div className={styles.cardImg}>
                     <Image

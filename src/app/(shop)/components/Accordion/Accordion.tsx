@@ -4,8 +4,8 @@ import Image from "next/image";
 import styles from './accordion.module.css'
 
 interface AccordionProps {
-  categories: any[];
-  subCategories: any[];
+  categories: any;
+  subCategories: any;
   onSubcategoryClick: (subcategoryId: string | null) => void;
 }
 
@@ -18,10 +18,10 @@ const Accordion: React.FC<AccordionProps> = ({ categories, subCategories, onSubc
   };
 
   const renderSubCategories = (categoryId: string) => {
-    const subCategoriesForCategory = subCategories.filter(
-      (sub) => sub.category?._id === categoryId
+    const subCategoriesForCategory = subCategories.subCategories.filter(
+      (sub: any) => sub.category?._id === categoryId
     );
-    return subCategoriesForCategory.map((subCategory) => (
+    return subCategoriesForCategory.map((subCategory:any) => (
       <p 
         key={subCategory._id} 
         className={styles.sub}
@@ -34,7 +34,7 @@ const Accordion: React.FC<AccordionProps> = ({ categories, subCategories, onSubc
 
   return (
     <section className={styles.accordion}>
-      {categories.map((category, index) => (
+      {categories.categories.map((category:any, index:any) => (
         <div className={styles.accordionContainer} key={category._id}>
 
           <div className={`${styles.accordionItem} ${index === activeIndex ? styles.active : ""}`}
