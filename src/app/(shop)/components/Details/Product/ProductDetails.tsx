@@ -5,6 +5,7 @@ import useSWR from "swr";
 import Image from "next/image";
 import Link from "next/link";
 import useBasketStore from '@/stores/basketStore';
+import useLikeStore from "@/stores/likeStore";
 import styles from "./productdetails.module.css";
 import DetailSlider from "../../Sliders/Detail/DetailSlider";
 import ProductCard from "@/app/(shop)/components/Cards/Product/ProductCard";
@@ -21,6 +22,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
 
     const { id } = useParams();
     const { data: responseData, error } = useSWR(`https://ecommerce-api-5ksa.onrender.com/api/v1/products/${id}`, fetcher);
+
+    const toggleLikeProduct = useLikeStore((state) => state.toggleLikeProduct);
+    const likedProducts = useLikeStore((state) => state.likedProducts);
+  
+    const handleLikeProduct = (productId: string) => {
+      toggleLikeProduct(productId);
+    };
 
     const addItem = useBasketStore((state) => state.addItem);
     const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
@@ -83,10 +91,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
                 <div className={styles.productinfo}>
 
                     <div className={styles.infoHeart}>
+
                         <h2>{responseData.title}</h2>
-                        <button className={styles.heartButton}>
-                            <Image src="/icons/heart.svg" alt="heart" width={21} height={21}/>
+
+                        <button className={styles.heartButton} onClick={() => handleLikeProduct(selectedProductId)}>
+                            <Image 
+                            src={likedProducts.includes(selectedProductId) ? '/icons/heart-filled.svg' : '/icons/heart.svg'} 
+                            alt="heart" 
+                            width={21} height={21}/>
                         </button>
+
                     </div>
 
                     <div className={styles.infoDescription}>

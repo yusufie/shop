@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./productmodal.module.css";
 import useBasketStore from '@/stores/basketStore';
+import useLikeStore from "@/stores/likeStore";
 import ModalSlider from "@/app/(shop)/components/Sliders/Modal/ModalSlider";
 import ProductCard from "@/app/(shop)/components/Cards/Product/ProductCard";
 
@@ -19,6 +20,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
   selectedProductId,
   categories,
 }) => {
+
+  const toggleLikeProduct = useLikeStore((state) => state.toggleLikeProduct);
+  const likedProducts = useLikeStore((state) => state.likedProducts);
+
+  const handleLikeProduct = (productId: string) => {
+    toggleLikeProduct(productId);
+  };
+
   const addItem = useBasketStore((state) => state.addItem);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
   const removeItem = useBasketStore((state) => state.removeItem);
@@ -67,8 +76,11 @@ const ProductModal: React.FC<ProductModalProps> = ({
                 <h2>{selectedProduct.title}</h2>
               </Link>
 
-              <button className={styles.heartButton}>
-                <Image src="/icons/heart.svg" alt="heart" width={21} height={21}/>
+              <button className={styles.heartButton} onClick={() => handleLikeProduct(selectedProductId)}>
+                <Image 
+                src={likedProducts.includes(selectedProductId) ? '/icons/heart-filled.svg' : '/icons/heart.svg'} 
+                alt="heart" 
+                width={21} height={21}/>
               </button>
               
             </div>
