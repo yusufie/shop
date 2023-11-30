@@ -4,8 +4,14 @@ import styles from './resetpassword.module.css'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordSchema } from '@/utils/formSchema';
+import { useSearchParams } from 'next/navigation'
+
 
 const ResetPassword = () => {
+  
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
+  
     const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -23,8 +29,9 @@ const ResetPassword = () => {
       return;
     }
 
+
+
     try {
-      const token = localStorage.getItem('accessToken');
       console.log('"token kontroll"', token);
       const response = await fetch(`https://ecommerce-api-5ksa.onrender.com/api/v1/auth/reset-password/${token}`, {
         method: 'POST',
