@@ -78,12 +78,11 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
       <div className={styles.registerModalContent}>
         {
           <Image
-            className={styles.logo}
-            src={"/images/logo.png"}
-            alt="logo"
-            width={160}
-            height={26}
-          />
+          className={styles.logo}
+          src={"/images/grand.png"}
+          alt="logo"
+          width={163} height={45}
+        />
         }
         <p>
           By signing up, you agree to our{" "}

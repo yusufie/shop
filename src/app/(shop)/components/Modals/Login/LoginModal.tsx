@@ -89,10 +89,9 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
       {
           <Image
             className={styles.logo}
-            src={"/images/logo.png"}
+            src={"/images/grand.png"}
             alt="logo"
-            width={160}
-            height={26}
+            width={163} height={45}
           />
         }
         <p>Login with your email & password</p>
@@ -138,38 +137,6 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
           <hr />
           <span>Or</span>
         </div>
-
-        <div className={styles.auth}>
-          {
-            <button className={styles.google}>
-              <Image
-                className={styles.iconsgoogle}
-                src={"/icons/google.svg"}
-                alt="google"
-                width={16}
-                height={16}
-              />{" "}
-              Login with Google
-            </button>
-          }
-          {
-            <button className={styles.mobile}>
-              <Image
-                className={styles.iconsphone}
-                src={"/icons/phone.svg"}
-                alt="phone"
-                width={20}
-                height={20}
-              />{" "}
-              Login with Mobile number
-            </button>
-          }
-        </div>
-
-        <div className={styles.horizontalLinea}>
-          <hr />
-        </div>
-
         <div className={styles.account}>
           Don&apos;t have any account?{" "}
           <button 
