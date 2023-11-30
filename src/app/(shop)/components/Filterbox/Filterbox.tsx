@@ -20,14 +20,14 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const handleCategoryClick = (categoryId: string) => {
+  const handleCategoryClick = (categoryId: string | null) => {
     // Set the selected category when a category is clicked
     setSelectedCategory(categoryId);
   };
 
   const filterProductsByCategory = (categoryId: string | null) => {
     return datas.products.filter((data: any) => {
-      if (!categoryId) {
+      if (!categoryId || categoryId === 'allProducts') {
         // If no category is selected, display all products
         return true; 
       }

@@ -15,20 +15,25 @@ interface AccordionProps {
   tree: {
     categories: Category[];
   };
-  handleCategoryClick: (categoryId: string) => void;
+  handleCategoryClick: (categoryId: string | null) => void;
 }
 
 const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
   const handleAccordionClick = (categoryId: string) => {
-    if (expandedCategories.includes(categoryId)) {
-      setExpandedCategories(expandedCategories.filter(id => id !== categoryId));
+    if (categoryId === 'allProducts') {
+      // Set selectedCategory to null for "All Products" category
+      handleCategoryClick(null); 
     } else {
-      setExpandedCategories([...expandedCategories, categoryId]);
+      if (expandedCategories.includes(categoryId)) {
+        setExpandedCategories(expandedCategories.filter(id => id !== categoryId));
+      } else {
+        setExpandedCategories([...expandedCategories, categoryId]);
+      }
+      // Pass the category ID when clicked
+      handleCategoryClick(categoryId);
     }
-
-    handleCategoryClick(categoryId);
   };
 
   const renderCategories = (categories: Category[]) => {
@@ -45,7 +50,7 @@ const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
             {/* <Image src={category.coverImage} alt={category.title} width={20} height={20} /> */}
             <span>{category.name}</span>
           </div>
-          {category.children.length > 0 && (
+          {category.children.length > 0 && category._id !== 'allProducts' && (
             <Image
               src="/icons/arrow-down.svg"
               alt="arrow-down"
@@ -55,11 +60,11 @@ const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
             />
           )}
         </div>
-        {expandedCategories.includes(category._id) && (
+        {expandedCategories.includes(category._id) && category._id !== 'allProducts' && (
           <div className={styles.subCategories}>
             {category.children.map((childCategory: Category) => (
-              <div key={childCategory._id}>
-                <div
+              <>
+                <div key={childCategory._id}
                   className={`${styles.accordionItem}`}
                   onClick={() => {
                     handleAccordionClick(childCategory._id);
@@ -85,7 +90,7 @@ const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
                     {renderCategories(childCategory.children)}
                   </div>
                 )}
-              </div>
+              </>
             ))}
           </div>
         )}
@@ -98,6 +103,18 @@ const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
 
   return (
     <section className={styles.accordion}>
+      {allProductsCategory && (
+        <div className={styles.accordionContainer} key={allProductsCategory._id}>
+          <div
+            className={`${styles.accordionItem}`}
+            onClick={() => handleAccordionClick('allProducts')}
+          >
+            <div className={styles.accordionTitle}>
+              {allProductsCategory.name} {/* Display "All Products" category name */}
+            </div>
+          </div>
+        </div>
+      )}
       {allProductsCategory && renderCategories(allProductsCategory.children)}
     </section>
   );

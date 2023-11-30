@@ -7,6 +7,11 @@
   padding: 1.25rem;
   height: 100vh;
   max-width: 16rem;
+  width: 100%;
+}
+
+.accordionContainer {
+  width: 100%;
 }
 
 .accordionItem {
@@ -36,19 +41,16 @@
   color: rgb(75, 85, 99);
 }
 
-.accordionContent {
-  margin-bottom: 0.5rem;
-}
-
-.accordionContent .sub {
-  padding: 0.5rem 2.25rem;
+.subCategories {
+  padding-left: 1rem;
+  /* padding: 0.5rem 2.25rem; */
   font-weight: 600;
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  /* line-height: 1.25rem; */
   color: rgb(75, 85, 99);
 }
 
-.sub:hover {
+.subCategories:hover {
   color: rgb(0, 159, 127);
   cursor: pointer;
 }
