@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { useStore } from '@/stores/SearchStore';
 import Accordion from '@/app/(shop)/components/Accordion/Accordion'
 import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
-import ProductCard from '../Cards/Product/ProductCard';
+import ProductCard from '@/app/(shop)/components/Cards/Product/ProductCard';
+import Pagination from '@/app/(shop)/components/Pagination/Pagination';
 import styles from './filterbox.module.css'
 
 interface FilterboxProps {
@@ -20,9 +21,14 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 18;
+
   const handleCategoryClick = (categoryId: string | null) => {
     // Set the selected category when a category is clicked
     setSelectedCategory(categoryId);
+    // Reset to first page when a category is clicked
+    setCurrentPage(1);
   };
 
   const filterProductsByCategory = (categoryId: string | null) => {
@@ -39,6 +45,16 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
 
   const filteredProducts = filterProductsByCategory(selectedCategory);
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts
+    .filter((data: any) => data.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    .slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   const handleProductModal = (id: number | null) => {
     setSelectedProductId(id);
     setIsProductModalVisible(true);
@@ -51,17 +67,26 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
         handleCategoryClick={handleCategoryClick}
       />
 
+    <div className={styles.results}>
+      {/* Product cards */}
       <article className={styles.cards}>
-      {filteredProducts
-          .filter((data: any) => data.title.toLowerCase().includes(searchQuery.toLowerCase()))
-          .map((data: any) => (
-            <ProductCard
-              key={data._id}
-              data={data}
-              handleProductModal={handleProductModal}
-            />
-          ))}
+        {currentProducts.map((data: any) => (
+          <ProductCard
+            key={data._id}
+            data={data}
+            handleProductModal={handleProductModal}
+          />
+        ))}
       </article>
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        productsPerPage={productsPerPage}
+        totalProducts={filteredProducts.length}
+        paginate={paginate}
+      />
+    </div>
 
       {/* Conditionally render the ProductModal */}
       {isProductModalVisible && (

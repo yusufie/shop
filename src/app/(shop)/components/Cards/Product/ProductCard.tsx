@@ -45,7 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
         onClick={() => handleProductModal(data._id)}
         onKeyDown={() => handleProductModal(data._id)}
       >
-        <Image src={data.images[0]} alt={data.name} width={256} height={256} />
+        <Image src={data.images[0]} alt={data.name} width={216} height={216} />
         {showImage && addedItem?._id === data._id && (
           <div className={styles.flyImage}>
             <Image src={data.images[0]} alt={data.name} width={112} height={112} />
