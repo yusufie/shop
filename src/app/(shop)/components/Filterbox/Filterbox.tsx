@@ -18,6 +18,26 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
 
   const [isProductModalVisible, setIsProductModalVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const handleCategoryClick = (categoryId: string) => {
+    // Set the selected category when a category is clicked
+    setSelectedCategory(categoryId);
+  };
+
+  const filterProductsByCategory = (categoryId: string | null) => {
+    return datas.products.filter((data: any) => {
+      if (!categoryId) {
+        // If no category is selected, display all products
+        return true; 
+      }
+
+      // Check if the product belongs to the selected category or its children
+      return data.category._id === categoryId || data.category.parent === categoryId;
+    });
+  };
+
+  const filteredProducts = filterProductsByCategory(selectedCategory);
 
   const handleProductModal = (id: number | null) => {
     setSelectedProductId(id);
@@ -28,10 +48,11 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
     <section className={styles.filterbox} id="filterbox">
       <Accordion 
         tree={tree}
+        handleCategoryClick={handleCategoryClick}
       />
 
       <article className={styles.cards}>
-      {datas.products
+      {filteredProducts
           .filter((data: any) => data.title.toLowerCase().includes(searchQuery.toLowerCase()))
           .map((data: any) => (
             <ProductCard

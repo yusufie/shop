@@ -15,9 +15,10 @@ interface AccordionProps {
   tree: {
     categories: Category[];
   };
+  handleCategoryClick: (categoryId: string) => void;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ tree }) => {
+const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
   const handleAccordionClick = (categoryId: string) => {
@@ -26,6 +27,8 @@ const Accordion: React.FC<AccordionProps> = ({ tree }) => {
     } else {
       setExpandedCategories([...expandedCategories, categoryId]);
     }
+
+    handleCategoryClick(categoryId);
   };
 
   const renderCategories = (categories: Category[]) => {
@@ -33,7 +36,10 @@ const Accordion: React.FC<AccordionProps> = ({ tree }) => {
       <div className={styles.accordionContainer} key={category._id}>
         <div
           className={`${styles.accordionItem}`}
-          onClick={() => handleAccordionClick(category._id)}
+          onClick={() => {
+            handleAccordionClick(category._id);
+            handleCategoryClick(category._id);
+          }}
         >
           <div className={styles.accordionTitle}>
             {/* <Image src={category.coverImage} alt={category.title} width={20} height={20} /> */}
@@ -55,9 +61,12 @@ const Accordion: React.FC<AccordionProps> = ({ tree }) => {
               <div key={childCategory._id}>
                 <div
                   className={`${styles.accordionItem}`}
-                  onClick={() => handleAccordionClick(childCategory._id)}
+                  onClick={() => {
+                    handleAccordionClick(childCategory._id);
+                    handleCategoryClick(childCategory._id);
+                  }}
                 >
-                  <div className={styles.accordionTitle}>
+                  <div className={styles.accordionTitle} >
                     {/* <Image src={childCategory.coverImage} alt={childCategory.title} width={20} height={20} /> */}
                     <span>{childCategory.name}</span>
                   </div>
