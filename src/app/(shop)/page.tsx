@@ -6,6 +6,7 @@ import Middlebar from "@/app/(shop)/components/Middlebar/Middlebar";
 import images from "../../../public/datas/slider.json";
 import Grocery from "@/app/(shop)/components/Heros/Grocery";
 import Mobilenav from "@/app/(shop)/components/Mobilenav/Mobilenav";
+import Guarantee from "@/app/(shop)/components/Guarantee/Guarantee";
 import getCategories from "@/utils/getCategories";
 import getCategoriesTree from "@/utils/getCategoriesTree";
 import { revalidateTag } from "next/cache";
@@ -37,7 +38,8 @@ export default async function Home() {
       <Bag />
       <HomeSlider images={images} />
       <Middlebar />
-      <Filterbox datas={datas} categories={categories} tree={tree}/>
+      <Filterbox datas={datas} categories={categories} tree={tree} />
+      <Guarantee />
       <Mobilenav />
     </Layout>
   );
