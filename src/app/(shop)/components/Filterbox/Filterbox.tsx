@@ -9,9 +9,10 @@ import styles from './filterbox.module.css'
 interface FilterboxProps {
   datas: any;
   categories: any;
+  tree: any;
 }
 
-const Filterbox: React.FC<FilterboxProps> = ({datas, categories}) => {
+const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
 
   const { searchQuery } = useStore();
 
@@ -26,7 +27,7 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories}) => {
   return (
     <section className={styles.filterbox} id="filterbox">
       <Accordion 
-        categories={categories}
+        tree={tree}
       />
 
       <article className={styles.cards}>
