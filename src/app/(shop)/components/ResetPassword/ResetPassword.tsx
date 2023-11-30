@@ -17,9 +17,7 @@ const ResetPassword = () => {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const handleChangePassword = async (e:any) => {
-    e.preventDefault();
-
+  const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match');
       return;
@@ -53,11 +51,11 @@ const ResetPassword = () => {
      <p>Password must be at least 8 characters</p>
      <form className={styles.resetPasswordForm} onSubmit={handleSubmit(handleChangePassword)}>
         <label htmlFor="password">New Password</label>
-        <input type="password" id='password'  {...register('password')} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+        <input id='password'  {...register('password')} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
         {errors.password && <span className={styles.error}>{errors.password.message as any}</span>}
 
         <label htmlFor="passwordConfirm">Confirm New Password</label>
-        <input type="password" id='passwordConfirm'  {...register('passwordConfirm')} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+        <input id='passwordConfirm'  {...register('passwordConfirm')} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
         {errors.passwordConfirm && <span className={styles.error}>{errors.passwordConfirm.message as any}</span>}
 
         <button className={styles.btn}>Save</button>
