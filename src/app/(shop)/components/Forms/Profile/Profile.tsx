@@ -1,10 +1,16 @@
+"use client";
+import React from 'react'
+// import { useUserStore } from '@/stores/userStore'
 import Image from "next/image";
 import styles from "./profile.module.css";
+// import Avatar from './Avatar';
+import UpdateName from './UpdateName';
 
 const Profile: React.FC = () => {
   return (
     <section className={styles.profile}>
 
+      {/* <Avatar /> */}
         <form className={styles.personal}>
 
           <div className={styles.upload}>
@@ -14,20 +20,28 @@ const Profile: React.FC = () => {
               <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
             </div>
           </div>
+
+          <button type="submit" className={styles.saveButton}>Save</button>
+
+        </form>
+
+        <UpdateName />
+        
+{/*     <form className={styles.personal}>
           
           <div className={styles.nameField}>
-            <label htmlFor="name">Name</label>
-            <input type="text"  className={styles.nameInput}/>
+            <label htmlFor="firstName">firstName</label>
+            <input type="text"  className={styles.nameInput} />
           </div>
-          
-          <div className={styles.bioField}>
-            <label htmlFor="bio">Bio</label>
-            <textarea name="bio" id="" className={styles.textarea}></textarea>
+
+          <div className={styles.nameField}>
+            <label htmlFor="lastName">lastName</label>
+            <input type="text"  className={styles.nameInput} />
           </div>
           
           <button className={styles.saveButton}>Save</button>
 
-        </form>
+        </form> */}
 
         <form className={styles.emailField}>
           <div>
