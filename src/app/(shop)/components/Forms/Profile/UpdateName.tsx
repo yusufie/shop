@@ -23,7 +23,7 @@ const UpdateName = () => {
     // resolver: zodResolver(registerSchema),
   });
 
-  // send data to the "/api/v1/auth/login" route
+  // send data to the "/api/v1/profile/name/{userId}" route
   const onSubmit = async (data: FormValues,) => {
 
     try {
