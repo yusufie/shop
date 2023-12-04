@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f3f4f6;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 4rem; 
+    text-align: center;
+    max-width: 27.5rem; 
+    width: 100%; 
+  }
+  
+  .logo {
+    margin-bottom: 1.2rem;
+  }
+  
+  .message {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .successfulVerified {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 1.2rem;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: #009f7f;
+    border: 1px solid #009f7f;
+    padding: 0.6rem 1.2rem;
+    border-radius: 1.2rem;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .link:hover {
+    background-color: #009f7f;
+    color: white;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .card {
+      padding: 2rem;
+    }
+  
+    .message {
+      font-size: 1rem; 
+    }
+  }
+  
