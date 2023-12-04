@@ -3,35 +3,17 @@ import React from 'react'
 import styles from "./profile.module.css";
 import Avatar from './Avatar';
 import UpdateName from './UpdateName';
+import UpdateEmail from './UpdateEmail';
 
 const Profile: React.FC = () => {
   return (
     <section className={styles.profile}>
 
       <Avatar />
-{/*     <form className={styles.personal}>
 
-          <div className={styles.upload}>
-            <input type="file" className={styles.customFileinput} />
-            <div className={styles.image}>
-            <Image src="/icons/upload.svg" alt="upload" width={40} height={30} />
-              <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
-            </div>
-          </div>
+      <UpdateName />
 
-          <button type="submit" className={styles.saveButton}>Save</button>
-
-        </form> */}
-
-        <UpdateName />
-        
-        <form className={styles.emailField}>
-          <div>
-            <label htmlFor="email">Email</label>
-            <input type="text" className={styles.emailinput}/>
-          </div>
-          <button className={styles.updateButton}>Update</button>
-        </form>
+      <UpdateEmail />
 
         <div className={styles.contactField}>
           <div className={styles.contactHeader}>
