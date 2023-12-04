@@ -65,13 +65,13 @@ const UpdateName = () => {
         <form className={styles.personal} onSubmit={handleSubmit(onSubmit)}>
 
             <div className={styles.nameField}>
-                <label htmlFor="firstName">firstName</label>
+                <label htmlFor="firstName">Firstname:</label>
                 <input {...register("firstName")} id="firstName" className={styles.nameInput} />
                 {/* {errors.firstName && <span>{errors.firstName.message}</span>} */}
             </div>
 
             <div className={styles.nameField}>
-                <label htmlFor="lastName">lastName</label>
+                <label htmlFor="lastName">Lastname:</label>
                 <input {...register("lastName")} id="lastName" className={styles.nameInput} />
                 {/* {errors.lastName && <span>{errors.lastName.message}</span>} */}
             </div>
