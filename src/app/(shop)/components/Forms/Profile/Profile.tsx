@@ -1,9 +1,11 @@
 "use client";
 import React from 'react'
 import styles from "./profile.module.css";
-import Avatar from './Avatar';
-import UpdateName from './UpdateName';
-import UpdateEmail from './UpdateEmail';
+import Avatar from '@/app/(shop)/components/Forms/Profile/Avatar';
+import UpdateName from '@/app/(shop)/components/Forms/Profile/UpdateName';
+import UpdateEmail from '@/app/(shop)/components/Forms/Profile/UpdateEmail';
+import UpdateContact from '@/app/(shop)/components/Forms/Profile/UpdateContact';
+import UpdateAddress from '@/app/(shop)/components/Forms/Profile/UpdateAddress';
 
 const Profile: React.FC = () => {
   return (
@@ -15,34 +17,9 @@ const Profile: React.FC = () => {
 
       <UpdateEmail />
 
-        <div className={styles.contactField}>
-          <div className={styles.contactHeader}>
-            <p>Contact Number</p>
-            <button className={styles.contactButton}>+ Update</button>
-          </div>
+      <UpdateContact />
 
-          <input type="text" className={styles.contactinput}/>
-        </div>
-
-        <div className={styles.addressField}>
-          <div className={styles.addressHeader}>
-            <p>Addresses</p>
-            <button className={styles.addButton}>+ Add</button>
-          </div>
-
-          <div className={styles.adressButtons}>
-            <button className={styles.adressButton}>
-              <p className={styles.title}>Billing</p>
-              <p className={styles.address}>2231 Kidd Avenue, AK, Kipnuk, 99614, United States</p>
-            </button>
-
-            <button className={styles.adressButton}>
-              <p className={styles.title}>Shipping</p>
-              <p className={styles.address}>2231 Kidd Avenue, AK, Kipnuk, 99614, United States</p>
-            </button>
-          </div>
-
-        </div>
+      <UpdateAddress />
 
     </section>
   )
