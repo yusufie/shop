@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 import { useUserStore } from '@/stores/userStore';
+import Image from "next/image";
+import styles from "./profile.module.css";
 
 const Avatar = () => {
   const userStore = useUserStore();
@@ -58,9 +60,10 @@ const Avatar = () => {
           method: 'PATCH', // Consider using 'PATCH' for updating resources
           headers: {
             Authorization: `Bearer ${userStore.accessToken}`,
+            'Content-Type': 'application/json',
           },
           // send the FormData object containing the imageUrl
-          body: formData,
+          body: JSON.stringify({ image: imageUrl }),
         });
   
         if (response.ok) {
@@ -76,10 +79,21 @@ const Avatar = () => {
   };
 
   return (
-    <section>
-      <h2>Avatar</h2>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button onClick={handleImageUpload}>Upload</button>
+    <section className={styles.personal}>
+
+      <div className={styles.upload}>
+
+        <input type="file" accept="image/*" onChange={handleImageChange} className={styles.customFileinput}/>
+        
+        <div className={styles.image}>
+            <Image src="/icons/upload.svg" alt="upload" width={40} height={30} />
+            <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
+        </div>
+
+      </div>
+
+      <button onClick={handleImageUpload} className={styles.saveButton}>Save</button>
+
     </section>
   );
 };
