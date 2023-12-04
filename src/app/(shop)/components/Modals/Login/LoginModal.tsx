@@ -6,6 +6,7 @@ import { loginSchema } from '@/utils/formSchema'
 import { useUserStore } from '@/stores/userStore';
 import Image from 'next/image';
 import styles from './loginmodal.module.css'
+import { useRouter } from "next/navigation";
 // import ConfirmationModal from "@/components/Modal/ConfirmationModal";
 // import RegisterModal from '@/app/(shop)/components/Modals/Register/RegisterModal';
 
@@ -22,6 +23,7 @@ type FormValues = {
 
 const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: LoginModalProps) => {
 
+  const route = useRouter();
   const userStore = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -70,6 +72,7 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
 
         // Close the modal or navigate to another page
         onClose();
+        route.push("/");
 
       } else {
         alert('Login failed');
