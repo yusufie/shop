@@ -34,7 +34,7 @@ const VerifyEmail = () => {
             console.log("Email verification successful!", response);
           } else {
             const errorData = await response.json();
-            alert()
+            alert('Your email could not be verified')
             console.log("Failed to verify email hata:", errorData);
             console.log(response, "responsee");
           }
@@ -46,7 +46,7 @@ const VerifyEmail = () => {
     } else {
       console.log("tokenn yokk");
     }
-  }, []);
+  }, [token]);
 
   const handleLoginModal = () => {
     setIsVerify(!isVerify);
