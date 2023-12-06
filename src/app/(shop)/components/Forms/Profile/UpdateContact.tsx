@@ -62,7 +62,7 @@ const UpdateContact = () => {
     <form className={styles.contactField} onSubmit={handleSubmit(onSubmit)}>
 
         <div>
-            <label htmlFor="contact">Contact:</label>
+            <label htmlFor="contact">Contact</label>
             <input {...register("contact")} id="contact" className={styles.contactinput} />
         </div>
 
