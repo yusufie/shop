@@ -79,3 +79,8 @@
   .changePassword .submitButton:hover {
     background-color: rgba(1, 147, 118, 255);
   }
+
+  .error{
+    color: red;
+    font-size: small;
+}
