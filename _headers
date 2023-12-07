@@ -1,2 +1,2 @@
 https://ecommerce-api-5ksa.onrender.com/*
-  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Origin: https://ecommerce-api-5ksa.onrender.com/*
