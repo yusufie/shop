@@ -108,7 +108,7 @@ const Header: React.FC = () => {
         {userStore.isLoggedIn && (
           <>
             {userStore.user?.role === 'ADMIN' && (
-              <Link href={'/admin/dashboard'}>
+              <Link href={'/admin'}>
                 <button className={styles.become}>Admin</button>
               </Link>
             )}
