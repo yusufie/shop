@@ -81,6 +81,7 @@ const Change: React.FC = () => {
 
       if (response.ok) {
         console.log(response);
+        setConfirmOldPassword(false);
         setIsSuccess(true);
         resetForm();
       } else {
