@@ -1,5 +1,5 @@
 [[headers]]
-  for = "*"
+  for = "https://ecommerce-api-5ksa.onrender.com/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Headers = "Content-Type"
