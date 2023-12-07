@@ -18,22 +18,62 @@ import getProducts from "@/utils/getProducts";
 //   return res.json();
 // }
 
-async function DynamicPage() {
-
+async function generateStaticParams() {
   const products = await getProducts();
-  // console.log(products)
+  const params = products.map((product : any) => ({
+    params: { id: product.id.toString() },
+  }));
+  return params;
+}
 
+export async function getStaticPaths() {
+  return {
+    paths: await generateStaticParams(),
+    fallback: false,
+  };
+}
+
+export async function getStaticProps() {
+  const products = await getProducts();
   const categories = await getCategories();
-  // console.log(categories)
-  
+  return {
+    props: {
+      products,
+      categories,
+    },
+    revalidate: 60,
+  };
+}
+
+ function DynamicPage({ products , categories }: any) {
   return (
     <Layout>
-
       <ProductDetails products={products} categories={categories} />
       <Bag />
-
     </Layout>
   );
 }
 
 export default DynamicPage;
+
+// async function DynamicPage() {
+
+//   const products = await getProducts();
+//   // console.log(products)
+
+//   const categories = await getCategories();
+//   // console.log(categories)
+
+  
+  
+//   return (
+//     <Layout>
+
+//       <ProductDetails products={products} categories={categories} />
+//       <Bag />
+
+//     </Layout>
+//   );
+// }
+
+// export default DynamicPage;
