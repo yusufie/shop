@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  exportPathMap: async function (defaultPathMap) {
+    return defaultPathMap;
+  },
   // output: 'export',
   images: {
     domains: [
