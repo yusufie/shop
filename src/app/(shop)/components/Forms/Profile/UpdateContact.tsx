@@ -8,6 +8,7 @@ import styles from "./profile.module.css";
 
 type FormValues = {
   contact: string;
+  countryCode: string;
 };
 
 const UpdateContact = () => {
@@ -25,18 +26,33 @@ const UpdateContact = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       const userData = {
-        contact: data.contact,
+        contact: {
+          type: 'string', // Update type based on your schema
+          phone: {
+            countryCode: data.countryCode,
+            number: data.contact,
+          },
+        },
       };
+
+      const userId = userStore.user?._id;
+      const accessToken = userStore.accessToken;
+
+      if (!userId || !accessToken) {
+        console.error('User ID or access token not available');
+        return;
+      }
+
       console.log("Submitted Data:", userData);
-      console.log("User ID:", userStore.user?._id);
-      console.log("Access token:", userStore.accessToken);
+      console.log("User ID:", userId);
+      console.log("Access token:", accessToken);
 
       const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/contact/${userStore.user?._id}`,
+        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/contact/${userId}`,
         {
           method: "PATCH",
           headers: {
-            Authorization: `Bearer ${userStore.accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
@@ -66,6 +82,15 @@ const UpdateContact = () => {
             <input {...register("contact")} id="contact" className={styles.contactinput} />
         </div>
 
+        <div>
+          <label htmlFor="countryCode">Country Code:</label>
+          <select {...register('countryCode')} id="countryCode" className={styles.countryCodeSelect}>
+            <option value="+1">+1 (USA)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+91">+91 (India)</option>
+          </select>
+        </div>
+        
         <button type="submit" value="submit" className={styles.updateButton}>Update</button>
 
     </form>
