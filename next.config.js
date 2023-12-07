@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  exportPathMap: async function (defaultPathMap) {
-    return defaultPathMap;
+  generateStaticParams: async function () {
+    return {
+      '/': { page: '/' },
+    };
   },
   // output: 'export',
   images: {
