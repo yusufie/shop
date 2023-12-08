@@ -1,55 +1,28 @@
 import Layout from "@/app/(shop)/components/Layout/Layout";
-// import ProductDetails from "@/app/(shop)/components/Details/Product/ProductDetails";
-import Bag from "@/app/(shop)/components/Bag/Bag";
-// import getCategories from "@/utils/getCategories";
-
-export async function generateStaticParams() {
-
-  const products = await fetch("https://ecommerce-api-5ksa.onrender.com/api/v1/products").then(res => res.json());
-
-  // console.log("products:", products)
-
-  return products.products.map((product: any) => ({
-    productId: product._id
-  }));
-
-}
-
-export default function DynamicPage({ params }: any) {
-
-  console.log("params:", params)
-
-  const { id } = params;
-  console.log("productId:", id)
-
-  return (
-    <Layout>
-      <p>
-        Product ID: {id}
-      </p>
-      <Bag />
-    </Layout>
-  );
-}
-
-/* 
-import Layout from "@/app/(shop)/components/Layout/Layout";
 import ProductDetails from "@/app/(shop)/components/Details/Product/ProductDetails";
 import Bag from "@/app/(shop)/components/Bag/Bag";
 import getCategories from "@/utils/getCategories";
 import { revalidateTag } from "next/cache";
 
 async function getProducts() {
-  // Cache data and tag it for revalidation
-  const res = await fetch( "https://ecommerce-api-5ksa.onrender.com/api/v1/products",
-    { next: { tags: ["productData"] }, }
-  );
 
-  if (res.ok) { await revalidateTag("productData"); }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/products";
 
-  if (!res.ok) { throw new Error("Failed to fetch data"); }
+  try {
+    const res = await fetch(apiUrl, { next: { tags: ['products'] } });
 
-  return res.json();
+    if (res.ok) {
+      revalidateTag('products');
+    } else {
+      throw new Error('Failed to fetch products data');
+    }
+
+    return res.json();
+  } catch (error: any) {
+    console.error('Error fetching products data:', error.message);
+    // Handle the error gracefully (e.g., show a user-friendly message)
+    throw error;
+  }
 }
 
 async function DynamicPage() {
@@ -71,5 +44,3 @@ async function DynamicPage() {
 }
 
 export default DynamicPage;
-
- */

@@ -19,7 +19,8 @@ const Avatar = () => {
     imageFormData.append('file', file);
 
     try {
-      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/upload/single', {
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload/single`;
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${userStore.accessToken}`,
@@ -56,13 +57,13 @@ const Avatar = () => {
         console.log('Image URL:', imageUrl);
         console.log('User ID:', userStore.user?._id);
   
-        const response = await fetch(`https://ecommerce-api-5ksa.onrender.com/api/v1/profile/image/${userStore.user?._id}`, {
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/image/${userStore.user?._id}`;
+        const response = await fetch(apiUrl, {
           method: 'PATCH', // Consider using 'PATCH' for updating resources
           headers: {
             Authorization: `Bearer ${userStore.accessToken}`,
             'Content-Type': 'application/json',
           },
-          // send the FormData object containing the imageUrl
           body: JSON.stringify({ image: imageUrl }),
         });
   

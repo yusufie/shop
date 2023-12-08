@@ -2,7 +2,7 @@ import { revalidateTag } from "next/cache";
 
 async function getProducts() {
 
-  const apiUrl = "https://ecommerce-api-5ksa.onrender.com/api/v1/products";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/products";
 
   try {
     const res = await fetch(apiUrl, { next: { tags: ['products'] } });

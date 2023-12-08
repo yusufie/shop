@@ -18,16 +18,14 @@ const VerifyEmail = () => {
       const sendVerificationRequest = async () => {
         console.log("token kontrol", token);
         try {
-          const response = await fetch(
-            `https://ecommerce-api-5ksa.onrender.com/api/v1/auth/verify-email/${token}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email: email, token: token }),
-            }
-          );
+          const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/verify-email/${token}`;
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: email, token: token }),
+          });
 
           if (response.ok) {
             setEmailVerified(true);

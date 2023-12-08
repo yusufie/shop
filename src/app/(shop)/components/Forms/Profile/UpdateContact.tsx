@@ -31,17 +31,15 @@ const UpdateContact = () => {
       console.log("User ID:", userStore.user?._id);
       console.log("Access token:", userStore.accessToken);
 
-      const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/contact/${userStore.user?._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${userStore.accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        }
-      );
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/contact/${userStore.user?._id}`;
+      const response = await fetch(apiUrl, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${userStore.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
 
       console.log("Response Status:", response.status);
 

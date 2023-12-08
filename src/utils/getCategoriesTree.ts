@@ -2,7 +2,7 @@ import { revalidateTag } from "next/cache";
 
 async function getCategoriesTree() {
 
-  const apiUrl = "https://ecommerce-api-5ksa.onrender.com/api/v1/categories/tree";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/categories/tree";
 
   try {
     const res = await fetch(apiUrl, { next: { tags: ['categoriestree'] } });
