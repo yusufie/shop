@@ -1,6 +1,0 @@
-[[headers]]
-  for = "https://ecommerce-api-5ksa.onrender.com/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "https://ecommerce-api-5ksa.onrender.com/*"
-    Access-Control-Allow-Headers = "Content-Type"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
