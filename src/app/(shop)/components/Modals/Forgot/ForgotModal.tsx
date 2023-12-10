@@ -38,7 +38,7 @@ const ForgotPasswordModal = ({ onClose }: ForgotModalProps) => {
           }
           console.log('Submitted Data:', userData);
     
-          const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/forgot-password', {
+          const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/v1/auth/forgot-password', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

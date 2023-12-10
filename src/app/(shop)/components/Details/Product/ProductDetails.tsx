@@ -21,7 +21,7 @@ const fetcher = (url: any) => fetch(url).then((res) => res.json());
 const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) => {
 
     const { id } = useParams();
-    const { data: responseData, error } = useSWR(`https://ecommerce-api-5ksa.onrender.com/api/v1/products/${id}`, fetcher);
+    const { data: responseData, error } = useSWR(process.env.NEXT_PUBLIC_API_URL+`/api/v1/products/${id}`, fetcher);
 
     const toggleLikeProduct = useLikeStore((state) => state.toggleLikeProduct);
     const likedProducts = useLikeStore((state) => state.likedProducts);

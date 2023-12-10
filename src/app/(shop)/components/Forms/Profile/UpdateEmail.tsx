@@ -32,7 +32,7 @@ const UpdateEmail = () => {
       console.log("Access token:", userStore.accessToken);
 
       const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/email/${userStore.user?._id}`,
+          process.env.NEXT_PUBLIC_API_URL+`/api/v1/profile/email/${userStore.user?._id}`,
         {
           method: "PATCH",
           headers: {

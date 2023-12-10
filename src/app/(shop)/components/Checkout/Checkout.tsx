@@ -29,7 +29,7 @@ interface CheckoutComponentProps {
     totalPrice: number;
     itemDes: string;
     itemPrice: number;
-    itemİd: number;
+    itemId: number;
   }>;
 }
 
@@ -71,7 +71,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
     error,
     mutate,
   } = useSWR(
-    `https://ecommerce-api-5ksa.onrender.com/api/v1/users`,
+      process.env.NEXT_PUBLIC_API_URL+`/api/v1/users`,
     async (url) => {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
@@ -98,7 +98,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
   const handleCheckout = async () => {
-    const apiUrl = "https://ecommerce-api-5ksa.onrender.com/api/v1/orders";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL+"/api/v1/orders";
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       throw new Error("Access token not found");

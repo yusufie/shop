@@ -55,7 +55,7 @@ const CheckoutUpdateModal: React.FC<CheckoutUpdateModalProps> = ({
       }
 
       const userResponse = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/orders/contact/${userId}`,
+          process.env.NEXT_PUBLIC_API_URL+`/api/v1/orders/contact/${userId}`,
         {
           method: "PATCH",
           headers: {
