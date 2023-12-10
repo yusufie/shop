@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type BasketStore = {
   items: any[];
@@ -51,7 +51,7 @@ const useBasketStore = create<BasketStore>(
         }),
     }),
     {
-      name: 'basket-storage', // name for the storage
+      name: "basket-storage", // name for the storage
     }
   ) as any
 );

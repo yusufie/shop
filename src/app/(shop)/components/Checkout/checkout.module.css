@@ -15,6 +15,20 @@
   align-items: center;
   gap: 2rem;
 }
+.selectedButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 12rem;
+  height: 5rem;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  background-color: rgb(243, 244, 246);
+  border: 1px solid rgb(127, 185, 127);
+  cursor: pointer;
+}
 
 .checkoutInfo .serial {
   display: inline-flex;
@@ -30,7 +44,7 @@
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: 600;
-}
+}  
 
 .checkoutInfo .title {
   font-weight: 500;
@@ -71,7 +85,25 @@
   display: flex;
   align-items: center;
 }
-
+.inputBottom{
+  height: 5rem;
+  /* border: 2px solid red; */
+  margin-top: -3rem;
+  display: flex;
+  gap: 2rem; 
+}
+.special{
+  font-size: 0.6rem;
+  margin: -1rem;
+  margin-left: -0.6rem;
+ 
+ 
+}
+.special:hover{
+  color: red;
+ 
+ 
+}
 .contactInput input {
   width: 100%;
   height: 3rem;
@@ -107,10 +139,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-
   gap: 1rem;
-  width: 12rem;
-  height: 8rem;
+  width: 15rem;
+  height: 11rem;
   padding: 1rem;
   border-radius: 1rem;
   border: 1px solid rgb(0, 159, 127);
@@ -125,7 +156,15 @@
 
   cursor: pointer;
 }
-
+.map{
+  display: flex;
+  gap: 10rem;
+}
+ .shippingInput  {
+  display: flex;
+  justify-content: center;
+  /* border: 2px solid red; */
+}
 .shippingInput:hover .hoverButtons {
   visibility: visible;
   display: flex;
@@ -196,12 +235,13 @@
   justify-content: flex-start;
 
   gap: 1rem;
-  width: 12rem;
-  height: 8rem;
+  width:15rem;
+  height: 11rem;
   padding: 1rem;
   border-radius: 1rem;
   border: 1px solid rgb(0, 159, 127);
   cursor: pointer;
+  
 }
 
 .shippingInput .inputTop {
@@ -238,13 +278,12 @@
   gap: 1rem;
 }
 
-.deliveryInput button {
+.deliveryInput .deliveryButton {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 1rem;
-
   width: 12rem;
   height: 5rem;
   padding: 1rem;
@@ -295,7 +334,7 @@
   width: 100%;
   max-width: 20rem;
 
-  color: rgb(107,114,128);
+  color: rgb(107, 114, 128);
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
@@ -309,9 +348,9 @@
 
 .orderItems {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  line-height: 2.5rem;
+  align-items:start;
   width: 100%;
 }
 
@@ -368,7 +407,6 @@
   cursor: pointer;
 }
 
-
 /* media query */
 
 @media screen and (max-width: 1024px) {
@@ -384,4 +422,9 @@
     width: 100%;
     margin: 0 auto;
   }
+  .map{
+  display: flex;
+  gap: 10rem;
+  flex-wrap: wrap;
+}
 }
