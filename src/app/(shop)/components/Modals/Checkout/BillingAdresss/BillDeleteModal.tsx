@@ -1,22 +1,20 @@
-// CheckoutUpdateModal.tsx
-import React, { useState } from "react";
+// BillDeleteModal.tsx
+
+import React from "react";
 import styles from "./billdeletemodal.module.css";
 import Image from "next/image";
 
 interface BillDeleteModalProps {
   onClose: () => void;
-
   userMatches: any;
+  addressIdsToDelete: string[];
 }
 
 const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   onClose,
-
   userMatches,
+  addressIdsToDelete,
 }) => {
-  // !!!Burayı dinamik yap*!!
-  const adressId = userMatches.data[3].addresses[0]._id;
-  console.log(adressId);
   const handleDelete = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
@@ -36,25 +34,30 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
         throw new Error("User ID not found");
       }
 
-      const deleteResponse = await fetch(
-        process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${adressId}`, // Kullanılacak adres ID'sini ayarlayın
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (!deleteResponse.ok) {
-        throw new Error(
-          `Address delete failed. HTTP error! Status: ${deleteResponse.status}`
+      // Her bir ID için DELETE isteği gönder
+      for (const addressIdToDelete of addressIdsToDelete) {
+        const deleteResponse = await fetch(
+          process.env.NEXT_PUBLIC_API_URL +
+            `/api/v1/orders/${userId}/address/${addressIdToDelete}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
         );
+
+        if (!deleteResponse.ok) {
+          throw new Error(
+            `Address delete failed. HTTP error! Status: ${deleteResponse.status}`
+          );
+        }
+
+        const responseData = await deleteResponse.json();
+        console.log(`Address ${addressIdToDelete} deleted. Response:`, responseData);
       }
 
-      const responseData = await deleteResponse.json();
-      console.log("Delete Response:", responseData);
+      onClose(); // Tüm işlemler tamamlandıktan sonra modalı kapat
     } catch (error) {
       console.log("Error:", error);
     }
@@ -70,9 +73,16 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.trash}>
-          <Image src="/icons/trash.svg" alt="star" width={40} height={50} />
+          <Image src="/icons/trash.svg" alt="Trash Can Icon" width={40} height={50} />
           <h1>Delete</h1>
-          <p>Are you sure you want to delete?</p>
+          <p>Are you sure you want to delete the following addresses?</p>
+          <ul>
+            {userMatches.map((userMatch: any) =>
+              userMatch?.addresses?.map((address: any) => (
+                <li key={address._id}>{address.addressName}</li>
+              ))
+            )}
+          </ul>
         </div>
         <div className={styles.butContainer}>
           <button onClick={onClose} className={styles.checkButton1}>

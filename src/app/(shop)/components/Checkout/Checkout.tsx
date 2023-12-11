@@ -4,11 +4,7 @@ import styles from "./checkout.module.css";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useEffect, useState } from "react"; // useEffect'i kaldırdım, çünkü burada kullanmış gibi görünmüyor.
-
-
-
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
-
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
 import CheckoutShipAddModal from "../Modals/Checkout/ShippingAdress/CheckoutShipAddModal";
 import useBasketStore from "@/stores/basketStore";
@@ -74,55 +70,53 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
     data: datas,
     error,
     mutate,
-  } = useSWR(
-      process.env.NEXT_PUBLIC_API_URL+`/api/v1/users`,
-    async (url) => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        throw new Error("Access token not found");
-      }
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
-      }
-      return response.json();
+  } = useSWR(process.env.NEXT_PUBLIC_API_URL + `/api/v1/users`, async (url) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      throw new Error("Access token not found");
     }
-  );
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.status}`);
+    }
+    return response.json();
+  });
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
- 
 
-const userString = localStorage.getItem("user");
-let userId: string | undefined;
+  const userString = localStorage.getItem("user");
+  let userId: string | undefined;
 
-if (userString) {
-  // Parse the user data from JSON
-  const userData: User = JSON.parse(userString);
+  if (userString) {
+    // Parse the user data from JSON
+    const userData: User = JSON.parse(userString);
 
-  // Extract the user ID
-  userId = userData._id;
-}
+    // Extract the user ID
+    userId = userData._id;
+  }
 
-if (!userId) {
-  throw new Error("User ID bulunamadı");
-}
+  if (!userId) {
+    throw new Error("User ID bulunamadı");
+  }
 
-// Use filter with the correct type for item
-const userMatches = datas.data.filter(
-  (item: User) => item._id === userId
-);
-  
-console.log(userMatches);
+  // Use filter with the correct type for item
+  const userMatches = datas.data.filter((item: User) => item._id === userId);
+
+  console.log(userMatches);
+  const addressIdsToDelete = userMatches.flatMap(
+    (userMatch: any) =>
+      userMatch?.addresses?.map((address: any) => address?._id) || []
+  );
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
   const handleCheckout = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL+"/api/v1/orders";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/orders";
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       throw new Error("Access token not found");
@@ -556,6 +550,7 @@ console.log(userMatches);
         <BillDeleteModal
           userMatches={userMatches}
           onClose={handleBillDeleteClose}
+          addressIdsToDelete={addressIdsToDelete}
         />
       )}
       {isShipDeleteModalOpen && (
