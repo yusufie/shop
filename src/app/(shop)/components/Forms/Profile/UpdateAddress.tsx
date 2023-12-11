@@ -36,8 +36,9 @@ const UpdateAddress = () => {
       console.log("User ID:", userStore.user?._id);
       console.log("Access token:", userStore.accessToken);
 
-      const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/address/${userStore.user?._id}`,
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/address/${userStore.user?._id}`;
+
+      const response = await fetch(apiUrl,
         {
           method: "PATCH",
           headers: {
@@ -69,20 +70,6 @@ const UpdateAddress = () => {
         <p>Addresses</p>
         <button className={styles.addButton}>+ Add</button>
       </div>
-
-    {/* <div className={styles.adressButtons}>
-
-            <button className={styles.adressButton}>
-                <p className={styles.title}>Billing</p>
-                <p className={styles.address}>2231 Kidd Avenue, AK, Kipnuk, 99614, United States</p>
-            </button>
-
-            <button className={styles.adressButton}>
-                <p className={styles.title}>Shipping</p>
-                <p className={styles.address}>2231 Kidd Avenue, AK, Kipnuk, 99614, United States</p>
-            </button>
-
-        </div> */}
 
       <div className={styles.adressButtons}>
         <div className={styles.adressButton}>

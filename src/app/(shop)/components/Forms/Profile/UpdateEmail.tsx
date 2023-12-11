@@ -31,8 +31,9 @@ const UpdateEmail = () => {
       console.log("User ID:", userStore.user?._id);
       console.log("Access token:", userStore.accessToken);
 
-      const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/email/${userStore.user?._id}`,
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/email/${userStore.user?._id}`;
+
+      const response = await fetch(apiUrl,
         {
           method: "PATCH",
           headers: {

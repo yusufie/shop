@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/userStore';
 import Image from "next/image";
 import styles from "./profile.module.css";
 
-const Avatar = () => {
+const UpdateAvatar = () => {
   const userStore = useUserStore();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -19,7 +19,10 @@ const Avatar = () => {
     imageFormData.append('file', file);
 
     try {
-      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/upload/single', {
+
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload/single`;
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${userStore.accessToken}`,
@@ -55,8 +58,10 @@ const Avatar = () => {
         console.log('formData:', formData); // Log FormData for verification
         console.log('Image URL:', imageUrl);
         console.log('User ID:', userStore.user?._id);
+
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/image/${userStore.user?._id}`;
   
-        const response = await fetch(`https://ecommerce-api-5ksa.onrender.com/api/v1/profile/image/${userStore.user?._id}`, {
+        const response = await fetch(apiUrl, {
           method: 'PATCH', // Consider using 'PATCH' for updating resources
           headers: {
             Authorization: `Bearer ${userStore.accessToken}`,
@@ -86,8 +91,8 @@ const Avatar = () => {
         <input type="file" accept="image/*" onChange={handleImageChange} className={styles.customFileinput}/>
         
         <div className={styles.image}>
-            <Image src="/icons/upload.svg" alt="upload" width={40} height={30} />
-            <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
+          <Image src="/icons/upload.svg" alt="upload" width={40} height={30} />
+          <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
         </div>
 
       </div>
@@ -98,4 +103,4 @@ const Avatar = () => {
   );
 };
 
-export default Avatar;
+export default UpdateAvatar;
