@@ -5,6 +5,8 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useEffect, useState } from "react"; // useEffect'i kaldırdım, çünkü burada kullanmış gibi görünmüyor.
 
+
+
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
@@ -72,49 +74,55 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
     data: datas,
     error,
     mutate,
-  } = useSWR(process.env.NEXT_PUBLIC_API_URL + `/api/v1/users`, async (url) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      throw new Error("Access token not found");
-    }
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  } = useSWR(
+      process.env.NEXT_PUBLIC_API_URL+`/api/v1/users`,
+    async (url) => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        throw new Error("Access token not found");
+      }
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.status}`);
+      }
+      return response.json();
     }
-    return response.json();
-  });
+  );
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
+ 
 
-  const userString = localStorage.getItem("user");
-  let userId: string | undefined;
+const userString = localStorage.getItem("user");
+let userId: string | undefined;
 
-  if (userString) {
-    // Parse the user data from JSON
-    const userData: User = JSON.parse(userString);
+if (userString) {
+  // Parse the user data from JSON
+  const userData: User = JSON.parse(userString);
 
-    // Extract the user ID
-    userId = userData._id;
-  }
+  // Extract the user ID
+  userId = userData._id;
+}
 
-  if (!userId) {
-    throw new Error("User ID bulunamadı");
-  }
+if (!userId) {
+  throw new Error("User ID bulunamadı");
+}
 
-  // Use filter with the correct type for item
-  const userMatches = datas.data.filter((item: User) => item._id === userId);
-
-  console.log(userMatches);
+// Use filter with the correct type for item
+const userMatches = datas.data.filter(
+  (item: User) => item._id === userId
+);
+  
+console.log(userMatches);
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
   const handleCheckout = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/orders";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL+"/api/v1/orders";
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       throw new Error("Access token not found");
@@ -131,7 +139,9 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
       discount: 0,
       contact: userMatches.flatMap((userMatch: any) =>
         userMatch?.contact?.length > 0
-          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({ 
+          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({
+              // Eğer mümkünse, benzersiz bir tanımlayıcı kullanın (_id yerine)
+              // Örnek: id: contactItem.id
               phone: {
                 countryCode: contactItem.phone.countryCode,
                 number: contactItem.phone.number,
@@ -266,19 +276,17 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
               <div key={_id}>
                 {/* Önceki kontrol, userMatch'in varlığını ve contact dizisinin varlığını kontrol eder */}
                 {userMatch?.contact?.length > 0 &&
-                  userMatch.contact.map(
-                    (contactItem: any, contactIndex: any) => (
-                      <div key={contactIndex}>
-                        <PhoneInput
-                          international
-                          placeholder="Telefon numaranızı girin"
-                          disabled={true}
-                          value={`${contactItem.phone.countryCode} ${contactItem.phone.number}`}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    )
-                  )}
+                  userMatch.contact.map((contactItem:any, contactIndex:any) => (
+                    <div key={contactIndex}>
+                      <PhoneInput
+                        international
+                        placeholder="Telefon numaranızı girin"
+                        disabled={true}
+                        value={`${contactItem.phone.countryCode} ${contactItem.phone.number}`}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  ))}
               </div>
             ))}
           </div>
