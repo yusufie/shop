@@ -5,8 +5,6 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useEffect, useState } from "react"; // useEffect'i kaldırdım, çünkü burada kullanmış gibi görünmüyor.
 
-
-
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
@@ -31,6 +29,10 @@ interface CheckoutComponentProps {
     itemPrice: number;
     itemId: number;
   }>;
+}
+interface User {
+  _id: string;
+  // Add other properties as needed
 }
 
 const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
@@ -70,35 +72,49 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
     data: datas,
     error,
     mutate,
-  } = useSWR(
-      process.env.NEXT_PUBLIC_API_URL+`/api/v1/users`,
-    async (url) => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        throw new Error("Access token not found");
-      }
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
-      }
-      return response.json();
+  } = useSWR(process.env.NEXT_PUBLIC_API_URL + `/api/v1/users`, async (url) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      throw new Error("Access token not found");
     }
-  );
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.status}`);
+    }
+    return response.json();
+  });
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
-  console.log(datas.data);
-  // };
-  // fetchData();
+
+  const userString = localStorage.getItem("user");
+  let userId: string | undefined;
+
+  if (userString) {
+    // Parse the user data from JSON
+    const userData: User = JSON.parse(userString);
+
+    // Extract the user ID
+    userId = userData._id;
+  }
+
+  if (!userId) {
+    throw new Error("User ID bulunamadı");
+  }
+
+  // Use filter with the correct type for item
+  const userMatches = datas.data.filter((item: User) => item._id === userId);
+
+  console.log(userMatches);
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
   const handleCheckout = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL+"/api/v1/orders";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/orders";
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       throw new Error("Access token not found");
@@ -113,12 +129,16 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
 
       coupon: null,
       discount: 0,
-      contact: datas.data[3].contact.map((item: any) => ({
-        phone: {
-          countryCode: item.phone.countryCode,
-          number: item.phone.number,
-        },
-      })),
+      contact: userMatches.flatMap((userMatch: any) =>
+        userMatch?.contact?.length > 0
+          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({ 
+              phone: {
+                countryCode: contactItem.phone.countryCode,
+                number: contactItem.phone.number,
+              },
+            }))
+          : []
+      ),
 
       billingAddress: {
         alias: addressData.alias,
@@ -242,15 +262,23 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
             </button>
           </div>
           <div className={styles.contactInput}>
-            {datas.data[3].contact.map((item: any, _id: any) => (
+            {userMatches.map((userMatch: any, _id: any) => (
               <div key={_id}>
-                <PhoneInput
-                  international
-                  placeholder="Telefon numaranızı girin"
-                  disabled={true}
-                  value={`${item.phone.countryCode} ${item.phone.number}`} // Değerleri birleştir
-                  onChange={handleChange}
-                />
+                {/* Önceki kontrol, userMatch'in varlığını ve contact dizisinin varlığını kontrol eder */}
+                {userMatch?.contact?.length > 0 &&
+                  userMatch.contact.map(
+                    (contactItem: any, contactIndex: any) => (
+                      <div key={contactIndex}>
+                        <PhoneInput
+                          international
+                          placeholder="Telefon numaranızı girin"
+                          disabled={true}
+                          value={`${contactItem.phone.countryCode} ${contactItem.phone.number}`}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    )
+                  )}
               </div>
             ))}
           </div>
@@ -270,45 +298,55 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
             </button>
           </div>
           <div className={styles.map}>
-            {datas.data[3].addresses.map((item: any, _id: any) => (
-              <div className={styles.billingInput}>
-                <div className={styles.inputTop}>
-                  <h4>Billing</h4>
-                  <div className={styles.hoverButtons}>
-                    <button
-                      onClick={handleBillUpdateClick}
-                      className={styles.hoverPen}
-                    >
-                      <Image
-                        src="/icons/pen.svg"
-                        alt="pen"
-                        width={16}
-                        height={16}
-                      />
-                    </button>
-                    <button
-                      onClick={handleBillDeleteClick}
-                      className={styles.hoverCross}
-                    >
-                      <Image
-                        src="/icons/cross.svg"
-                        alt="cross"
-                        width={16}
-                        height={16}
-                      />
-                    </button>
-                  </div>
-                </div>
-                <div className={styles.inputBottom}>
-                  <div key={_id}>
-                    <strong>Title:</strong> {item.alias} <br />
-                    <strong>Street Address:</strong> {item.details} <br />
-                    <strong>City:</strong> {item.city} <br />
-                    <strong>Country:</strong> {item.country} <br />
-                    <strong>Postal Code:</strong> {item.postalCode} <br />
-                  </div>
-                </div>
-              </div>
+            {userMatches.map((userMatch: any, _id: any) => (
+              <>
+                {userMatch?.addresses?.length > 0 &&
+                  userMatch.addresses.map(
+                    (contactItem: any, contactIndex: any) => (
+                      <div className={styles.billingInput} key={contactIndex}>
+                        <div className={styles.inputTop}>
+                          <h4>Billing</h4>
+                          <div className={styles.hoverButtons}>
+                            <button
+                              onClick={handleBillUpdateClick}
+                              className={styles.hoverPen}
+                            >
+                              <Image
+                                src="/icons/pen.svg"
+                                alt="pen"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                            <button
+                              onClick={handleBillDeleteClick}
+                              className={styles.hoverCross}
+                            >
+                              <Image
+                                src="/icons/cross.svg"
+                                alt="cross"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                        <div className={styles.inputBottom}>
+                          <div key={_id}>
+                            <strong>Title:</strong> {contactItem.alias} <br />
+                            <strong>Street Address:</strong>{" "}
+                            {contactItem.details} <br />
+                            <strong>City:</strong> {contactItem.city} <br />
+                            <strong>Country:</strong> {contactItem.country}{" "}
+                            <br />
+                            <strong>Postal Code:</strong>{" "}
+                            {contactItem.postalCode} <br />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
+              </>
             ))}
           </div>
         </div>
@@ -327,45 +365,55 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
             </button>
           </div>
           <div className={styles.map}>
-            {datas.data[3].addresses.map((item: any, _id: any) => (
-              <div className={styles.shippingInput}>
-                <div className={styles.inputTop}>
-                  <h4>Shipping</h4>
-                  <div className={styles.hoverButtons}>
-                    <button
-                      onClick={handleShipUpdateClick}
-                      className={styles.hoverPen}
-                    >
-                      <Image
-                        src="/icons/pen.svg"
-                        alt="pen"
-                        width={16}
-                        height={16}
-                      />
-                    </button>
-                    <button
-                      onClick={handleShipDeleteClick}
-                      className={styles.hoverCross}
-                    >
-                      <Image
-                        src="/icons/cross.svg"
-                        alt="cross"
-                        width={16}
-                        height={16}
-                      />
-                    </button>
-                  </div>
-                </div>
-                <div className={styles.inputBottom}>
-                  <div key={_id}>
-                    <strong>Title:</strong> {item.alias} <br />
-                    <strong>Street Address:</strong> {item.details} <br />
-                    <strong>City:</strong> {item.city} <br />
-                    <strong>Country:</strong> {item.country} <br />
-                    <strong>Postal Code:</strong> {item.postalCode} <br />
-                  </div>
-                </div>
-              </div>
+            {userMatches.map((userMatch: any, _id: any) => (
+              <>
+                {userMatch?.addresses?.length > 0 &&
+                  userMatch.addresses.map(
+                    (contactItem: any, contactIndex: any) => (
+                      <div className={styles.shippingInput} key={contactIndex}>
+                        <div className={styles.inputTop}>
+                          <h4>Shipping</h4>
+                          <div className={styles.hoverButtons}>
+                            <button
+                              onClick={handleShipUpdateClick}
+                              className={styles.hoverPen}
+                            >
+                              <Image
+                                src="/icons/pen.svg"
+                                alt="pen"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                            <button
+                              onClick={handleShipDeleteClick}
+                              className={styles.hoverCross}
+                            >
+                              <Image
+                                src="/icons/cross.svg"
+                                alt="cross"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                        <div className={styles.inputBottom}>
+                          <div key={_id}>
+                            <strong>Title:</strong> {contactItem.alias} <br />
+                            <strong>Street Address:</strong>{" "}
+                            {contactItem.details} <br />
+                            <strong>City:</strong> {contactItem.city} <br />
+                            <strong>Country:</strong> {contactItem.country}{" "}
+                            <br />
+                            <strong>Postal Code:</strong>{" "}
+                            {contactItem.postalCode} <br />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
+              </>
             ))}
           </div>
         </div>
