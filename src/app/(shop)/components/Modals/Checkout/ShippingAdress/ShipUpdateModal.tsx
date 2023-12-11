@@ -4,12 +4,12 @@ import styles from "./shipupdatemodal.module.css";
 
 interface ShipUpdateModalProps {
   onClose: () => void;
-  datas: any;
+  userMatches: any;
 }
 
 const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
   onClose,
-  datas,
+  userMatches,
 }) => {
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
@@ -18,9 +18,9 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
     postalCode: "",
     streetAddress: "",
   });
-  console.log(datas);
+  console.log(userMatches);
   // !!!Burayı dinamik yap*!!
-  const adressId = datas.data[3].addresses[0]._id;
+  const adressId = userMatches.data[3].addresses[0]._id;
   console.log(adressId);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,7 +43,8 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
       }
       console.log("userId", userId);
       const userResponse = await fetch(
-          process.env.NEXT_PUBLIC_API_URL+`/api/v1/orders/${userId}/address/${adressId}`,
+        process.env.NEXT_PUBLIC_API_URL +
+          `/api/v1/orders/${userId}/address/${adressId}`,
         {
           method: "PATCH",
           headers: {

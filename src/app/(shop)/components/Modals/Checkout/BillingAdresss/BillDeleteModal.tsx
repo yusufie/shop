@@ -6,16 +6,16 @@ import Image from "next/image";
 interface BillDeleteModalProps {
   onClose: () => void;
 
-  datas: any;
+  userMatches: any;
 }
 
 const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   onClose,
 
-  datas,
+  userMatches,
 }) => {
   // !!!Burayı dinamik yap*!!
-  const adressId = datas.data[3].addresses[0]._id;
+  const adressId = userMatches.data[3].addresses[0]._id;
   console.log(adressId);
   const handleDelete = async () => {
     try {
@@ -37,7 +37,8 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
       }
 
       const deleteResponse = await fetch(
-          process.env.NEXT_PUBLIC_API_URL+`/api/v1/orders/${userId}/address/${adressId}`, // Kullanılacak adres ID'sini ayarlayın
+        process.env.NEXT_PUBLIC_API_URL +
+          `/api/v1/orders/${userId}/address/${adressId}`, // Kullanılacak adres ID'sini ayarlayın
         {
           method: "DELETE",
           headers: {

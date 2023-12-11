@@ -6,16 +6,16 @@ import Image from "next/image";
 interface ShipDeleteModalProps {
   onClose: () => void;
 
-  datas: any;
+  userMatches: any;
 }
 
 const ShipDeleteModal: React.FC<ShipDeleteModalProps> = ({
   onClose,
 
-  datas,
+  userMatches,
 }) => {
   // !!!Burayı dinamik yap*!!
-  const adressId = datas.data[3].addresses[0]._id;
+  const adressId = userMatches.data[3].addresses[0]._id;
   console.log(adressId);
   const handleDelete = async () => {
     // DELETE isteği için gerekli işlemleri burada gerçekleştirin
@@ -40,7 +40,8 @@ const ShipDeleteModal: React.FC<ShipDeleteModalProps> = ({
       }
 
       const deleteResponse = await fetch(
-          process.env.NEXT_PUBLIC_API_URL+`/api/v1/orders/${userId}/address/${adressId}`, // Kullanılacak adres ID'sini ayarlayın
+        process.env.NEXT_PUBLIC_API_URL +
+          `/api/v1/orders/${userId}/address/${adressId}`, // Kullanılacak adres ID'sini ayarlayın
         {
           method: "DELETE",
           headers: {

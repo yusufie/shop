@@ -276,17 +276,19 @@ console.log(userMatches);
               <div key={_id}>
                 {/* Önceki kontrol, userMatch'in varlığını ve contact dizisinin varlığını kontrol eder */}
                 {userMatch?.contact?.length > 0 &&
-                  userMatch.contact.map((contactItem:any, contactIndex:any) => (
-                    <div key={contactIndex}>
-                      <PhoneInput
-                        international
-                        placeholder="Telefon numaranızı girin"
-                        disabled={true}
-                        value={`${contactItem.phone.countryCode} ${contactItem.phone.number}`}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  ))}
+                  userMatch.contact.map(
+                    (contactItem: any, contactIndex: any) => (
+                      <div key={contactIndex}>
+                        <PhoneInput
+                          international
+                          placeholder="Telefon numaranızı girin"
+                          disabled={true}
+                          value={`${contactItem.phone.countryCode} ${contactItem.phone.number}`}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    )
+                  )}
               </div>
             ))}
           </div>
@@ -539,16 +541,28 @@ console.log(userMatches);
         <CheckoutUpdateModal onClose={handleUpdateModalClose} />
       )}
       {isBillUpdateModalOpen && (
-        <BillUpdateModal datas={datas} onClose={handleBillModalClose} />
+        <BillUpdateModal
+          userMatches={userMatches}
+          onClose={handleBillModalClose}
+        />
       )}
       {isShipUpdateModalOpen && (
-        <ShipUpdateModal datas={datas} onClose={handleShipModalClose} />
+        <ShipUpdateModal
+          userMatches={userMatches}
+          onClose={handleShipModalClose}
+        />
       )}
       {isBillDeleteModalOpen && (
-        <BillDeleteModal datas={datas} onClose={handleBillDeleteClose} />
+        <BillDeleteModal
+          userMatches={userMatches}
+          onClose={handleBillDeleteClose}
+        />
       )}
       {isShipDeleteModalOpen && (
-        <ShipDeleteModal datas={datas} onClose={handleShipDeleteClose} />
+        <ShipDeleteModal
+          userMatches={userMatches}
+          onClose={handleShipDeleteClose}
+        />
       )}
       {isBillAddModalOpen && (
         <CheckoutBillAddModal onClose={handleBillAddModalClose} />
