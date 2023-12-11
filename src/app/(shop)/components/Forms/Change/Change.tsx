@@ -65,8 +65,10 @@ const Change: React.FC = () => {
         const userData = JSON.parse(user);
         userId = userData._id;
       }
-      const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/auth/change-password/${userId}`,
+
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/change-password/${userId}`;
+
+      const response = await fetch(apiUrl,
         {
           method: "POST",
           headers: {
@@ -167,7 +169,7 @@ const Change: React.FC = () => {
           )}
         </div>
 
-        <button className={styles.submitButton}>Submit</button>
+        <button type="submit" value="submit" className={styles.submitButton}>Submit</button>
       </form>
     </section>
   );
