@@ -48,7 +48,7 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
       }
       console.log('Submitted Data:', userData);
 
-      const response = await fetch('https://e-com-admin-unny.onrender.com/api/v1/auth/login', {
+      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
