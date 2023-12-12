@@ -1,9 +1,8 @@
-// CheckoutUpdateModal.tsx
-
 import React, { useState } from "react";
 import styles from "./checkoutupdatemodal.module.css";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import useSWR, { mutate } from "swr";
 
 interface CheckoutUpdateModalProps {
   onClose: () => void;
@@ -15,6 +14,10 @@ const CheckoutUpdateModal: React.FC<CheckoutUpdateModalProps> = ({
   // State'leri tanımlayın
   const [countryCode, setCountryCode] = useState<string>("");
   const [number, setNumber] = useState<string>("");
+  const accessToken = localStorage.getItem("accessToken");
+  const user = localStorage.getItem("user");
+  const userData = user ? JSON.parse(user) : null;
+  const userId = userData ? userData._id : null;
 
   // Overlay'e tıklama işlemi
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -32,6 +35,9 @@ const CheckoutUpdateModal: React.FC<CheckoutUpdateModalProps> = ({
       setNumber(num || ""); // Eğer num boşsa, boş bir string atayın
     }
   };
+
+  // Veriyi tekrar çekmek için useSWR hook'unu kullan
+  const { data: userContactData } = useSWR(`/api/v1/orders/contact/${userId}`);
 
   // Form gönderildiğinde çalışan fonksiyon
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +61,7 @@ const CheckoutUpdateModal: React.FC<CheckoutUpdateModalProps> = ({
       }
 
       const userResponse = await fetch(
-          process.env.NEXT_PUBLIC_API_URL+`/api/v1/orders/contact/${userId}`,
+        process.env.NEXT_PUBLIC_API_URL + `/api/v1/orders/contact/${userId}`,
         {
           method: "PATCH",
           headers: {
@@ -84,6 +90,9 @@ const CheckoutUpdateModal: React.FC<CheckoutUpdateModalProps> = ({
       const responseData = await userResponse.json();
       console.log("Post Response:", responseData);
 
+      // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
+      mutate(`/api/v1/orders/contact/${userId}`, undefined, true);
+
       onClose();
     } catch (error) {
       console.log("Hata:", error);
@@ -101,7 +110,12 @@ const CheckoutUpdateModal: React.FC<CheckoutUpdateModalProps> = ({
               disabled={false}
               value={`${countryCode} ${number}`}
               onChange={handleChange}
-              className={styles.updateInput}
+              countryProps={{ showFlag: true, showName: false }}
+              inputProps={{
+                name: "number",
+                required: true,
+                autoFocus: true,
+              }}
             />
             <button type="submit" className={styles.checkButton}>
               İletişim Bilgisini Güncelle
