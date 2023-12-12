@@ -1,18 +1,17 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./billupdatemodal.module.css";
+import useSWR, { mutate } from "swr";
 
 interface BillUpdateModalProps {
   onClose: () => void;
   userMatches: any;
-  addressIdsToDelete: string[];
 }
 
 const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
   userMatches,
-  addressIdsToDelete,
 }) => {
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
     country: "",
@@ -20,10 +19,20 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
     postalCode: "",
     streetAddress: "",
   });
-  console.log(userMatches);
-  // !!!Burayı dinamik yap*!!
-  const adressId = userMatches.data[3].addresses[0]._id;
-  console.log(adressId);
+ const accessToken = localStorage.getItem("accessToken");
+ const user = localStorage.getItem("user");
+ const userData = user ? JSON.parse(user) : null;
+ const userId = userData ? userData._id : null;
+  const { data: userResponseData } = useSWR(
+    selectedAddressId
+      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+      : null
+  );
+
+  const handleAddressSelection = useCallback((addressId: string) => {
+    setSelectedAddressId(addressId);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -40,13 +49,13 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
         userId = userData._id;
       }
 
-      if (!userId) {
-        throw new Error("User ID not found");
+      if (!userId || !selectedAddressId) {
+        throw new Error("User ID or selected address ID not found");
       }
-      console.log("userId", userId);
+
       const userResponse = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${adressId}`,
+          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
         {
           method: "PATCH",
           headers: {
@@ -69,8 +78,12 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
         );
       }
 
-      const responseData = await userResponse.json();
-      console.log("Post Response:", responseData);
+      // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
+      mutate(
+        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        undefined,
+        true
+      );
 
       onClose();
     } catch (error) {
@@ -99,6 +112,26 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
       <div className={styles.checkModalContent}>
         <h1>Update Address</h1>
         <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <ul>
+            {userMatches.map((userMatch: any) =>
+              userMatch?.addresses?.map((address: any) => (
+                <li
+                  key={address._id}
+                  onClick={() => handleAddressSelection(address._id)}
+                  className={
+                    selectedAddressId === address._id ? styles.selected : ""
+                  }
+                >
+                  <div style={{ cursor: "pointer" }}>
+                    <p>Select your adresss</p>
+                    {address.country && address.city
+                      ? `${address.country} ${address.city}  ${address._id}`
+                      : "Unknown Address"}
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
           <div className={styles.email}>
             <label htmlFor="alias">Title</label>
             <input

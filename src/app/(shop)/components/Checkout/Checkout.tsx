@@ -536,14 +536,14 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
         <BillUpdateModal
           userMatches={userMatches}
           onClose={handleBillModalClose}
-          addressIdsToDelete={addressIdsToDelete}
+       
         />
       )}
       {isShipUpdateModalOpen && (
         <ShipUpdateModal
           userMatches={userMatches}
           onClose={handleShipModalClose}
-          addressIdsToDelete={addressIdsToDelete}
+          
         />
       )}
       {isBillDeleteModalOpen && (

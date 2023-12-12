@@ -1,24 +1,17 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./shipupdatemodal.module.css";
+import useSWR, { mutate } from "swr";
 
-interface ShipUpdateModalProps {
+interface BillUpdateModalProps {
   onClose: () => void;
   userMatches: any;
-  addressIdsToDelete: string[];
 }
 
-// ...
-
-const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
+const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
   userMatches,
-  addressIdsToDelete,
 }) => {
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
-    null
-  );
-
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
     country: "",
@@ -26,22 +19,23 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
     postalCode: "",
     streetAddress: "",
   });
+  const accessToken = localStorage.getItem("accessToken");
+  const user = localStorage.getItem("user");
+  const userData = user ? JSON.parse(user) : null;
+  const userId = userData ? userData._id : null;
+  const { data: userResponseData } = useSWR(
+    selectedAddressId
+      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+      : null
+  );
 
-  console.log(userMatches);
+  const handleAddressSelection = useCallback((addressId: string) => {
+    setSelectedAddressId(addressId);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
-      // Seçilen adresin `addressIdsToDelete` içinde olup olmadığını kontrol et
-      if (
-        !selectedAddressId ||
-        !addressIdsToDelete.includes(selectedAddressId)
-      ) {
-        console.error("Invalid address selection.");
-        return;
-      }
-
       const accessToken = localStorage.getItem("accessToken");
 
       if (!accessToken) {
@@ -55,10 +49,9 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
         userId = userData._id;
       }
 
-      if (!userId) {
-        throw new Error("User ID not found");
+      if (!userId || !selectedAddressId) {
+        throw new Error("User ID or selected address ID not found");
       }
-      console.log("userId", userId);
 
       const userResponse = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
@@ -85,8 +78,12 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
         );
       }
 
-      const responseData = await userResponse.json();
-      console.log("Post Response:", responseData);
+      // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
+      mutate(
+        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        undefined,
+        true
+      );
 
       onClose();
     } catch (error) {
@@ -114,25 +111,27 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
     <section className={styles.checkModal} onClick={handleOverlayClick}>
       <div className={styles.checkModalContent}>
         <h1>Update Address</h1>
-
-        {/* Adres Seçimi */}
-        <ul>
-          {userMatches.map((userMatch: any) =>
-            userMatch?.addresses?.map((contactItem: any) => (
-              <li
-                key={contactItem._id}
-                onClick={() => setSelectedAddressId(contactItem._id)}
-              >
-                {contactItem.country && contactItem.city
-                  ? `${contactItem.country} ${contactItem.city}`
-                  : "Unknown Address"}
-              </li>
-            ))
-          )}
-        </ul>
-
-        {/* Form */}
         <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <ul>
+            {userMatches.map((userMatch: any) =>
+              userMatch?.addresses?.map((address: any) => (
+                <li
+                  key={address._id}
+                  onClick={() => handleAddressSelection(address._id)}
+                  className={
+                    selectedAddressId === address._id ? styles.selected : ""
+                  }
+                >
+                  <div style={{ cursor: "pointer" }}>
+                    <p>select your adresss</p>
+                    {address.country && address.city
+                      ? `${address.country} ${address.city}  ${address._id}`
+                      : "Unknown Address"}
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
           <div className={styles.email}>
             <label htmlFor="alias">Title</label>
             <input
@@ -190,8 +189,6 @@ const ShipUpdateModal: React.FC<ShipUpdateModalProps> = ({
             Update Address
           </button>
         </form>
-
-        {/* Kapatma Butonu */}
         <button onClick={onClose} className={styles.closeLogin}>
           x
         </button>
