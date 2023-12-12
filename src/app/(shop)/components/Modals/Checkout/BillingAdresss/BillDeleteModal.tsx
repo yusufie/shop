@@ -13,30 +13,20 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   userMatches,
   addressIdsToDelete,
 }) => {
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
-    null
-  );
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
+ 
 
-  useEffect(() => {
-    console.log(
-      "Component mounted or selectedAddressId changed:",
-      selectedAddressId
-    );
-  }, [selectedAddressId]);
+  const handleAddressSelection = (addressId: string) => {
+    setSelectedAddressId(addressId);
+    console.log("dksjfkdfk");
+  };
+
+  console.log(selectedAddressId);
 
   const handleDelete = async () => {
     try {
-      console.log("Selected Address ID:", selectedAddressId);
-      console.log("Address IDs to Delete:", addressIdsToDelete);
-
       if (!selectedAddressId) {
         console.log("No address selected for deletion.");
-        onClose();
-        return;
-      }
-
-      if (!addressIdsToDelete.includes(selectedAddressId)) {
-        console.log("Selected address is not in the list to delete.");
         onClose();
         return;
       }
@@ -76,6 +66,8 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
       }
 
       const responseData = await deleteResponse.json();
+      
+
       console.log(
         `Address ${selectedAddressId} deleted. Response:`,
         responseData
@@ -110,17 +102,20 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
               userMatch?.addresses?.map((contactItem: any) => (
                 <li
                   key={contactItem._id}
-                  onClick={() => {
-                    console.log("Clicked!", contactItem._id);
-                    setSelectedAddressId(contactItem._id);
-                  }}
+                  onClick={() => handleAddressSelection(contactItem._id)}
                   className={
                     selectedAddressId === contactItem._id ? styles.selected : ""
                   }
                 >
-                  {contactItem.country && contactItem.city
-                    ? `${contactItem.country} ${contactItem.city}`
-                    : "Unknown Address"}
+                  <div
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    {contactItem.country && contactItem.city
+                      ? `${contactItem.country} ${contactItem.city}  ${contactItem._id}`
+                      : "Unknown Address"}
+                  </div>
                 </li>
               ))
             )}
@@ -140,121 +135,3 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
 };
 
 export default BillDeleteModal;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
