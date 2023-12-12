@@ -133,7 +133,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
       discount: 0,
       contact: userMatches.flatMap((userMatch: any) =>
         userMatch?.contact?.length > 0
-          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({   
+          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({
               phone: {
                 countryCode: contactItem.phone.countryCode,
                 number: contactItem.phone.number,
@@ -168,7 +168,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
       },
       body: JSON.stringify(orderData),
     };
-
+    console.log(orderData);
     try {
       const response = await fetch(apiUrl, requestOptions);
 
@@ -536,14 +536,12 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
         <BillUpdateModal
           userMatches={userMatches}
           onClose={handleBillModalClose}
-       
         />
       )}
       {isShipUpdateModalOpen && (
         <ShipUpdateModal
           userMatches={userMatches}
           onClose={handleShipModalClose}
-          
         />
       )}
       {isBillDeleteModalOpen && (
