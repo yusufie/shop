@@ -1,47 +1,54 @@
-// CheckoutUpdateModal.tsx
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./shipdeletemodal.module.css";
 import Image from "next/image";
+import useSWR, { mutate } from "swr";
 
-interface ShipDeleteModalProps {
+interface BillDeleteModalProps {
   onClose: () => void;
-  addressIdsToDelete: string[];
   userMatches: any;
+  addressIdsToDelete: string[];
 }
 
-const ShipDeleteModal: React.FC<ShipDeleteModalProps> = ({
+const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
   onClose,
-  addressIdsToDelete,
   userMatches,
+  addressIdsToDelete,
 }) => {
-  // !!!Burayı dinamik yap*!!
-  const adressId = userMatches.data[3].addresses[0]._id;
-  console.log(adressId);
-  const handleDelete = async () => {
-    // DELETE isteği için gerekli işlemleri burada gerçekleştirin
-    // Örneğin, bir API çağrısı yapabilirsiniz
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
+  const [loading, setLoading] = useState(false);
+  const accessToken = localStorage.getItem("accessToken");
+  const user = localStorage.getItem("user");
+  const userData = user ? JSON.parse(user) : null;
+  const userId = userData ? userData._id : null;
+
+  const { data: deleteResponseData } = useSWR(
+    userId && selectedAddressId
+      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+      : null,
+    { revalidateOnFocus: true } // Yeniden çekmeyi odaklandığında gerçekleştir
+  );
+
+  const handleAddressSelection = useCallback((addressId: string) => {
+    setSelectedAddressId(addressId);
+  }, []);
+
+  const handleDelete = useCallback(async () => {
     try {
-      // Örnek bir DELETE isteği
-      const accessToken = localStorage.getItem("accessToken");
-      const user = localStorage.getItem("user");
-      let userId;
+      if (!selectedAddressId || !userId) {
+        console.log("No address selected for deletion or user ID not found.");
+        onClose();
+        return;
+      }
 
       if (!accessToken) {
         throw new Error("Erişim token'ı bulunamadı");
       }
 
-      if (user) {
-        const userData = JSON.parse(user);
-        userId = userData._id;
-      }
+      setLoading(true); // Set loading to true before making the API call
 
-      if (!userId) {
-        throw new Error("User ID not found");
-      }
-
-      const deleteResponse = await fetch(
+      await fetch(
         process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${adressId}`, // Kullanılacak adres ID'sini ayarlayın
+          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
         {
           method: "DELETE",
           headers: {
@@ -50,18 +57,19 @@ const ShipDeleteModal: React.FC<ShipDeleteModalProps> = ({
         }
       );
 
-      if (!deleteResponse.ok) {
-        throw new Error(
-          `Address delete failed. HTTP error! Status: ${deleteResponse.status}`
-        );
-      }
+      mutate(
+        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        undefined,
+        true
+      );
 
-      const responseData = await deleteResponse.json();
-      console.log("Delete Response:", responseData);
+      setLoading(false); // Set loading to false after the API call is complete
+      onClose();
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
+      setLoading(false); // Set loading to false in case of an error
     }
-  };
+  }, [selectedAddressId, userId, accessToken, onClose]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -73,16 +81,48 @@ const ShipDeleteModal: React.FC<ShipDeleteModalProps> = ({
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.trash}>
-          <Image src="/icons/trash.svg" alt="star" width={40} height={50} />
+          <Image
+            src="/icons/trash.svg"
+            alt="Trash Can Icon"
+            width={40}
+            height={50}
+          />
           <h1>Delete</h1>
-          <p>Are you sure you want to delete?</p>
+          <p>Select the address you want to delete:</p>
+          <ul>
+            {userMatches.map((userMatch: any) =>
+              userMatch?.addresses?.map((contactItem: any) => (
+                <li
+                  key={contactItem._id}
+                  onClick={() => handleAddressSelection(contactItem._id)}
+                  className={
+                    selectedAddressId === contactItem._id ? styles.selected : ""
+                  }
+                >
+                  <div
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    {contactItem.country && contactItem.city
+                      ? `${contactItem.country} ${contactItem.city}  ${contactItem._id}`
+                      : "Unknown Address"}
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
         <div className={styles.butContainer}>
           <button onClick={onClose} className={styles.checkButton1}>
             Cancel
           </button>
-          <button onClick={handleDelete} className={styles.checkButton2}>
-            Delete
+          <button
+            onClick={handleDelete}
+            className={styles.checkButton2}
+            disabled={loading} // Disable the button when loading
+          >
+            {loading ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>
