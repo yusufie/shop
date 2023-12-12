@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./billdeletemodal.module.css";
 import Image from "next/image";
+import useSWR from "swr";
 
 interface BillDeleteModalProps {
   onClose: () => void;
@@ -14,41 +15,36 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   addressIdsToDelete,
 }) => {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
- 
+  const accessToken = localStorage.getItem("accessToken");
+  const user = localStorage.getItem("user");
+  const userData = user ? JSON.parse(user) : null;
+  const userId = userData ? userData._id : null;
+
+  const { data: deleteResponseData, mutate } = useSWR(
+    userId && selectedAddressId
+      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+      : null
+  );
 
   const handleAddressSelection = (addressId: string) => {
     setSelectedAddressId(addressId);
-    console.log("dksjfkdfk");
   };
 
   console.log(selectedAddressId);
 
   const handleDelete = async () => {
     try {
-      if (!selectedAddressId) {
-        console.log("No address selected for deletion.");
+      if (!selectedAddressId || !userId) {
+        console.log("No address selected for deletion or user ID not found.");
         onClose();
         return;
       }
-
-      const accessToken = localStorage.getItem("accessToken");
-      const user = localStorage.getItem("user");
-      let userId;
 
       if (!accessToken) {
         throw new Error("Erişim token'ı bulunamadı");
       }
 
-      if (user) {
-        const userData = JSON.parse(user);
-        userId = userData._id;
-      }
-
-      if (!userId) {
-        throw new Error("User ID not found");
-      }
-
-      const deleteResponse = await fetch(
+      await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           `/api/v1/orders/${userId}/address/${selectedAddressId}`,
         {
@@ -59,19 +55,8 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
         }
       );
 
-      if (!deleteResponse.ok) {
-        throw new Error(
-          `Address delete failed. HTTP error! Status: ${deleteResponse.status}`
-        );
-      }
-
-      const responseData = await deleteResponse.json();
-      
-
-      console.log(
-        `Address ${selectedAddressId} deleted. Response:`,
-        responseData
-      );
+      // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
+      mutate();
 
       onClose();
     } catch (error) {
@@ -113,7 +98,7 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
                     }}
                   >
                     {contactItem.country && contactItem.city
-                      ? `${contactItem.country} ${contactItem.city}  ${contactItem._id}`
+                      ? `${contactItem.country} ${contactItem.city}  ${contactItem._id}`
                       : "Unknown Address"}
                   </div>
                 </li>
