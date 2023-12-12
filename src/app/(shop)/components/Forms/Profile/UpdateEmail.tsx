@@ -10,8 +10,16 @@ type FormValues = {
   email: string;
 };
 
-const UpdateEmail = () => {
+interface UpdateProps {
+  userData: any;
+}
+
+const UpdateEmail: React.FC<UpdateProps> = ({userData}) => {
+
   const userStore = useUserStore();
+
+  // Destructuring user data for email
+  const { email = "" } = userData || {};
 
   const {
     register,
@@ -31,8 +39,9 @@ const UpdateEmail = () => {
       console.log("User ID:", userStore.user?._id);
       console.log("Access token:", userStore.accessToken);
 
-      const response = await fetch(
-        `https://ecommerce-api-5ksa.onrender.com/api/v1/profile/email/${userStore.user?._id}`,
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/email/${userStore.user?._id}`;
+
+      const response = await fetch(apiUrl,
         {
           method: "PATCH",
           headers: {
@@ -63,7 +72,12 @@ const UpdateEmail = () => {
 
         <div>
             <label htmlFor="email">Email:</label>
-            <input {...register("email")} id="email" className={styles.emailinput} />
+            <input 
+              {...register("email")} 
+              id="email" 
+              defaultValue={email}
+              className={styles.emailinput} 
+            />
         </div>
 
         <button type="submit" value="submit" className={styles.updateButton}>Update</button>
