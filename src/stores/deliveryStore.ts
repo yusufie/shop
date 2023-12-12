@@ -1,5 +1,6 @@
 // deliveryStore.ts
-import create from "zustand";
+import { create } from "zustand";
+
 
 type ButtonType = "express" | "morning" | "noon" | "afternoon" | "evening";
 

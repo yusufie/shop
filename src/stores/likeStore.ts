@@ -1,13 +1,14 @@
-import create  from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
 
-type LikeStore  = {
-  likedProducts: string[]; 
+import { persist } from "zustand/middleware";
+
+type LikeStore = {
+  likedProducts: string[];
   toggleLikeProduct: (productId: string) => void;
   removeLikedProduct: (productId: string) => void;
 };
 
-const useLikeStore = create<LikeStore >(
+const useLikeStore = create<LikeStore>(
   persist(
     (set) => ({
       likedProducts: [], // Store the liked products
@@ -27,7 +28,7 @@ const useLikeStore = create<LikeStore >(
       },
     }),
     {
-      name: 'like-storage', // name for the storage
+      name: "like-storage", // name for the storage
     }
   ) as any
 );

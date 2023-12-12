@@ -21,21 +21,21 @@ import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
 import CheckoutUpdateModal from "../Modals/Checkout/Checkupdate/CheckoutUpdateModal";
 import UpdateContact from "./UpdateContact";
 
-interface CheckoutComponentProps {
-  checkoutData: Array<{
-    totalPrice: number;
-    itemDes: string;
-    itemPrice: number;
-    itemId: number;
-  }>;
-}
+
+
+
+
+
+
+
+
 interface User {
   _id: string;
   // Add other properties as needed
 }
 
 const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
-const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
+const Checkout: React.FC = ({  }) => {
   // AÇMA KAPAMA STATELERİ
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isBillAddModalOpen, setIsBillAddModalOpen] = useState(false);
@@ -255,7 +255,6 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
     <section className={styles.checkout}>
       <div className={styles.checkoutInfo}>
         <UpdateContact userData={userMatches} />
-
         <div className={styles.billing}>
           <div className={styles.billingHeader}>
             <div>
