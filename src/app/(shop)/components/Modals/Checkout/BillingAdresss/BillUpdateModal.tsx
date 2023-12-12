@@ -5,11 +5,13 @@ import styles from "./billupdatemodal.module.css";
 interface BillUpdateModalProps {
   onClose: () => void;
   userMatches: any;
+  addressIdsToDelete: string[];
 }
 
 const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
   userMatches,
+  addressIdsToDelete,
 }) => {
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",

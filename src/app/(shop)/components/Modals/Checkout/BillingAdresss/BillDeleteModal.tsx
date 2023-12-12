@@ -1,6 +1,4 @@
-// BillDeleteModal.tsx
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./billdeletemodal.module.css";
 import Image from "next/image";
 
@@ -15,8 +13,34 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   userMatches,
   addressIdsToDelete,
 }) => {
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+    null
+  );
+
+  useEffect(() => {
+    console.log(
+      "Component mounted or selectedAddressId changed:",
+      selectedAddressId
+    );
+  }, [selectedAddressId]);
+
   const handleDelete = async () => {
     try {
+      console.log("Selected Address ID:", selectedAddressId);
+      console.log("Address IDs to Delete:", addressIdsToDelete);
+
+      if (!selectedAddressId) {
+        console.log("No address selected for deletion.");
+        onClose();
+        return;
+      }
+
+      if (!addressIdsToDelete.includes(selectedAddressId)) {
+        console.log("Selected address is not in the list to delete.");
+        onClose();
+        return;
+      }
+
       const accessToken = localStorage.getItem("accessToken");
       const user = localStorage.getItem("user");
       let userId;
@@ -34,32 +58,32 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
         throw new Error("User ID not found");
       }
 
-      // Her bir ID için DELETE isteği gönder
-      for (const addressIdToDelete of addressIdsToDelete) {
-        const deleteResponse = await fetch(
-          process.env.NEXT_PUBLIC_API_URL +
-            `/api/v1/orders/${userId}/address/${addressIdToDelete}`,
-          {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        if (!deleteResponse.ok) {
-          throw new Error(
-            `Address delete failed. HTTP error! Status: ${deleteResponse.status}`
-          );
+      const deleteResponse = await fetch(
+        process.env.NEXT_PUBLIC_API_URL +
+          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
+      );
 
-        const responseData = await deleteResponse.json();
-        console.log(`Address ${addressIdToDelete} deleted. Response:`, responseData);
+      if (!deleteResponse.ok) {
+        throw new Error(
+          `Address delete failed. HTTP error! Status: ${deleteResponse.status}`
+        );
       }
 
-      onClose(); // Tüm işlemler tamamlandıktan sonra modalı kapat
+      const responseData = await deleteResponse.json();
+      console.log(
+        `Address ${selectedAddressId} deleted. Response:`,
+        responseData
+      );
+
+      onClose();
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -73,13 +97,31 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.trash}>
-          <Image src="/icons/trash.svg" alt="Trash Can Icon" width={40} height={50} />
+          <Image
+            src="/icons/trash.svg"
+            alt="Trash Can Icon"
+            width={40}
+            height={50}
+          />
           <h1>Delete</h1>
-          <p>Are you sure you want to delete the following addresses?</p>
+          <p>Select the address you want to delete:</p>
           <ul>
             {userMatches.map((userMatch: any) =>
-              userMatch?.addresses?.map((address: any) => (
-                <li key={address._id}>{address.addressName}</li>
+              userMatch?.addresses?.map((contactItem: any) => (
+                <li
+                  key={contactItem._id}
+                  onClick={() => {
+                    console.log("Clicked!", contactItem._id);
+                    setSelectedAddressId(contactItem._id);
+                  }}
+                  className={
+                    selectedAddressId === contactItem._id ? styles.selected : ""
+                  }
+                >
+                  {contactItem.country && contactItem.city
+                    ? `${contactItem.country} ${contactItem.city}`
+                    : "Unknown Address"}
+                </li>
               ))
             )}
           </ul>
@@ -98,3 +140,121 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
 };
 
 export default BillDeleteModal;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

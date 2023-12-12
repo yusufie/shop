@@ -133,9 +133,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
       discount: 0,
       contact: userMatches.flatMap((userMatch: any) =>
         userMatch?.contact?.length > 0
-          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({
-              // Eğer mümkünse, benzersiz bir tanımlayıcı kullanın (_id yerine)
-              // Örnek: id: contactItem.id
+          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({   
               phone: {
                 countryCode: contactItem.phone.countryCode,
                 number: contactItem.phone.number,
@@ -538,12 +536,14 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
         <BillUpdateModal
           userMatches={userMatches}
           onClose={handleBillModalClose}
+          addressIdsToDelete={addressIdsToDelete}
         />
       )}
       {isShipUpdateModalOpen && (
         <ShipUpdateModal
           userMatches={userMatches}
           onClose={handleShipModalClose}
+          addressIdsToDelete={addressIdsToDelete}
         />
       )}
       {isBillDeleteModalOpen && (
@@ -557,6 +557,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
         <ShipDeleteModal
           userMatches={userMatches}
           onClose={handleShipDeleteClose}
+          addressIdsToDelete={addressIdsToDelete}
         />
       )}
       {isBillAddModalOpen && (

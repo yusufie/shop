@@ -5,13 +5,13 @@ import Image from "next/image";
 
 interface ShipDeleteModalProps {
   onClose: () => void;
-
+  addressIdsToDelete: string[];
   userMatches: any;
 }
 
 const ShipDeleteModal: React.FC<ShipDeleteModalProps> = ({
   onClose,
-
+  addressIdsToDelete,
   userMatches,
 }) => {
   // !!!Burayı dinamik yap*!!
