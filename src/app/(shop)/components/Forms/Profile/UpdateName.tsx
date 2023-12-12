@@ -11,9 +11,16 @@ type FormValues = {
     lastName: string;
 };
 
-const UpdateName = () => {
+interface UpdateProps {
+  userData: any;
+}
+
+const UpdateName: React.FC<UpdateProps> = ({userData}) => {
 
   const userStore = useUserStore();
+
+  // Destructuring user data for first name and last name
+  const { firstName = '', lastName = '' } = userData || {};
 
   const {
     register,
@@ -36,7 +43,8 @@ const UpdateName = () => {
       console.log('User ID:', userStore.user?._id);
       console.log('Access token:', userStore.accessToken);
 
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/name/${userStore.user?._id}`;
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/name/${userStore.user?._id}`
+
       const response = await fetch(apiUrl, {
         method: 'PATCH',
         headers: {
@@ -67,13 +75,23 @@ const UpdateName = () => {
 
             <div className={styles.nameField}>
                 <label htmlFor="firstName">Firstname:</label>
-                <input {...register("firstName")} id="firstName" className={styles.nameInput} />
+                <input 
+                  {...register("firstName")} 
+                  id="firstName" 
+                  defaultValue={firstName}
+                  className={styles.nameInput} 
+                />
                 {/* {errors.firstName && <span>{errors.firstName.message}</span>} */}
             </div>
 
             <div className={styles.nameField}>
                 <label htmlFor="lastName">Lastname:</label>
-                <input {...register("lastName")} id="lastName" className={styles.nameInput} />
+                <input 
+                  {...register("lastName")} 
+                  id="lastName" 
+                  defaultValue={lastName}
+                  className={styles.nameInput} 
+                />
                 {/* {errors.lastName && <span>{errors.lastName.message}</span>} */}
             </div>
 

@@ -28,6 +28,7 @@
     flex-direction: column;
     gap: 0.5rem;
     width: 100%;
+    position: relative;
   }
   
   .passwordField .passwordInput {
@@ -79,3 +80,34 @@
   .changePassword .submitButton:hover {
     background-color: rgba(1, 147, 118, 255);
   }
+
+  .success{
+    color: green;
+    border: none;
+    padding: 1rem;
+    background-color: rgb(190, 232, 190);
+    border-radius: 0.3rem;
+    max-width: max-content;
+    text-align: center;
+  }
+  .error{
+    color: red;
+    font-size: small;
+}
+
+.confirmOldPassword{
+  color: red;
+  border: none;
+  padding: 1rem;
+  background-color: rgb(234, 204, 199);
+  border-radius: 0.3rem;
+  max-width: max-content;
+  text-align: center;
+}
+
+.eyeSvg{
+  position: absolute;
+  right:1rem;
+  top: 2.4rem;
+  cursor: pointer;
+}
