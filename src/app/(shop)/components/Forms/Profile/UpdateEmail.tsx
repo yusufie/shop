@@ -10,8 +10,16 @@ type FormValues = {
   email: string;
 };
 
-const UpdateEmail = () => {
+interface UpdateProps {
+  userData: any;
+}
+
+const UpdateEmail: React.FC<UpdateProps> = ({userData}) => {
+
   const userStore = useUserStore();
+
+  // Destructuring user data for email
+  const { email = "" } = userData || {};
 
   const {
     register,
@@ -64,7 +72,12 @@ const UpdateEmail = () => {
 
         <div>
             <label htmlFor="email">Email:</label>
-            <input {...register("email")} id="email" className={styles.emailinput} />
+            <input 
+              {...register("email")} 
+              id="email" 
+              defaultValue={email}
+              className={styles.emailinput} 
+            />
         </div>
 
         <button type="submit" value="submit" className={styles.updateButton}>Update</button>

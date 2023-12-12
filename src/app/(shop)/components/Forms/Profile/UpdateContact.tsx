@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { registerSchema } from '@/utils/formSchema'
 import { useUserStore } from "@/stores/userStore";
+import countryCodes from 'country-codes-list';
 import styles from "./profile.module.css";
 
 type FormValues = {
@@ -11,12 +12,30 @@ type FormValues = {
   countryCode: string;
 };
 
-const UpdateContact = () => {
+interface UpdateProps {
+  userData: any;
+}
+
+const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
+
   const userStore = useUserStore();
+
+  // Destructuring user data for contact
+  const { contact = [] } = userData || {};
+  const defaultContact = contact.length > 0 ? contact[0] : {};
+  // console.log("Contact:", contact);
+
+  // Get country codes
+  const countryList: any = countryCodes.customList(
+    'countryCode' as any,
+    '[{countryCode}] +{countryCallingCode}'
+  ); // Generating the country code list
+  // console.log("Country List:", countryList);
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormValues>({
     // resolver: zodResolver(registerSchema),
@@ -25,11 +44,15 @@ const UpdateContact = () => {
   // send data to the "/api/v1/profile/contact/{userId}" route
   const onSubmit = async (data: FormValues) => {
     try {
+
+      // Extracting only the numeric part from the countryCode
+      const countryCodeNumber = data.countryCode.split(' ')[1];
+
       const userData = {
         contact: {
           type: 'string', // Update type based on your schema
           phone: {
-            countryCode: data.countryCode,
+            countryCode: countryCodeNumber, // Sending only the numeric part of the country code
             number: data.contact,
           },
         },
@@ -78,21 +101,42 @@ const UpdateContact = () => {
   return (
     <form className={styles.contactField} onSubmit={handleSubmit(onSubmit)}>
 
+      <div className={styles.contactHeader}>
+        <p>Contact Number</p>
+        {/* <button className={styles.addButton}>+ Add</button> */}
+      </div>
+
+      <div className={styles.contactInfos}>
         <div>
-            <label htmlFor="contact">Contact:</label>
-            <input {...register("contact")} id="contact" className={styles.contactinput} />
+          {/* <label htmlFor="countryCode">Country Code:</label> */}
+          <Controller
+            name="countryCode"
+            control={control}
+            defaultValue={defaultContact?.phone?.countryCode || ''}
+            render={({ field }) => (
+              <select id="countryCode" {...field} className={styles.countrySelect}>
+                {Object.keys(countryList).map((code) => (
+                  <option key={code} value={code.split(' ')[1]}>
+                    {countryList[code]}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
         </div>
 
-        <div>
-          <label htmlFor="countryCode">Country Code:</label>
-          <select {...register('countryCode')} id="countryCode" className={styles.countryCodeSelect}>
-            <option value="+1">+1 (USA)</option>
-            <option value="+44">+44 (UK)</option>
-            <option value="+91">+91 (India)</option>
-          </select>
-        </div>
+        <>
+            <input 
+              {...register("contact")} 
+              id="contact" 
+              defaultValue={defaultContact?.phone?.number || ''}
+              className={styles.contactinput} 
+            />
+        </>
+
+      </div>
         
-        <button type="submit" value="submit" className={styles.updateButton}>Update</button>
+      <button type="submit" value="submit" className={styles.updateButton}>Update</button>
 
     </form>
   )
