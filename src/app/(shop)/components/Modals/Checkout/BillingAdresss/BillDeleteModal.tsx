@@ -52,11 +52,8 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
             Authorization: `Bearer ${accessToken}`,
           },
         }
-      );
-
-      // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
-      mutate(
-        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+      );      
+      mutate(`/api/v1/orders/${userId}/address/${selectedAddressId}`,
         undefined,
         true
       );

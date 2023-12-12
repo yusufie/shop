@@ -19,6 +19,7 @@ import CheckoutBillAddModal from "../Modals/Checkout/BillingAdresss/CheckoutBill
 import BillDeleteModal from "../Modals/Checkout/BillingAdresss/BillDeleteModal";
 import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
 import CheckoutUpdateModal from "../Modals/Checkout/Checkupdate/CheckoutUpdateModal";
+import UpdateContact from "./UpdateContact";
 
 interface CheckoutComponentProps {
   checkoutData: Array<{
@@ -107,7 +108,8 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
   // Use filter with the correct type for item
   const userMatches = datas.data.filter((item: User) => item._id === userId);
 
-  console.log(userMatches);
+  console.log("userMatches", userMatches);
+
   const addressIdsToDelete = userMatches.flatMap(
     (userMatch: any) =>
       userMatch?.addresses?.map((address: any) => address?._id) || []
@@ -252,39 +254,7 @@ const Checkout: React.FC<CheckoutComponentProps> = ({}) => {
   return (
     <section className={styles.checkout}>
       <div className={styles.checkoutInfo}>
-        <div className={styles.contact}>
-          <div className={styles.contactHeader}>
-            <div>
-              <span className={styles.serial}>1</span>
-              <span className={styles.title}>Contact Number</span>
-            </div>
-
-            <button onClick={handleUpdateClick} className={styles.updateButton}>
-              + Update
-            </button>
-          </div>
-          <div className={styles.contactInput}>
-            {userMatches.map((userMatch: any, _id: any) => (
-              <div key={_id}>
-                {/* Önceki kontrol, userMatch'in varlığını ve contact dizisinin varlığını kontrol eder */}
-                {userMatch?.contact?.length > 0 &&
-                  userMatch.contact.map(
-                    (contactItem: any, contactIndex: any) => (
-                      <div key={contactIndex}>
-                        <PhoneInput
-                          international
-                          placeholder="Telefon numaranızı girin"
-                          disabled={true}
-                          value={`${contactItem.phone.countryCode} ${contactItem.phone.number}`}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    )
-                  )}
-              </div>
-            ))}
-          </div>
-        </div>
+        <UpdateContact userData={userMatches} />
 
         <div className={styles.billing}>
           <div className={styles.billingHeader}>
