@@ -6,6 +6,7 @@ import { loginSchema } from '@/utils/formSchema'
 import { useUserStore } from '@/stores/userStore';
 import Image from 'next/image';
 import styles from './loginmodal.module.css'
+import { useRouter } from "next/navigation";
 // import ConfirmationModal from "@/components/Modal/ConfirmationModal";
 // import RegisterModal from '@/app/(shop)/components/Modals/Register/RegisterModal';
 
@@ -22,6 +23,7 @@ type FormValues = {
 
 const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: LoginModalProps) => {
 
+  const route = useRouter();
   const userStore = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,7 +48,7 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
       }
       console.log('Submitted Data:', userData);
 
-      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/login', {
+      const response = await fetch('https://e-com-admin-unny.onrender.com/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,6 +72,7 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
 
         // Close the modal or navigate to another page
         onClose();
+        route.push("/");
 
       } else {
         alert('Login failed');
@@ -89,10 +92,9 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
       {
           <Image
             className={styles.logo}
-            src={"/images/logo.png"}
+            src={"/images/grand.png"}
             alt="logo"
-            width={160}
-            height={26}
+            width={163} height={45}
           />
         }
         <p>Login with your email & password</p>
@@ -138,38 +140,6 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
           <hr />
           <span>Or</span>
         </div>
-
-        <div className={styles.auth}>
-          {
-            <button className={styles.google}>
-              <Image
-                className={styles.iconsgoogle}
-                src={"/icons/google.svg"}
-                alt="google"
-                width={16}
-                height={16}
-              />{" "}
-              Login with Google
-            </button>
-          }
-          {
-            <button className={styles.mobile}>
-              <Image
-                className={styles.iconsphone}
-                src={"/icons/phone.svg"}
-                alt="phone"
-                width={20}
-                height={20}
-              />{" "}
-              Login with Mobile number
-            </button>
-          }
-        </div>
-
-        <div className={styles.horizontalLinea}>
-          <hr />
-        </div>
-
         <div className={styles.account}>
           Don&apos;t have any account?{" "}
           <button 

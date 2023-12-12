@@ -11,21 +11,29 @@ import getCategories from "@/utils/getCategories";
 import getCategoriesTree from "@/utils/getCategoriesTree";
 import { revalidateTag } from "next/cache";
 
-async function getData() {
-  // Cache data and tag it for revalidation
-  const res = await fetch( "https://ecommerce-api-5ksa.onrender.com/api/v1/products",
-    { next: { tags: ["productData"] }, }
-  );
+async function getProducts() {
 
-  if (res.ok) { await revalidateTag("productData"); }
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/products";
 
-  if (!res.ok) { throw new Error("Failed to fetch data"); }
+  try {
+    const res = await fetch(apiUrl, { next: { tags: ['products'] } });
 
-  return res.json();
+    if (res.ok) {
+      revalidateTag('products');
+    } else {
+      throw new Error('Failed to fetch products data');
+    }
+
+    return res.json();
+  } catch (error: any) {
+    console.error('Error fetching products data:', error.message);
+    // Handle the error gracefully (e.g., show a user-friendly message)
+    throw error;
+  }
 }
 
 export default async function Home() {
-  const datas = await getData();
+  const datas = await getProducts();
   // console.log(datas)
   const categories = await getCategories();
   // console.log(categories)

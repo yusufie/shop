@@ -71,12 +71,11 @@ const ForgotPasswordModal = ({ onClose }: ForgotModalProps) => {
       <div className={styles.forgotModalContent}>
       {
           <Image
-            className={styles.logo}
-            src={"/images/logo.png"}
-            alt="logo"
-            width={160}
-            height={26}
-          />
+          className={styles.logo}
+          src={"/images/grand.png"}
+          alt="logo"
+          width={163} height={45}
+        />
         }
         <p>We will send you a link to reset your password</p>
 

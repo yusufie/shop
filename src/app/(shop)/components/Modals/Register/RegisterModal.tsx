@@ -46,7 +46,9 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
       }
       console.log('Submitted Data:', userData);
 
-      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/register', {
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/register`;
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,12 +80,11 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
       <div className={styles.registerModalContent}>
         {
           <Image
-            className={styles.logo}
-            src={"/images/logo.png"}
-            alt="logo"
-            width={160}
-            height={26}
-          />
+          className={styles.logo}
+          src={"/images/grand.png"}
+          alt="logo"
+          width={163} height={45}
+        />
         }
         <p>
           By signing up, you agree to our{" "}

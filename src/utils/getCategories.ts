@@ -1,21 +1,24 @@
 import { revalidateTag } from "next/cache";
 
 async function getCategories() {
-  // Cache data and tag it for revalidation
-  const res = await fetch(
-    "https://ecommerce-api-5ksa.onrender.com/api/v1/categories",
-    { next: { tags: ["categories"] } }
-  );
 
-  if (res.ok) {
-    await revalidateTag("categories");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/categories";
+
+  try {
+    const res = await fetch(apiUrl, { next: { tags: ['categories'] } });
+
+    if (res.ok) {
+      revalidateTag('categories');
+    } else {
+      throw new Error('Failed to fetch categories data');
+    }
+
+    return res.json();
+  } catch (error: any) {
+    console.error('Error fetching categories data:', error.message);
+    // Handle the error gracefully (e.g., show a user-friendly message)
+    throw error;
   }
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return res.json();
 }
 
 export default getCategories;

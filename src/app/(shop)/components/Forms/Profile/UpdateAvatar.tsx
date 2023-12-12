@@ -60,14 +60,13 @@ const UpdateAvatar = () => {
         console.log('User ID:', userStore.user?._id);
 
         const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/image/${userStore.user?._id}`;
-  
+
         const response = await fetch(apiUrl, {
           method: 'PATCH', // Consider using 'PATCH' for updating resources
           headers: {
             Authorization: `Bearer ${userStore.accessToken}`,
             'Content-Type': 'application/json',
           },
-          // send the FormData object containing the imageUrl
           body: JSON.stringify({ image: imageUrl }),
         });
   
