@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./billdeletemodal.module.css";
 import Image from "next/image";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 interface BillDeleteModalProps {
   onClose: () => void;
@@ -20,19 +20,18 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   const userData = user ? JSON.parse(user) : null;
   const userId = userData ? userData._id : null;
 
-  const { data: deleteResponseData, mutate } = useSWR(
+  const { data: deleteResponseData } = useSWR(
     userId && selectedAddressId
       ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
-      : null
+      : null,
+    { revalidateOnFocus: true } // Yeniden çekmeyi odaklandığında gerçekleştir
   );
 
-  const handleAddressSelection = (addressId: string) => {
+  const handleAddressSelection = useCallback((addressId: string) => {
     setSelectedAddressId(addressId);
-  };
+  }, []);
 
-  console.log(selectedAddressId);
-
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     try {
       if (!selectedAddressId || !userId) {
         console.log("No address selected for deletion or user ID not found.");
@@ -56,13 +55,17 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
       );
 
       // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
-      mutate();
+      mutate(
+        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        undefined,
+        true
+      );
 
       onClose();
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  }, [selectedAddressId, userId, accessToken, onClose]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
