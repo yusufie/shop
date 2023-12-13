@@ -1,14 +1,11 @@
 "use client";
 import Image from "next/image";
 import styles from "./checkout.module.css";
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
-import { useEffect, useState } from "react"; // useEffect'i kaldırdım, çünkü burada kullanmış gibi görünmüyor.
+import { useEffect, useState } from "react";
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
 import CheckoutShipAddModal from "../Modals/Checkout/ShippingAdress/CheckoutShipAddModal";
 import useBasketStore from "@/stores/basketStore";
-import useContactStore from "@/stores/contactStore";
 import useNoteStore from "@/stores/noteStore";
 import useDeliveryStore from "@/stores/deliveryStore";
 import useShipAddressStore from "@/stores/shipaddressStore";
@@ -21,21 +18,14 @@ import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
 import CheckoutUpdateModal from "../Modals/Checkout/Checkupdate/CheckoutUpdateModal";
 import UpdateContact from "./UpdateContact";
 
-
-
-
-
-
-
-
-
 interface User {
   _id: string;
   // Add other properties as needed
 }
 
 const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
-const Checkout: React.FC = ({  }) => {
+
+const Checkout: React.FC = () => {
   // AÇMA KAPAMA STATELERİ
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isBillAddModalOpen, setIsBillAddModalOpen] = useState(false);
@@ -48,7 +38,6 @@ const Checkout: React.FC = ({  }) => {
   // ZUSTAND STORELAR
   const product = useBasketStore((state) => state.items);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
-  const { contactNumber, setContactNumber } = useContactStore();
   const { selectedButtons, handleButtonClick } = useDeliveryStore();
   const { orderNote, setOrderNote } = useNoteStore();
 
@@ -68,9 +57,9 @@ const Checkout: React.FC = ({  }) => {
 
   // *!!!-------------------------------------GET FUNCTİON-----------------------!!!!*
   const {
-    data: datas,
-    error,
-    mutate,
+    data: userMatches,
+    error: userDataError,
+    mutate: mutateUserData,
   } = useSWR(process.env.NEXT_PUBLIC_API_URL + `/api/v1/users`, async (url) => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -83,12 +72,14 @@ const Checkout: React.FC = ({  }) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch data: ${response.status}`);
+      throw new Error(`Failed to fetch user data: ${response.status}`);
     }
+
     return response.json();
   });
-  if (error) return <div>Loading failed</div>;
-  if (!datas) return <div>Loading...</div>;
+
+  if (userDataError) return <div>Loading failed for user data</div>;
+  if (!userMatches) return <div>Loading user data...</div>;
 
   const userString = localStorage.getItem("user");
   let userId: string | undefined;
@@ -102,15 +93,17 @@ const Checkout: React.FC = ({  }) => {
   }
 
   if (!userId) {
-    throw new Error("User ID bulunamadı");
+    throw new Error("User ID not found");
   }
 
   // Use filter with the correct type for item
-  const userMatches = datas.data.filter((item: User) => item._id === userId);
+  const userMatchesFiltered = userMatches.data.filter(
+    (item: User) => item._id === userId
+  );
 
-  console.log("userMatches", userMatches);
+  console.log("userMatches", userMatchesFiltered);
 
-  const addressIdsToDelete = userMatches.flatMap(
+  const addressIdsToDelete = userMatchesFiltered.flatMap(
     (userMatch: any) =>
       userMatch?.addresses?.map((address: any) => address?._id) || []
   );
@@ -184,26 +177,22 @@ const Checkout: React.FC = ({  }) => {
 
       console.log(orderData);
 
-      alert("Alkış sonunda başardın ");
+      alert("Gratulerer! Bestillingene dine er opprettet med suksess.");
     } catch (error: any) {
       console.error("Error creating order:", error.message);
       alert("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
+  //  order apiye get isteği yap
 
   // *!!!!---------------------------------HANDLE FUNCTİONLAR------------------------!!!!*
 
-  const handleChange = (number: string) => {
-    setContactNumber(number);
-  };
   const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newNote = event.target.value;
     setOrderNote(newNote);
   };
   // AÇMA KAPAMA
-  const handleUpdateClick = () => {
-    setIsUpdateModalOpen(true);
-  };
+
   const handleBillUpdateClick = () => {
     setIsBillUpdateModalOpen(true);
   };
