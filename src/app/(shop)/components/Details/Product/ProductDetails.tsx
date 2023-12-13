@@ -66,8 +66,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
 
     // Filter products based on the selectedProduct's category ID
     const relatedProducts = products.products.filter((product: any) => {
+
+        // Extract the category ID from the product
+        const productCategoryId = product.category?._id;
+        // product.category && product.category._id;
+
         // Check if the product's category matches the selectedProduct's category
-        return product.category._id === selectedProductCategoryId;
+        return productCategoryId === selectedProductCategoryId;
     });
 
   return (

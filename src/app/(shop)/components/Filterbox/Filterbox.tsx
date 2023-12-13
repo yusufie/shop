@@ -37,8 +37,10 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
         // If no category is selected, display all products
         return true; 
       }
-      const productCategoryId = data.category && data.category._id;
-      const productCategoryParentId = data.category && data.category.parent;
+
+      // Extract the category and its parent from the product data if it exists
+      const productCategoryId = data.category?._id;
+      const productCategoryParentId = data.category?.parent;
 
       // Strict equality check for both the category and its parent
       return productCategoryId === categoryId || productCategoryParentId === categoryId;
