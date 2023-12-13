@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from 'react';
-import { useUserStore } from '@/stores/userStore';
 import Image from "next/image";
+import { useUserStore } from '@/stores/userStore';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from "./profile.module.css";
 
 const UpdateAvatar = () => {
@@ -38,12 +40,14 @@ const UpdateAvatar = () => {
       return data.result.url; // Return the uploaded image URL
     } catch (error) {
       console.error('Error occurred during image upload', error);
+      toast.error('Image upload failed. Please try again.');
       return null;
     }
   };
 
   const handleImageUpload = async () => {
     if (!selectedImage) {
+      toast.error('Please select an image to upload.');
       return; // No image selected, handle accordingly
     }
   
@@ -72,9 +76,10 @@ const UpdateAvatar = () => {
   
         if (response.ok) {
           console.log('User avatar updated successfully!');
-          // Perform any additional actions upon successful avatar update
+          toast.success('Avatar updated successfully!');
         } else {
           console.error('Failed to update user avatar');
+          toast.error('Failed to update user avatar');
         }
       } catch (error) {
         console.error('Error occurred while updating user avatar', error);
@@ -83,22 +88,25 @@ const UpdateAvatar = () => {
   };
 
   return (
-    <section className={styles.personal}>
+    <>
+      <section className={styles.personal}>
 
-      <div className={styles.upload}>
+        <div className={styles.upload}>
 
-        <input type="file" accept="image/*" onChange={handleImageChange} className={styles.customFileinput}/>
-        
-        <div className={styles.image}>
-          <Image src="/icons/upload.svg" alt="upload" width={40} height={30} />
-          <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
+          <input type="file" accept="image/*" onChange={handleImageChange} className={styles.customFileinput}/>
+          
+          <div className={styles.image}>
+            <Image src="/icons/upload.svg" alt="upload" width={40} height={30} />
+            <p><span>Upload an image</span> or drag and drop PNG, JPG</p>
+          </div>
+
         </div>
 
-      </div>
+        <button onClick={handleImageUpload} className={styles.saveButton}>Save</button>
 
-      <button onClick={handleImageUpload} className={styles.saveButton}>Save</button>
-
-    </section>
+      </section>
+      <ToastContainer />
+    </>
   );
 };
 
