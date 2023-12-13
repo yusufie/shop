@@ -69,7 +69,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
 
         // Extract the category ID from the product
         const productCategoryId = product.category?._id;
-        // product.category && product.category._id;
 
         // Check if the product's category matches the selectedProduct's category
         return productCategoryId === selectedProductCategoryId;
