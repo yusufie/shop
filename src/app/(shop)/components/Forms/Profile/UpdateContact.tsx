@@ -5,6 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 // import { registerSchema } from '@/utils/formSchema'
 import { useUserStore } from "@/stores/userStore";
 import countryCodes from 'country-codes-list';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from "./profile.module.css";
 
 type FormValues = {
@@ -62,7 +64,8 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
       const accessToken = userStore.accessToken;
 
       if (!userId || !accessToken) {
-        console.error('User ID or access token not available');
+        toast.error('User ID or access token is not available');
+        // console.error('User ID or access token not available');
         return;
       }
 
@@ -88,10 +91,10 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Response Data:", responseData);
-        alert("Update successful");
+        toast.success('Update successful');
       } else {
         console.error("Failed to update. Status:", response.status);
-        alert("Update failed");
+        toast.error('Update failed');
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -99,6 +102,7 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
   };
 
   return (
+    <>
     <form className={styles.contactField} onSubmit={handleSubmit(onSubmit)}>
 
       <div className={styles.contactHeader}>
@@ -140,6 +144,9 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
       <button type="submit" value="submit" className={styles.updateButton}>Update</button>
 
     </form>
+    
+    <ToastContainer />
+    </>
   )
 };
 
