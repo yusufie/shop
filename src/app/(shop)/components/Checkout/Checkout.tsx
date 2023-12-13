@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import styles from "./checkout.module.css";
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react"; // useEffect'i kaldırdım, çünkü burada kullanmış gibi görünmüyor.
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
@@ -21,21 +21,13 @@ import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
 import CheckoutUpdateModal from "../Modals/Checkout/Checkupdate/CheckoutUpdateModal";
 import UpdateContact from "./UpdateContact";
 
-
-
-
-
-
-
-
-
 interface User {
   _id: string;
   // Add other properties as needed
 }
 
 const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
-const Checkout: React.FC = ({  }) => {
+const Checkout: React.FC = ({}) => {
   // AÇMA KAPAMA STATELERİ
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isBillAddModalOpen, setIsBillAddModalOpen] = useState(false);
@@ -181,13 +173,12 @@ const Checkout: React.FC = ({  }) => {
       const responseData = await response.json();
 
       console.log("Order created successfully:", responseData);
-
       console.log(orderData);
 
-      alert("Alkış sonunda başardın ");
+      toast.success("Gratulations! Your order has been created successfully.");
     } catch (error: any) {
       console.error("Error creating order:", error.message);
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -252,288 +243,294 @@ const Checkout: React.FC = ({  }) => {
     )
     .toFixed(2);
   return (
-    <section className={styles.checkout}>
-      <div className={styles.checkoutInfo}>
-        <UpdateContact userData={userMatches} />
-        <div className={styles.billing}>
-          <div className={styles.billingHeader}>
-            <div>
-              <span className={styles.serial}>2</span>
-              <span className={styles.title}>Billing Address</span>
+    <>
+      <section className={styles.checkout}>
+        <div className={styles.checkoutInfo}>
+          <UpdateContact userData={userMatches} />
+          <div className={styles.billing}>
+            <div className={styles.billingHeader}>
+              <div>
+                <span className={styles.serial}>2</span>
+                <span className={styles.title}>Billing Address</span>
+              </div>
+              <button
+                onClick={handleBillAddClick}
+                className={styles.updateButton}
+              >
+                + Add
+              </button>
             </div>
-            <button
-              onClick={handleBillAddClick}
-              className={styles.updateButton}
-            >
-              + Add
-            </button>
+            <div className={styles.map}>
+              {userMatches.map((userMatch: any, _id: any) => (
+                <>
+                  {userMatch?.addresses?.length > 0 &&
+                    userMatch.addresses.map(
+                      (contactItem: any, contactIndex: any) => (
+                        <div className={styles.billingInput} key={contactIndex}>
+                          <div className={styles.inputTop}>
+                            <h4>Billing</h4>
+                            <div className={styles.hoverButtons}>
+                              <button
+                                onClick={handleBillUpdateClick}
+                                className={styles.hoverPen}
+                              >
+                                <Image
+                                  src="/icons/pen.svg"
+                                  alt="pen"
+                                  width={16}
+                                  height={16}
+                                />
+                              </button>
+                              <button
+                                onClick={handleBillDeleteClick}
+                                className={styles.hoverCross}
+                              >
+                                <Image
+                                  src="/icons/cross.svg"
+                                  alt="cross"
+                                  width={16}
+                                  height={16}
+                                />
+                              </button>
+                            </div>
+                          </div>
+                          <div className={styles.inputBottom}>
+                            <div key={_id}>
+                              <strong>Title:</strong> {contactItem.alias} <br />
+                              <strong>Street Address:</strong>{" "}
+                              {contactItem.details} <br />
+                              <strong>City:</strong> {contactItem.city} <br />
+                              <strong>Country:</strong> {contactItem.country}{" "}
+                              <br />
+                              <strong>Postal Code:</strong>{" "}
+                              {contactItem.postalCode} <br />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                </>
+              ))}
+            </div>
           </div>
-          <div className={styles.map}>
-            {userMatches.map((userMatch: any, _id: any) => (
-              <>
-                {userMatch?.addresses?.length > 0 &&
-                  userMatch.addresses.map(
-                    (contactItem: any, contactIndex: any) => (
-                      <div className={styles.billingInput} key={contactIndex}>
-                        <div className={styles.inputTop}>
-                          <h4>Billing</h4>
-                          <div className={styles.hoverButtons}>
-                            <button
-                              onClick={handleBillUpdateClick}
-                              className={styles.hoverPen}
-                            >
-                              <Image
-                                src="/icons/pen.svg"
-                                alt="pen"
-                                width={16}
-                                height={16}
-                              />
-                            </button>
-                            <button
-                              onClick={handleBillDeleteClick}
-                              className={styles.hoverCross}
-                            >
-                              <Image
-                                src="/icons/cross.svg"
-                                alt="cross"
-                                width={16}
-                                height={16}
-                              />
-                            </button>
+          <div className={styles.shipping}>
+            <div className={styles.shippingHeader}>
+              <div>
+                <span className={styles.serial}>3</span>
+                <span className={styles.title}>Shipping Address</span>
+              </div>
+
+              <button
+                onClick={handleShipAddClick}
+                className={styles.updateButton}
+              >
+                + Add
+              </button>
+            </div>
+            <div className={styles.map}>
+              {userMatches.map((userMatch: any, _id: any) => (
+                <>
+                  {userMatch?.addresses?.length > 0 &&
+                    userMatch.addresses.map(
+                      (contactItem: any, contactIndex: any) => (
+                        <div
+                          className={styles.shippingInput}
+                          key={contactIndex}
+                        >
+                          <div className={styles.inputTop}>
+                            <h4>Shipping</h4>
+                            <div className={styles.hoverButtons}>
+                              <button
+                                onClick={handleShipUpdateClick}
+                                className={styles.hoverPen}
+                              >
+                                <Image
+                                  src="/icons/pen.svg"
+                                  alt="pen"
+                                  width={16}
+                                  height={16}
+                                />
+                              </button>
+                              <button
+                                onClick={handleShipDeleteClick}
+                                className={styles.hoverCross}
+                              >
+                                <Image
+                                  src="/icons/cross.svg"
+                                  alt="cross"
+                                  width={16}
+                                  height={16}
+                                />
+                              </button>
+                            </div>
+                          </div>
+                          <div className={styles.inputBottom}>
+                            <div key={_id}>
+                              <strong>Title:</strong> {contactItem.alias} <br />
+                              <strong>Street Address:</strong>{" "}
+                              {contactItem.details} <br />
+                              <strong>City:</strong> {contactItem.city} <br />
+                              <strong>Country:</strong> {contactItem.country}{" "}
+                              <br />
+                              <strong>Postal Code:</strong>{" "}
+                              {contactItem.postalCode} <br />
+                            </div>
                           </div>
                         </div>
-                        <div className={styles.inputBottom}>
-                          <div key={_id}>
-                            <strong>Title:</strong> {contactItem.alias} <br />
-                            <strong>Street Address:</strong>{" "}
-                            {contactItem.details} <br />
-                            <strong>City:</strong> {contactItem.city} <br />
-                            <strong>Country:</strong> {contactItem.country}{" "}
-                            <br />
-                            <strong>Postal Code:</strong>{" "}
-                            {contactItem.postalCode} <br />
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  )}
-              </>
+                      )
+                    )}
+                </>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.delivery}>
+            <div className={styles.deliveryHeader}>
+              <div>
+                <span className={styles.serial}>4</span>
+                <span className={styles.title}>Delivery Schedule</span>
+              </div>
+            </div>
+            <div className={styles.deliveryInput}>
+              <button
+                onClick={() => handleButtonClick("express")}
+                className={
+                  selectedButtons.express
+                    ? styles.selectedButton
+                    : styles.deliveryButton
+                }
+              >
+                <h4>Express Delivery</h4>
+                <span>90 min express delivery</span>
+              </button>
+              <button
+                onClick={() => handleButtonClick("morning")}
+                className={
+                  selectedButtons.morning
+                    ? styles.selectedButton
+                    : styles.deliveryButton
+                }
+              >
+                <h4>Morning</h4>
+                <span>8.00 AM - 11.00 AM</span>
+              </button>
+              <button
+                onClick={() => handleButtonClick("noon")}
+                className={
+                  selectedButtons.noon
+                    ? styles.selectedButton
+                    : styles.deliveryButton
+                }
+              >
+                <h4>Noon</h4>
+                <span>11.00 AM - 2.00 PM</span>
+              </button>
+              <button
+                onClick={() => handleButtonClick("afternoon")}
+                className={
+                  selectedButtons.afternoon
+                    ? styles.selectedButton
+                    : styles.deliveryButton
+                }
+              >
+                <h4>Afternoon</h4>
+                <span>2.00 PM - 5.00 PM</span>
+              </button>
+              <button
+                onClick={() => handleButtonClick("evening")}
+                className={
+                  selectedButtons.evening
+                    ? styles.selectedButton
+                    : styles.deliveryButton
+                }
+              >
+                <h4>Evening</h4>
+                <span>5.00 PM - 8.00 PM</span>
+                <span className={styles.special}>
+                  (Your order will be delivered the next day.)
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.note}>
+            <div className={styles.noteHeader}>
+              <div>
+                <span className={styles.serial}>5</span>
+                <span className={styles.title}>Order Note</span>
+              </div>
+            </div>
+
+            <div className={styles.noteInput}>
+              <textarea
+                rows={8}
+                placeholder="Sipariş notunuzu buraya yazın..."
+                value={orderNote}
+                onChange={handleNoteChange}
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.checkoutCalculate}>
+          <div className={styles.orderHeader}>
+            <h4>Your Order</h4>
+          </div>
+
+          <div className={styles.orderItems}>
+            {product.map((item: any) => (
+              <div key={item._id} className={styles.orderItem}>
+                <span>
+                  {addedItemCounts[item._id]} x {item.description} | 1lb
+                </span>
+                <span>${item.price.toFixed(2)}</span>
+              </div>
             ))}
+            <span>SubTotal:${totalPrice}</span>
           </div>
+
+          <button onClick={handleCheckout} className={styles.availableButton}>
+            Place Order
+          </button>
         </div>
-        <div className={styles.shipping}>
-          <div className={styles.shippingHeader}>
-            <div>
-              <span className={styles.serial}>3</span>
-              <span className={styles.title}>Shipping Address</span>
-            </div>
-
-            <button
-              onClick={handleShipAddClick}
-              className={styles.updateButton}
-            >
-              + Add
-            </button>
-          </div>
-          <div className={styles.map}>
-            {userMatches.map((userMatch: any, _id: any) => (
-              <>
-                {userMatch?.addresses?.length > 0 &&
-                  userMatch.addresses.map(
-                    (contactItem: any, contactIndex: any) => (
-                      <div className={styles.shippingInput} key={contactIndex}>
-                        <div className={styles.inputTop}>
-                          <h4>Shipping</h4>
-                          <div className={styles.hoverButtons}>
-                            <button
-                              onClick={handleShipUpdateClick}
-                              className={styles.hoverPen}
-                            >
-                              <Image
-                                src="/icons/pen.svg"
-                                alt="pen"
-                                width={16}
-                                height={16}
-                              />
-                            </button>
-                            <button
-                              onClick={handleShipDeleteClick}
-                              className={styles.hoverCross}
-                            >
-                              <Image
-                                src="/icons/cross.svg"
-                                alt="cross"
-                                width={16}
-                                height={16}
-                              />
-                            </button>
-                          </div>
-                        </div>
-                        <div className={styles.inputBottom}>
-                          <div key={_id}>
-                            <strong>Title:</strong> {contactItem.alias} <br />
-                            <strong>Street Address:</strong>{" "}
-                            {contactItem.details} <br />
-                            <strong>City:</strong> {contactItem.city} <br />
-                            <strong>Country:</strong> {contactItem.country}{" "}
-                            <br />
-                            <strong>Postal Code:</strong>{" "}
-                            {contactItem.postalCode} <br />
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  )}
-              </>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.delivery}>
-          <div className={styles.deliveryHeader}>
-            <div>
-              <span className={styles.serial}>4</span>
-              <span className={styles.title}>Delivery Schedule</span>
-            </div>
-          </div>
-          <div className={styles.deliveryInput}>
-            <button
-              onClick={() => handleButtonClick("express")}
-              className={
-                selectedButtons.express
-                  ? styles.selectedButton
-                  : styles.deliveryButton
-              }
-            >
-              <h4>Express Delivery</h4>
-              <span>90 min express delivery</span>
-            </button>
-            <button
-              onClick={() => handleButtonClick("morning")}
-              className={
-                selectedButtons.morning
-                  ? styles.selectedButton
-                  : styles.deliveryButton
-              }
-            >
-              <h4>Morning</h4>
-              <span>8.00 AM - 11.00 AM</span>
-            </button>
-            <button
-              onClick={() => handleButtonClick("noon")}
-              className={
-                selectedButtons.noon
-                  ? styles.selectedButton
-                  : styles.deliveryButton
-              }
-            >
-              <h4>Noon</h4>
-              <span>11.00 AM - 2.00 PM</span>
-            </button>
-            <button
-              onClick={() => handleButtonClick("afternoon")}
-              className={
-                selectedButtons.afternoon
-                  ? styles.selectedButton
-                  : styles.deliveryButton
-              }
-            >
-              <h4>Afternoon</h4>
-              <span>2.00 PM - 5.00 PM</span>
-            </button>
-            <button
-              onClick={() => handleButtonClick("evening")}
-              className={
-                selectedButtons.evening
-                  ? styles.selectedButton
-                  : styles.deliveryButton
-              }
-            >
-              <h4>Evening</h4>
-              <span>5.00 PM - 8.00 PM</span>
-              <span className={styles.special}>
-                (Your order will be delivered the next day.)
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <div className={styles.note}>
-          <div className={styles.noteHeader}>
-            <div>
-              <span className={styles.serial}>5</span>
-              <span className={styles.title}>Order Note</span>
-            </div>
-          </div>
-
-          <div className={styles.noteInput}>
-            <textarea
-              rows={8}
-              placeholder="Sipariş notunuzu buraya yazın..."
-              value={orderNote}
-              onChange={handleNoteChange}
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.checkoutCalculate}>
-        <div className={styles.orderHeader}>
-          <h4>Your Order</h4>
-        </div>
-
-        <div className={styles.orderItems}>
-          {product.map((item: any) => (
-            <div key={item._id} className={styles.orderItem}>
-              <span>
-                {addedItemCounts[item._id]} x {item.description} | 1lb
-              </span>
-              <span>${item.price.toFixed(2)}</span>
-            </div>
-          ))}
-          <span>SubTotal:${totalPrice}</span>
-        </div>
-
-        <button onClick={handleCheckout} className={styles.availableButton}>
-          Place Order
-        </button>
-      </div>
-      {isUpdateModalOpen && (
-        <CheckoutUpdateModal onClose={handleUpdateModalClose} />
-      )}
-      {isBillUpdateModalOpen && (
-        <BillUpdateModal
-          userMatches={userMatches}
-          onClose={handleBillModalClose}
-        />
-      )}
-      {isShipUpdateModalOpen && (
-        <ShipUpdateModal
-          userMatches={userMatches}
-          onClose={handleShipModalClose}
-        />
-      )}
-      {isBillDeleteModalOpen && (
-        <BillDeleteModal
-          userMatches={userMatches}
-          onClose={handleBillDeleteClose}
-          addressIdsToDelete={addressIdsToDelete}
-        />
-      )}
-      {isShipDeleteModalOpen && (
-        <ShipDeleteModal
-          userMatches={userMatches}
-          onClose={handleShipDeleteClose}
-          addressIdsToDelete={addressIdsToDelete}
-        />
-      )}
-      {isBillAddModalOpen && (
-        <CheckoutBillAddModal onClose={handleBillAddModalClose} />
-      )}
-      {isShipAddModalOpen && (
-        <CheckoutShipAddModal onClose={handleShipAddModalClose} />
-      )}
-    </section>
+        {isUpdateModalOpen && (
+          <CheckoutUpdateModal onClose={handleUpdateModalClose} />
+        )}
+        {isBillUpdateModalOpen && (
+          <BillUpdateModal
+            userMatches={userMatches}
+            onClose={handleBillModalClose}
+          />
+        )}
+        {isShipUpdateModalOpen && (
+          <ShipUpdateModal
+            userMatches={userMatches}
+            onClose={handleShipModalClose}
+          />
+        )}
+        {isBillDeleteModalOpen && (
+          <BillDeleteModal
+            userMatches={userMatches}
+            onClose={handleBillDeleteClose}
+            addressIdsToDelete={addressIdsToDelete}
+          />
+        )}
+        {isShipDeleteModalOpen && (
+          <ShipDeleteModal
+            userMatches={userMatches}
+            onClose={handleShipDeleteClose}
+            addressIdsToDelete={addressIdsToDelete}
+          />
+        )}
+        {isBillAddModalOpen && (
+          <CheckoutBillAddModal onClose={handleBillAddModalClose} />
+        )}
+        {isShipAddModalOpen && (
+          <CheckoutShipAddModal onClose={handleShipAddModalClose} />
+        )}
+      </section>
+      <ToastContainer />
+    </>
   );
 };
 
