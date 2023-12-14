@@ -26,13 +26,8 @@ interface User {
   // Add other properties as needed
 }
 
-
-const fetchOrders = (url: any) => fetch(url).then((res) => res.json());
-const Checkout: React.FC = () => {
-
 const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
 const Checkout: React.FC = ({}) => {
-
   // AÇMA KAPAMA STATELERİ
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isBillAddModalOpen, setIsBillAddModalOpen] = useState(false);
@@ -41,7 +36,6 @@ const Checkout: React.FC = ({}) => {
   const [isBillDeleteModalOpen, setIsBillDeleteModalOpen] = useState(false);
   const [isShipUpdateModalOpen, setIsShipUpdateModalOpen] = useState(false);
   const [isShipDeleteModalOpen, setIsShipDeleteModalOpen] = useState(false);
-  const [orderMatches, setOrderMatches] = useState();
 
   // ZUSTAND STORELAR
   const product = useBasketStore((state) => state.items);
@@ -64,71 +58,6 @@ const Checkout: React.FC = ({}) => {
     console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
 
-  const fetchData = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-
-    if (!accessToken) {
-      throw new Error("Access token not found");
-    }
-
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL + `/api/v1/orders`;
-
-    const fetchOptions = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        // Diğer header bilgilerini buraya ekleyebilirsiniz
-      },
-    };
-
-    const {
-      data: orderData,
-      error,
-      mutate,
-    } = useSWR(apiUrl, async (url) => {
-      const response = await fetch(url, fetchOptions);
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
-      }
-
-      return response.json();
-    });
-
-    if (error) return <div>Loading failed</div>;
-    if (!orderData) return <div>Loading...</div>;
-    const userString = localStorage.getItem("user");
-    let userId: string | undefined;
-    if (userString) {
-      // Parse the user data from JSON
-      const userData: User = JSON.parse(userString);
-      // Extract the user ID
-      userId = userData._id;
-    }
-    if (!userId) {
-      throw new Error("User ID bulunamadı");
-    }
-    const orderMatches = orderData.filter((siparis: any) => {
-      return siparis.user._id === userId;
-    });
-
-    setOrderMatches(orderMatches);
-
-    mutate(orderData);
-  };
-  const fetchDataAndSetOrderMatches = async () => {
-    try {
-      await fetchData();
-    } catch (error) {
-      // Handle errors if needed
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchDataAndSetOrderMatches();
-  }, []); // Boş bağımlılık dizisi, yalnızca bir kere çağrılmasını sağlar
-
-  console.log("orderMatches", orderMatches);
   // *!!!-------------------------------------GET FUNCTİON-----------------------!!!!*
   const {
     data: datas,
@@ -177,7 +106,6 @@ const Checkout: React.FC = ({}) => {
     (userMatch: any) =>
       userMatch?.addresses?.map((address: any) => address?._id) || []
   );
-  // Kullanıcın verilerini çekme
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -247,11 +175,7 @@ const Checkout: React.FC = ({}) => {
       console.log("Order created successfully:", responseData);
       console.log(orderData);
 
-
-      alert("Gratulerer! Bestillingene dine er opprettet med suksess.");
-
       toast.success("Gratulations! Your order has been created successfully.");
-
     } catch (error: any) {
       console.error("Error creating order:", error.message);
       toast.error("An error occurred. Please try again.");
@@ -389,11 +313,6 @@ const Checkout: React.FC = ({}) => {
               ))}
             </div>
           </div>
-          <div className={styles.map}>
-            {orderMatches &&
-            orderMatches.map((userMatch: any,_id:any) => (
-                <div>
-
           <div className={styles.shipping}>
             <div className={styles.shippingHeader}>
               <div>
@@ -411,7 +330,6 @@ const Checkout: React.FC = ({}) => {
             <div className={styles.map}>
               {userMatches.map((userMatch: any, _id: any) => (
                 <>
-
                   {userMatch?.addresses?.length > 0 &&
                     userMatch.addresses.map(
                       (contactItem: any, contactIndex: any) => (
@@ -445,63 +363,6 @@ const Checkout: React.FC = ({}) => {
                                 />
                               </button>
                             </div>
-
-                          </div>
-                          <div className={styles.inputBottom}>
-                            <div key={_id}>
-                              <strong>Title:</strong> {contactItem.alias} <br />
-                              <strong>Street Address:</strong>{" "}
-                              {contactItem.details} <br />
-                              <strong>City:</strong> {contactItem.city} <br />
-                              <strong>Country:</strong> {contactItem.country}{" "}
-                              <br />
-                              <strong>Postal Code:</strong>{" "}
-                              {contactItem.postalCode} <br />
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    )}
-                </div>
-              ))}
-            {userMatches &&
-              userMatches.map((userMatch: any, _id: any) => (
-                <>
-                  {userMatch?.addresses?.length > 0 &&
-                    userMatch.addresses.map(
-                      (contactItem: any, contactIndex: any) => (
-                        <div
-                          className={styles.shippingInput}
-                          key={contactIndex}
-                        >
-                          <div className={styles.inputTop}>
-                            <h4>Shipping</h4>
-                            <div className={styles.hoverButtons}>
-                              <button
-                                onClick={handleShipUpdateClick}
-                                className={styles.hoverPen}
-                              >
-                                <Image
-                                  src="/icons/pen.svg"
-                                  alt="pen"
-                                  width={16}
-                                  height={16}
-                                />
-                              </button>
-                              <button
-                                onClick={handleShipDeleteClick}
-                                className={styles.hoverCross}
-                              >
-                                <Image
-                                  src="/icons/cross.svg"
-                                  alt="cross"
-                                  width={16}
-                                  height={16}
-                                />
-                              </button>
-                            </div>
-                          </div>
-
                           </div>
                           <div className={styles.inputBottom}>
                             <div key={_id}>
@@ -520,10 +381,7 @@ const Checkout: React.FC = ({}) => {
                     )}
                 </>
               ))}
-
-
             </div>
-
           </div>
 
           <div className={styles.delivery}>
@@ -618,17 +476,6 @@ const Checkout: React.FC = ({}) => {
           <div className={styles.orderHeader}>
             <h4>Your Order</h4>
           </div>
-        <div className={styles.orderItems}>
-          {product.map((item: any) => (
-            <div key={item._id} className={styles.orderItem}>
-              <span>
-                {addedItemCounts[item._id]} x {item.title} | 1lb
-              </span>
-              <span>${item.price.toFixed(2)}</span>
-            </div>
-          ))}
-          <span>SubTotal:${totalPrice}</span>
-        </div>
 
           <div className={styles.orderItems}>
             {product.map((item: any) => (
@@ -641,7 +488,6 @@ const Checkout: React.FC = ({}) => {
             ))}
             <span>SubTotal:${totalPrice}</span>
           </div>
-
 
           <button onClick={handleCheckout} className={styles.availableButton}>
             Place Order
