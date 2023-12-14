@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./checkout.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react"; // useEffect'i kaldırdım, çünkü burada kullanmış gibi görünmüyor.
+import { useEffect, useState } from "react";
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
 import CheckoutShipAddModal from "../Modals/Checkout/ShippingAdress/CheckoutShipAddModal";
@@ -23,7 +23,6 @@ import UpdateContact from "./UpdateContact";
 
 interface User {
   _id: string;
-  // Add other properties as needed
 }
 
 const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
@@ -43,7 +42,7 @@ const Checkout: React.FC = ({}) => {
   const { contactNumber, setContactNumber } = useContactStore();
   const { selectedButtons, handleButtonClick } = useDeliveryStore();
   const { orderNote, setOrderNote } = useNoteStore();
-
+ const [orderMatches, setOrderMatches] = useState()
   const noteData = useNoteStore((state) => state);
   const shipAddressData = useShipAddressStore((state) => state);
 
@@ -54,11 +53,66 @@ const Checkout: React.FC = ({}) => {
     state.getDeliverySchedule()
   );
   useEffect(() => {
-    // deliverySchedule'ı kullanarak gerekli işlemleri gerçekleştir
     console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
+  // *!!!-------------------------------------GET ORDERS---------------------------------------!!!!*
+  const fetchData = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      throw new Error("Access token not found");
+    }
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + `/api/v1/orders`;
+    const fetchOptions = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        // Diğer header bilgilerini buraya ekleyebilirsiniz
+      },
+    };
+    const {
+      data: orderData,
+      error,
+      mutate,
+    } = useSWR(apiUrl, async (url) => {
+      const response = await fetch(url, fetchOptions);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.status}`);
+      }
+      return response.json();
+    });
+    if (error) return <div>Loading failed</div>;
+    if (!orderData) return <div>Loading...</div>;
+    const userString = localStorage.getItem("user");
+    let userId: string | undefined;
+    if (userString) {
+      // Parse the user data from JSON
+      const userData: User = JSON.parse(userString);
+      // Extract the user ID
+      userId = userData._id;
+    }
+    if (!userId) {
+      throw new Error("User ID bulunamadı");
+    }
+    const orderMatches = orderData.filter((siparis: any) => {
+      return siparis.user._id === userId;
+    });
 
-  // *!!!-------------------------------------GET FUNCTİON-----------------------!!!!*
+    setOrderMatches(orderMatches);
+
+    mutate(orderData);
+  };
+  const fetchDataAndSetOrderMatches = async () => {
+    try {
+      await fetchData();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataAndSetOrderMatches();
+  }, []); 
+
+  // *!!!-------------------------------------GET USER---------------------------------------!!!!*
   const {
     data: datas,
     error,
@@ -81,15 +135,13 @@ const Checkout: React.FC = ({}) => {
   });
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
-
+  mutate(datas)
   const userString = localStorage.getItem("user");
   let userId: string | undefined;
 
   if (userString) {
-    // Parse the user data from JSON
     const userData: User = JSON.parse(userString);
 
-    // Extract the user ID
     userId = userData._id;
   }
 
@@ -184,17 +236,12 @@ const Checkout: React.FC = ({}) => {
 
   // *!!!!---------------------------------HANDLE FUNCTİONLAR------------------------!!!!*
 
-  const handleChange = (number: string) => {
-    setContactNumber(number);
-  };
   const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newNote = event.target.value;
     setOrderNote(newNote);
   };
   // AÇMA KAPAMA
-  const handleUpdateClick = () => {
-    setIsUpdateModalOpen(true);
-  };
+
   const handleBillUpdateClick = () => {
     setIsBillUpdateModalOpen(true);
   };
