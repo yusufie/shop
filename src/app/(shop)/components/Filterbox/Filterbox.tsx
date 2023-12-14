@@ -38,8 +38,12 @@ const Filterbox: React.FC<FilterboxProps> = ({datas, categories, tree}) => {
         return true; 
       }
 
-      // Check if the product belongs to the selected category or its children
-      return data.category._id === categoryId || data.category.parent === categoryId;
+      // Extract the category and its parent from the product data if it exists
+      const productCategoryId = data.category?._id;
+      const productCategoryParentId = data.category?.parent;
+
+      // Strict equality check for both the category and its parent
+      return productCategoryId === categoryId || productCategoryParentId === categoryId;
     });
   };
 

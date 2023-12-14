@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { registerSchema } from '@/utils/formSchema'
 import { useUserStore } from '@/stores/userStore';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from "./profile.module.css";
 
 type FormValues = {
@@ -59,10 +61,10 @@ const UpdateName: React.FC<UpdateProps> = ({userData}) => {
       if (response.ok) {
         const responseData = await response.json();
         console.log('Response Data:', responseData);
-        alert('Update successful');
+        toast.success('Update successful');
       } else {
         console.error('Failed to update. Status:', response.status);
-        alert('Update failed');
+        toast.error('Update failed');
       }
     } catch (error) {
       console.error('Error occurred:', error);
@@ -70,7 +72,7 @@ const UpdateName: React.FC<UpdateProps> = ({userData}) => {
   };
 
   return (
-
+    <>
         <form className={styles.personal} onSubmit={handleSubmit(onSubmit)}>
 
             <div className={styles.nameField}>
@@ -100,6 +102,8 @@ const UpdateName: React.FC<UpdateProps> = ({userData}) => {
             </button>
 
         </form>
+        <ToastContainer />
+    </>
   )
 }
 
