@@ -4,14 +4,13 @@ import useSWR, { mutate } from "swr";
 
 interface BillUpdateModalProps {
   onClose: () => void;
-  userMatches: any;
+  selectedAddressId: any;
 }
 
 const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
-  userMatches,
+  selectedAddressId,
 }) => {
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
     country: "",
@@ -19,19 +18,15 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
     postalCode: "",
     streetAddress: "",
   });
- const accessToken = localStorage.getItem("accessToken");
- const user = localStorage.getItem("user");
- const userData = user ? JSON.parse(user) : null;
- const userId = userData ? userData._id : null;
+
+  const user = localStorage.getItem("user");
+  const userData = user ? JSON.parse(user) : null;
+  const userId = userData ? userData._id : null;
   const { data: userResponseData } = useSWR(
     selectedAddressId
       ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
       : null
   );
-
-  const handleAddressSelection = useCallback((addressId: string) => {
-    setSelectedAddressId(addressId);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,7 +73,7 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
         );
       }
 
-      // Veriyi tekrar çekmek için mutate fonksiyonunu kullan
+      
       mutate(
         `/api/v1/orders/${userId}/address/${selectedAddressId}`,
         undefined,
@@ -112,26 +107,6 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
       <div className={styles.checkModalContent}>
         <h1>Update Address</h1>
         <form onSubmit={handleSubmit} className={styles.loginForm}>
-          <ul>
-            {userMatches.map((userMatch: any) =>
-              userMatch?.addresses?.map((address: any) => (
-                <li
-                  key={address._id}
-                  onClick={() => handleAddressSelection(address._id)}
-                  className={
-                    selectedAddressId === address._id ? styles.selected : ""
-                  }
-                >
-                  <div style={{ cursor: "pointer" }}>
-                    <p>Select your adresss</p>
-                    {address.country && address.city
-                      ? `${address.country} ${address.city}  ${address._id}`
-                      : "Unknown Address"}
-                  </div>
-                </li>
-              ))
-            )}
-          </ul>
           <div className={styles.email}>
             <label htmlFor="alias">Title</label>
             <input

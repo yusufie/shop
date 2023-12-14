@@ -8,7 +8,6 @@ import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
 import CheckoutShipAddModal from "../Modals/Checkout/ShippingAdress/CheckoutShipAddModal";
 import useBasketStore from "@/stores/basketStore";
-import useContactStore from "@/stores/contactStore";
 import useNoteStore from "@/stores/noteStore";
 import useDeliveryStore from "@/stores/deliveryStore";
 import useShipAddressStore from "@/stores/shipaddressStore";
@@ -18,17 +17,15 @@ import useSWR from "swr";
 import CheckoutBillAddModal from "../Modals/Checkout/BillingAdresss/CheckoutBillAddModal";
 import BillDeleteModal from "../Modals/Checkout/BillingAdresss/BillDeleteModal";
 import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
-import CheckoutUpdateModal from "../Modals/Checkout/Checkupdate/CheckoutUpdateModal";
 import UpdateContact from "./UpdateContact";
 
 interface User {
   _id: string;
 }
 
-const fetchProducts = (url: any) => fetch(url).then((res) => res.json());
+
 const Checkout: React.FC = ({}) => {
   // AÇMA KAPAMA STATELERİ
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isBillAddModalOpen, setIsBillAddModalOpen] = useState(false);
   const [isShipAddModalOpen, setIsShipAddModalOpen] = useState(false);
   const [isBillUpdateModalOpen, setIsBillUpdateModalOpen] = useState(false);
@@ -39,13 +36,12 @@ const Checkout: React.FC = ({}) => {
   // ZUSTAND STORELAR
   const product = useBasketStore((state) => state.items);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
-  const { contactNumber, setContactNumber } = useContactStore();
   const { selectedButtons, handleButtonClick } = useDeliveryStore();
   const { orderNote, setOrderNote } = useNoteStore();
- const [orderMatches, setOrderMatches] = useState()
+  const [orderMatches, setOrderMatches] = useState();
   const noteData = useNoteStore((state) => state);
   const shipAddressData = useShipAddressStore((state) => state);
-
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const addressData = useAddressStore((state) => state);
   const { user } = useUserStore();
 
@@ -65,7 +61,7 @@ const Checkout: React.FC = ({}) => {
     const fetchOptions = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        // Diğer header bilgilerini buraya ekleyebilirsiniz
+       
       },
     };
     const {
@@ -81,6 +77,7 @@ const Checkout: React.FC = ({}) => {
     });
     if (error) return <div>Loading failed</div>;
     if (!orderData) return <div>Loading...</div>;
+    console.log(orderData);
     const userString = localStorage.getItem("user");
     let userId: string | undefined;
     if (userString) {
@@ -110,8 +107,9 @@ const Checkout: React.FC = ({}) => {
 
   useEffect(() => {
     fetchDataAndSetOrderMatches();
-  }, []); 
+  }, []);
 
+   console.log(orderMatches);
   // *!!!-------------------------------------GET USER---------------------------------------!!!!*
   const {
     data: datas,
@@ -135,7 +133,7 @@ const Checkout: React.FC = ({}) => {
   });
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
-  mutate(datas)
+  mutate(datas);
   const userString = localStorage.getItem("user");
   let userId: string | undefined;
 
@@ -242,11 +240,13 @@ const Checkout: React.FC = ({}) => {
   };
   // AÇMA KAPAMA
 
-  const handleBillUpdateClick = () => {
+  const handleBillUpdateClick = (_id: any, contactItem: any) => {
     setIsBillUpdateModalOpen(true);
+      setSelectedAddressId(contactItem._id);
   };
-  const handleShipUpdateClick = () => {
+  const handleShipUpdateClick = (_id: any, contactItem: any) => {
     setIsShipUpdateModalOpen(true);
+     setSelectedAddressId(contactItem._id);
   };
   const handleBillAddClick = () => {
     setIsBillAddModalOpen(true);
@@ -254,16 +254,16 @@ const Checkout: React.FC = ({}) => {
   const handleShipAddClick = () => {
     setIsShipAddModalOpen(true);
   };
-  const handleBillDeleteClick = () => {
+  const handleBillDeleteClick = (_id: any, contactItem: any) => {
     setIsBillDeleteModalOpen(true);
-  };
-  const handleShipDeleteClick = () => {
-    setIsShipDeleteModalOpen(true);
+    setSelectedAddressId(contactItem._id);
   };
 
-  const handleUpdateModalClose = () => {
-    setIsUpdateModalOpen(false);
+  const handleShipDeleteClick = (_id: any, contactItem: any) => {
+    setIsShipDeleteModalOpen(true);
+     setSelectedAddressId(contactItem._id);
   };
+
   const handleBillAddModalClose = () => {
     setIsBillAddModalOpen(false);
   };
@@ -308,54 +308,56 @@ const Checkout: React.FC = ({}) => {
               </button>
             </div>
             <div className={styles.map}>
-              {userMatches.map((userMatch: any, _id: any) => (
+              {userMatches.map((userMatch: any) => (
                 <>
                   {userMatch?.addresses?.length > 0 &&
-                    userMatch.addresses.map(
-                      (contactItem: any, contactIndex: any) => (
-                        <div className={styles.billingInput} key={contactIndex}>
-                          <div className={styles.inputTop}>
-                            <h4>Billing</h4>
-                            <div className={styles.hoverButtons}>
-                              <button
-                                onClick={handleBillUpdateClick}
-                                className={styles.hoverPen}
-                              >
-                                <Image
-                                  src="/icons/pen.svg"
-                                  alt="pen"
-                                  width={16}
-                                  height={16}
-                                />
-                              </button>
-                              <button
-                                onClick={handleBillDeleteClick}
-                                className={styles.hoverCross}
-                              >
-                                <Image
-                                  src="/icons/cross.svg"
-                                  alt="cross"
-                                  width={16}
-                                  height={16}
-                                />
-                              </button>
-                            </div>
-                          </div>
-                          <div className={styles.inputBottom}>
-                            <div key={_id}>
-                              <strong>Title:</strong> {contactItem.alias} <br />
-                              <strong>Street Address:</strong>{" "}
-                              {contactItem.details} <br />
-                              <strong>City:</strong> {contactItem.city} <br />
-                              <strong>Country:</strong> {contactItem.country}{" "}
-                              <br />
-                              <strong>Postal Code:</strong>{" "}
-                              {contactItem.postalCode} <br />
-                            </div>
+                    userMatch.addresses.map((contactItem: any, _id: any) => (
+                      <div className={styles.billingInput}>
+                        <div className={styles.inputTop}>
+                          <h4>Billing</h4>
+                          <div className={styles.hoverButtons}>
+                            <button
+                              onClick={() =>
+                                handleBillUpdateClick(_id, contactItem)
+                              }
+                              className={styles.hoverPen}
+                            >
+                              <Image
+                                src="/icons/pen.svg"
+                                alt="pen"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleBillDeleteClick(_id, contactItem)
+                              }
+                              className={styles.hoverCross}
+                            >
+                              <Image
+                                src="/icons/cross.svg"
+                                alt="cross"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
                           </div>
                         </div>
-                      )
-                    )}
+                        <div className={styles.inputBottom}>
+                          <div key={_id}>
+                            <strong>Title:</strong> {contactItem.alias} <br />
+                            <strong>Street Address:</strong>{" "}
+                            {contactItem.details} <br />
+                            <strong>City:</strong> {contactItem.city} <br />
+                            <strong>Country:</strong> {contactItem.country}{" "}
+                            <br />
+                            <strong>Postal Code:</strong>{" "}
+                            {contactItem.postalCode} <br />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                 </>
               ))}
             </div>
@@ -388,7 +390,9 @@ const Checkout: React.FC = ({}) => {
                             <h4>Shipping</h4>
                             <div className={styles.hoverButtons}>
                               <button
-                                onClick={handleShipUpdateClick}
+                                onClick={() =>
+                                  handleShipUpdateClick(_id, contactItem)
+                                }
                                 className={styles.hoverPen}
                               >
                                 <Image
@@ -399,7 +403,9 @@ const Checkout: React.FC = ({}) => {
                                 />
                               </button>
                               <button
-                                onClick={handleShipDeleteClick}
+                                onClick={() =>
+                                  handleShipDeleteClick(_id, contactItem)
+                                }
                                 className={styles.hoverCross}
                               >
                                 <Image
@@ -540,33 +546,32 @@ const Checkout: React.FC = ({}) => {
             Place Order
           </button>
         </div>
-        {isUpdateModalOpen && (
-          <CheckoutUpdateModal onClose={handleUpdateModalClose} />
-        )}
+
         {isBillUpdateModalOpen && (
           <BillUpdateModal
-            userMatches={userMatches}
+         
             onClose={handleBillModalClose}
+            selectedAddressId={selectedAddressId}
           />
         )}
         {isShipUpdateModalOpen && (
           <ShipUpdateModal
-            userMatches={userMatches}
+          
             onClose={handleShipModalClose}
+            selectedAddressId={selectedAddressId}
           />
         )}
         {isBillDeleteModalOpen && (
           <BillDeleteModal
-            userMatches={userMatches}
+           
             onClose={handleBillDeleteClose}
-            addressIdsToDelete={addressIdsToDelete}
+            selectedAddressId={selectedAddressId}
           />
         )}
         {isShipDeleteModalOpen && (
           <ShipDeleteModal
-            userMatches={userMatches}
             onClose={handleShipDeleteClose}
-            addressIdsToDelete={addressIdsToDelete}
+            selectedAddressId={selectedAddressId}
           />
         )}
         {isBillAddModalOpen && (

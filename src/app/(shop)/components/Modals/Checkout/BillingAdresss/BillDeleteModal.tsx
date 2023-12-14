@@ -5,31 +5,26 @@ import useSWR, { mutate } from "swr";
 
 interface BillDeleteModalProps {
   onClose: () => void;
-  userMatches: any;
-  addressIdsToDelete: string[];
+  selectedAddressId: any;
 }
 
 const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   onClose,
-  userMatches,
-  addressIdsToDelete,
+  selectedAddressId,
 }) => {
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
+
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
   const userData = user ? JSON.parse(user) : null;
   const userId = userData ? userData._id : null;
 
+
   const { data: deleteResponseData } = useSWR(
     userId && selectedAddressId
       ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
       : null,
-    { revalidateOnFocus: true } // Yeniden çekmeyi odaklandığında gerçekleştir
+    { revalidateOnFocus: true } 
   );
-
-  const handleAddressSelection = useCallback((addressId: string) => {
-    setSelectedAddressId(addressId);
-  }, []);
 
   const handleDelete = useCallback(async () => {
     try {
@@ -52,8 +47,9 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
             Authorization: `Bearer ${accessToken}`,
           },
         }
-      );      
-      mutate(`/api/v1/orders/${userId}/address/${selectedAddressId}`,
+      );
+      mutate(
+        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
         undefined,
         true
       );
@@ -81,30 +77,6 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
             height={50}
           />
           <h1>Delete</h1>
-          <p>Select the address you want to delete:</p>
-          <ul>
-            {userMatches.map((userMatch: any) =>
-              userMatch?.addresses?.map((contactItem: any) => (
-                <li
-                  key={contactItem._id}
-                  onClick={() => handleAddressSelection(contactItem._id)}
-                  className={
-                    selectedAddressId === contactItem._id ? styles.selected : ""
-                  }
-                >
-                  <div
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    {contactItem.country && contactItem.city
-                      ? `${contactItem.country} ${contactItem.city}  ${contactItem._id}`
-                      : "Unknown Address"}
-                  </div>
-                </li>
-              ))
-            )}
-          </ul>
         </div>
         <div className={styles.butContainer}>
           <button onClick={onClose} className={styles.checkButton1}>

@@ -18,13 +18,13 @@ interface UpdateProps {
 }
 
 const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
-  console.log("useData", userData);
+  // console.log("useData", userData);
   const userStore = useUserStore();
 
   // Destructuring user data for contact
   const contact = userData.map((item: any) => item.contact[0]);
   const defaultContact = contact.length > 0 ? contact[0] : {};
-  console.log("Contact:", contact);
+  // console.log("Contact:", contact);
 
   // Get country codes
   const countryList: any = countryCodes.customList(
