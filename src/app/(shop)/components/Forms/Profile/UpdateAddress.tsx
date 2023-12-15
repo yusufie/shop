@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useUserStore } from "@/stores/userStore";
+import CreateAddress from "@/app/(shop)/components/Modals/Address/CreateAddress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./profile.module.css";
@@ -23,6 +24,7 @@ type UpdateAddressProps = {
 
 const UpdateAddress: React.FC<UpdateAddressProps> = ({ userData }) => {
   const userStore = useUserStore();
+  const [addAddress, setAddAddress] = useState(false);
   const [formFields, setFormFields] = useState<Address[]>(userData.addresses);
 
   const onSubmit = async (event: React.FormEvent, addressId: string) => {
@@ -77,12 +79,16 @@ const UpdateAddress: React.FC<UpdateAddressProps> = ({ userData }) => {
     setFormFields(updatedFields);
   };
 
+  const handleAddAddress = () => {
+    setAddAddress(!addAddress);
+  }
+
   return (
     <>
       <div className={styles.addressField}>
         <div className={styles.addressHeader}>
           <p>Addresses</p>
-          <button className={styles.addButton}>+ Add</button>
+          <button className={styles.addButton} onClick={handleAddAddress} >+ Add</button>
         </div>
 
         <div className={styles.adressButtons}>
@@ -137,6 +143,11 @@ const UpdateAddress: React.FC<UpdateAddressProps> = ({ userData }) => {
           ))}
         </div>
       </div>
+
+      {addAddress && (
+        <CreateAddress userData={userData} onClose={() => {setAddAddress(false);}} />
+      )}
+
       <ToastContainer />
     </>
   );
