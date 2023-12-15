@@ -21,6 +21,13 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
     }
   };
 
+  const handleAddToBasket = (item: any) => {
+    // Check if the quantity in the basket is less than the available stock
+    if (!addedItemCounts[item._id] || addedItemCounts[item._id] < item.stock) {
+      addItem(item);
+    }
+  };
+
   const totalPrice = items.reduce((total, item) => 
     total + (item.price * (addedItemCounts[item._id] || 0)), 0).toFixed(2);
 
@@ -46,9 +53,13 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
               <div className={styles.basketItem} key={item._id}>
                 <div className={styles.basketItemLeft}>
                   <div className={styles.basketItemQuantity}>
-                    <button className={styles.basketItemQuantityButton} onClick={() => addItem(item)}>
-                      <Image src={"/icons/plus.svg"} alt="plus" width={10} height={10} />
-                    </button>
+                  <button
+                    className={styles.basketItemQuantityButton}
+                    onClick={() => handleAddToBasket(item)}
+                    disabled={Boolean(addedItemCounts[item._id] && addedItemCounts[item._id] >= item.stock)}
+                  >
+                    <Image src={"/icons/plus.svg"} alt="plus" width={10} height={10} />
+                  </button>
 
                     <span className={styles.basketItemQuantityValue}>{addedItemCounts[item._id]}</span>
 

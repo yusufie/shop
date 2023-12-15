@@ -27,7 +27,9 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
   const removeItem = useBasketStore((state) => state.removeItem);
 
   const handleAddToBasket = (data: any) => {
+    if (data && (!addedItemCounts[data._id] || addedItemCounts[data._id] < data.stock)) {
       addItem(data);
+    }
   };
   
   const handleDecrease = (data: any) => {
@@ -72,16 +74,17 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
             <div className={styles.itemsButtons}>
 
               {!addedItemCounts[productId] ? (
-                <button className={styles.addButton} onClick={() => handleAddToBasket(getLikedProductDetails(productId))}>
+                <button className={styles.addButton}
+                  onClick={() => handleAddToBasket(getLikedProductDetails(productId))} >
                   {addedItemCounts[productId] || 'Add To Cart'}
                 </button>
               ) : (
                 <div className={styles.afterButton}>
                   <button onClick={() => handleDecrease(getLikedProductDetails(productId))}>-</button>
                   <span>{addedItemCounts[productId]}</span>
-                  <button onClick={() => addItem(getLikedProductDetails(productId))}>+</button>
+                  <button onClick={() => handleAddToBasket(getLikedProductDetails(productId))}>+</button>
                 </div>
-              )}              
+              )}      
 
               <button className={styles.removeButton} onClick={() => handleRemove(productId)}>
                 Remove

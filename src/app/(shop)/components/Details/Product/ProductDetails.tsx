@@ -35,8 +35,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
     const removeItem = useBasketStore((state) => state.removeItem);
 
     const handleAddToBasket = (data: any) => {
-        addItem(data);
-    };
+        // Check if the product exists and added quantity is less than available stock
+        if (selectedProduct && (!addedItemCounts[selectedProductId] || addedItemCounts[selectedProductId] < selectedProduct.stock)) {
+          addItem(data);
+        }
+      };
     
     const handleDecrease = (data: any) => {
         removeItem(data._id, true);
@@ -124,10 +127,10 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
                             <div className={styles.afterButton}>
                             <button onClick={() => handleDecrease(selectedProduct)}>-</button>
                             <span>{addedItemCounts[selectedProductId]}</span>
-                            <button onClick={() => addItem(selectedProduct)}>+</button>
+                            <button onClick={() => handleAddToBasket(selectedProduct)}>+</button>
                             </div>
                         )}
-                        <span className={styles.available}>{selectedProduct.stock} pieces available</span>
+                        <span className={styles.available}>{selectedProduct?.stock} pieces available</span>
                     </div>
 
                     <div className={styles.infoTags}>

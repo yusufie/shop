@@ -33,7 +33,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const removeItem = useBasketStore((state) => state.removeItem);
 
   const handleAddToBasket = (data: any) => {
-    addItem(data);
+    // Check if the quantity in the basket is less than the available stock
+    if (!addedItemCounts[selectedProductId] || addedItemCounts[selectedProductId] < selectedProduct.stock) {
+      addItem(data);
+    }
   };
 
   const handleDecrease = (data: any) => {
@@ -79,8 +82,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
               <button className={styles.heartButton} onClick={() => handleLikeProduct(selectedProductId)}>
                 <Image 
                 src={likedProducts.includes(selectedProductId) ? '/icons/heart-filled.svg' : '/icons/heart.svg'} 
-                alt="heart" 
-                width={21} height={21}/>
+                alt="heart" width={21} height={21}/>
               </button>
               
             </div>
@@ -110,7 +112,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                 <div className={styles.afterButton}>
                   <button onClick={() => handleDecrease(selectedProduct)}>-</button>
                   <span>{addedItemCounts[selectedProductId]}</span>
-                  <button onClick={() => addItem(selectedProduct)}>+</button>
+                  <button onClick={() => handleAddToBasket(selectedProduct)}>+</button>
                 </div>
               )}
               <span className={styles.available}>{selectedProduct.stock} pieces available</span>
