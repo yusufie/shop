@@ -27,7 +27,7 @@ const UpdateAddress: React.FC<UpdateAddressProps> = ({ userData }) => {
   const [addAddress, setAddAddress] = useState(false);
   const [formFields, setFormFields] = useState<Address[]>(userData.addresses);
 
-  const onSubmit = async (event: React.FormEvent, addressId: string) => {
+  const onUpdate = async (event: React.FormEvent, addressId: string) => {
     event.preventDefault();
     try {
       const addressToUpdate = formFields.find(
@@ -79,73 +79,112 @@ const UpdateAddress: React.FC<UpdateAddressProps> = ({ userData }) => {
     setFormFields(updatedFields);
   };
 
+  const onDelete = async (addressId: string) => {
+    try {
+      const userId = userData._id;
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/${userId}/address/${addressId}`;
+
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userStore.accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const updatedFields = formFields.filter(
+          (address) => address._id !== addressId
+        );
+        setFormFields(updatedFields);
+        console.log("Address deleted successfully", updatedFields);
+        toast.success("Address deleted");
+      } else {
+        console.error("Failed to delete address. Status:", response.status);
+        toast.error("Failed to delete address");
+      }
+    } catch (error) {
+      console.error("Error occurred while deleting address:", error);
+    }
+  };
+
   const handleAddAddress = () => {
     setAddAddress(!addAddress);
-  }
+  };
 
   return (
     <>
       <div className={styles.addressField}>
         <div className={styles.addressHeader}>
           <p>Addresses</p>
-          <button className={styles.addButton} onClick={handleAddAddress} >+ Add</button>
+          <button className={styles.addButton} onClick={handleAddAddress}>
+            + Add
+          </button>
         </div>
 
-        <div className={styles.adressButtons}>
+        <div className={styles.addressItems}>
           {formFields.map((address) => (
-            <form
-              key={address._id}
-              onSubmit={(event) => onSubmit(event, address._id)}
-              className={styles.adressButton}
-            >
-              <input
-                value={address.alias}
-                onChange={(e) =>
-                  handleFieldChange(address._id, "alias", e.target.value)
-                }
-                className={styles.input}
-              />
+            <div key={address._id} className={styles.addressItem}>
+              <form
+                key={address._id}
+                onSubmit={(event) => onUpdate(event, address._id)}
+                className={styles.addressForm}
+              >
+                <input
+                  value={address.alias}
+                  onChange={(e) =>
+                    handleFieldChange(address._id, "alias", e.target.value)
+                  }
+                  className={styles.input}
+                />
 
-              <input
-                value={address.details}
-                onChange={(e) =>
-                  handleFieldChange(address._id, "details", e.target.value)
-                }
-                className={styles.input}
-              />
+                <input
+                  value={address.details}
+                  onChange={(e) =>
+                    handleFieldChange(address._id, "details", e.target.value)
+                  }
+                  className={styles.input}
+                />
 
-              <input
-                value={address.country}
-                onChange={(e) =>
-                  handleFieldChange(address._id, "country", e.target.value)
-                }
-                className={styles.input}
-              />
+                <input
+                  value={address.country}
+                  onChange={(e) =>
+                    handleFieldChange(address._id, "country", e.target.value)
+                  }
+                  className={styles.input}
+                />
 
-              <input
-                value={address.city}
-                onChange={(e) =>
-                  handleFieldChange(address._id, "city", e.target.value)
-                }
-                className={styles.input}
-              />
+                <input
+                  value={address.city}
+                  onChange={(e) =>
+                    handleFieldChange(address._id, "city", e.target.value)
+                  }
+                  className={styles.input}
+                />
 
-              <input
-                value={address.postalCode}
-                onChange={(e) =>
-                  handleFieldChange(address._id, "postalCode", e.target.value)
-                }
-                className={styles.input}
-              />
+                <input
+                  value={address.postalCode}
+                  onChange={(e) =>
+                    handleFieldChange(address._id, "postalCode", e.target.value)
+                  }
+                  className={styles.input}
+                />
 
-              <button type="submit">Update Address</button>
-            </form>
+                <button type="submit" className={styles.updateButton}>Update Address</button>
+              </form>
+              <button onClick={() => onDelete(address._id)} 
+                className={styles.deleteButton}>
+                X
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
       {addAddress && (
-        <CreateAddress userData={userData} onClose={() => {setAddAddress(false);}} />
+        <CreateAddress
+          userData={userData}
+          onClose={() => {setAddAddress(false);}}
+        />
       )}
 
       <ToastContainer />
