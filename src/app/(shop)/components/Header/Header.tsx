@@ -113,7 +113,19 @@ const Header: React.FC = () => {
               </Link>
             )}
             <button className={styles.profile} onClick={toggleProfilemenu} >
-              <Image src="/icons/profile.svg" alt="profile" width={40} height={40} />
+              {userStore.user?.avatar ? (
+                <Image 
+                  src={userStore.user.avatar} 
+                  alt="profile" width={40} height={40} 
+                  className={styles.profileImage}
+                />
+              ) : (
+                <Image 
+                  src="/icons/profile.svg" 
+                  alt="profile" width={40} height={40} 
+                  className={styles.profileImage}
+                />
+              )}
             </button>
           </>
         )}

@@ -100,7 +100,8 @@
   cursor: pointer;
 }
 
-.right .profile img {
+.right .profile .profileImage {
+  object-fit: fill;
   position: absolute;
   height: 100%;
   width: 100%;
