@@ -7,7 +7,6 @@ import UpdateName from "@/app/(shop)/components/Forms/Profile/UpdateName";
 import UpdateEmail from "@/app/(shop)/components/Forms/Profile/UpdateEmail";
 import UpdateContact from "@/app/(shop)/components/Forms/Profile/UpdateContact";
 import UpdateAddress from "@/app/(shop)/components/Forms/Profile/UpdateAddress";
-// import CreateAddress from "@/app/(shop)/components/Forms/Profile/CreateAddress";
 
 const fetcher = async (url: string, accessToken: string | null) => {
   const res = await fetch(url, {
@@ -43,7 +42,7 @@ const Profile: React.FC = () => {
   return (
     <section className={styles.profile}>
 
-      <UpdateAvatar />
+      <UpdateAvatar userData={userData} />
 
       <UpdateName userData={userData} />
 
@@ -52,8 +51,6 @@ const Profile: React.FC = () => {
       <UpdateContact userData={userData} />
 
       <UpdateAddress userData={userData} />
-
-      {/* <CreateAddress userData={userData} /> */}
 
     </section>
   );

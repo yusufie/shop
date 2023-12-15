@@ -47,6 +47,13 @@
   color: rgb(0, 159, 127);
 }
 
+.upload .userImage {
+  object-fit: fill;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: 0.375rem;
+  margin-top: 0.25rem;
+}
+
 .customFileinput {
   display: flex;
   align-items: center;
