@@ -60,19 +60,22 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
     if (!responseData) return <div>loading...</div>;
 
     // Find the selected product's category object from the categories array
-    const selectedProductCategory = categories.categories.find((category:any) => 
-        category._id === selectedProduct.category._id
+    const selectedProductCategory = categories?.categories?.find((category:any) => 
+        category?._id === selectedProduct?.category?._id
     );
+
+  // Find the parent category of the selected product's category
+  const parentCategory = categories?.categories?.find((category: any) => 
+    category?._id === selectedProductCategory?.parent?._id
+  );
 
     // Extract the category ID from the selectedProduct
     const selectedProductCategoryId = selectedProduct.category._id;
 
     // Filter products based on the selectedProduct's category ID
     const relatedProducts = products.products.filter((product: any) => {
-
         // Extract the category ID from the product
         const productCategoryId = product.category?._id;
-
         // Check if the product's category matches the selectedProduct's category
         return productCategoryId === selectedProductCategoryId;
     });
@@ -136,7 +139,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
                     <div className={styles.infoTags}>
                         <span>Categories</span>
                         <button>{selectedProductCategory?.title}</button>
-                        <button>Subcategory?</button>
+                        {parentCategory && <button>{parentCategory?.title}</button>}
                     </div>
 
                     <div className={styles.infoSeller}>
