@@ -18,11 +18,14 @@ import CheckoutBillAddModal from "../Modals/Checkout/BillingAdresss/CheckoutBill
 import BillDeleteModal from "../Modals/Checkout/BillingAdresss/BillDeleteModal";
 import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
 import UpdateContact from "./UpdateContact";
+import OrderBillUpdateModal from "../Modals/Checkout/OrderBillingAdress/OrderBillUpdateModal";
+import OrderBillDeleteModal from "../Modals/Checkout/OrderBillingAdress/OrderBillDeleteModal";
+import OrderShipUpdateModal from "../Modals/Checkout/OrderShippingAdress/OrderShipUpdateModal";
+import OrderShipDeleteModal from "../Modals/Checkout/OrderShippingAdress/OrderShipDeleteModal";
 
 interface User {
   _id: string;
 }
-
 
 const Checkout: React.FC = ({}) => {
   // AÇMA KAPAMA STATELERİ
@@ -32,16 +35,25 @@ const Checkout: React.FC = ({}) => {
   const [isBillDeleteModalOpen, setIsBillDeleteModalOpen] = useState(false);
   const [isShipUpdateModalOpen, setIsShipUpdateModalOpen] = useState(false);
   const [isShipDeleteModalOpen, setIsShipDeleteModalOpen] = useState(false);
+  const [isOrderBillUpdateModalOpen, setIsOrderBillUpdateModalOpen] =
+    useState(false);
+  const [isOrderBillDeleteModalOpen, setIsOrderBillDeleteModalOpen] =
+    useState(false);
+  const [isOrderShipUpdateModalOpen, setIsOrderShipUpdateModalOpen] =
+    useState(false);
+  const [isOrderShipDeleteModalOpen, setIsOrderShipDeleteModalOpen] =
+    useState(false);
 
   // ZUSTAND STORELAR
   const product = useBasketStore((state) => state.items);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
   const { selectedButtons, handleButtonClick } = useDeliveryStore();
   const { orderNote, setOrderNote } = useNoteStore();
-  const [orderMatches, setOrderMatches] = useState();
+  const [orderMatches, setOrderMatches] = useState([]);
   const noteData = useNoteStore((state) => state);
   const shipAddressData = useShipAddressStore((state) => state);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const addressData = useAddressStore((state) => state);
   const { user } = useUserStore();
 
@@ -49,67 +61,60 @@ const Checkout: React.FC = ({}) => {
     state.getDeliverySchedule()
   );
   useEffect(() => {
-    console.log("Delivery schedule updated:", deliverySchedule);
+    // console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
   // *!!!-------------------------------------GET ORDERS---------------------------------------!!!!*
-  const fetchData = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      throw new Error("Access token not found");
-    }
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL + `/api/v1/orders`;
-    const fetchOptions = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-       
-      },
-    };
-    const {
-      data: orderData,
-      error,
-      mutate,
-    } = useSWR(apiUrl, async (url) => {
-      const response = await fetch(url, fetchOptions);
+
+  const {
+    data: orderData,
+    error: orderError,
+    mutate: mutateOrder,
+  } = useSWR(
+    process.env.NEXT_PUBLIC_API_URL + "/api/v1/orders",
+    async (url) => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        throw new Error("Access token not found");
+      }
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.status}`);
       }
       return response.json();
-    });
-    if (error) return <div>Loading failed</div>;
-    if (!orderData) return <div>Loading...</div>;
-    console.log(orderData);
-    const userString = localStorage.getItem("user");
-    let userId: string | undefined;
-    if (userString) {
-      // Parse the user data from JSON
-      const userData: User = JSON.parse(userString);
-      // Extract the user ID
-      userId = userData._id;
+    },
+    {
+      refreshInterval: 1000,
     }
-    if (!userId) {
-      throw new Error("User ID bulunamadı");
-    }
-    const orderMatches = orderData.filter((siparis: any) => {
-      return siparis.user._id === userId;
-    });
-
-    setOrderMatches(orderMatches);
-
-    mutate(orderData);
-  };
-  const fetchDataAndSetOrderMatches = async () => {
-    try {
-      await fetchData();
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  );
 
   useEffect(() => {
-    fetchDataAndSetOrderMatches();
-  }, []);
+    if (orderError) {
+      console.error("Order loading failed:", orderError);
+    }
+    if (orderData) {
+      console.log("Order data:", orderData);
+      const userString = localStorage.getItem("user");
+      if (userString) {
+        const userData: User = JSON.parse(userString);
+        const userId = userData._id;
+        if (userId) {
+          const orderMatches = orderData.filter(
+            (siparis: any) => siparis.user._id === userId
+          );
+          console.log("Order matches:", orderMatches);
+          setOrderMatches(orderMatches);
+          mutateOrder(orderData, false); // State'i güncelle, ancak veriyi tekrar getirme
+        } else {
+          throw new Error("User ID not found");
+        }
+      }
+    }
+  }, [orderData, orderError, setOrderMatches, mutateOrder]);
 
-   console.log(orderMatches);
   // *!!!-------------------------------------GET USER---------------------------------------!!!!*
   const {
     data: datas,
@@ -152,10 +157,10 @@ const Checkout: React.FC = ({}) => {
 
   console.log("userMatches", userMatches);
 
-  const addressIdsToDelete = userMatches.flatMap(
-    (userMatch: any) =>
-      userMatch?.addresses?.map((address: any) => address?._id) || []
-  );
+  // const addressIdsToDelete = userMatches.flatMap(
+  // (userMatch: any) =>
+  // userMatch?.addresses?.map((address: any) => address?._id) || []
+  // );
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -242,11 +247,19 @@ const Checkout: React.FC = ({}) => {
 
   const handleBillUpdateClick = (_id: any, contactItem: any) => {
     setIsBillUpdateModalOpen(true);
-      setSelectedAddressId(contactItem._id);
+    setSelectedAddressId(contactItem._id);
   };
+  const handleOrderBillUpdateClick = (_id: any, orderMatch: any) => {
+    setIsOrderBillUpdateModalOpen(true);
+    setSelectedOrderId(orderMatch._id);
+  };
+   const handleOrderShipUpdateClick = (_id: any, orderMatch: any) => {
+     setIsOrderShipUpdateModalOpen(true);
+     setSelectedOrderId(orderMatch._id);
+   };
   const handleShipUpdateClick = (_id: any, contactItem: any) => {
     setIsShipUpdateModalOpen(true);
-     setSelectedAddressId(contactItem._id);
+    setSelectedAddressId(contactItem._id);
   };
   const handleBillAddClick = () => {
     setIsBillAddModalOpen(true);
@@ -258,10 +271,18 @@ const Checkout: React.FC = ({}) => {
     setIsBillDeleteModalOpen(true);
     setSelectedAddressId(contactItem._id);
   };
+  const handleOrderBillDeleteClick = (_id: any, orderMatch: any) => {
+    setIsOrderBillDeleteModalOpen(true);
+    setSelectedOrderId(orderMatch._id);
+  };
+   const handleOrderShipDeleteClick = (_id: any, orderMatch: any) => {
+     setIsOrderShipDeleteModalOpen(true);
+     setSelectedOrderId(orderMatch._id);
+   };
 
   const handleShipDeleteClick = (_id: any, contactItem: any) => {
     setIsShipDeleteModalOpen(true);
-     setSelectedAddressId(contactItem._id);
+    setSelectedAddressId(contactItem._id);
   };
 
   const handleBillAddModalClose = () => {
@@ -273,6 +294,12 @@ const Checkout: React.FC = ({}) => {
   const handleBillModalClose = () => {
     setIsBillUpdateModalOpen(false);
   };
+  const handleOrderBillModalClose = () => {
+    setIsOrderBillUpdateModalOpen(false);
+  };
+  const handleOrderShipModalClose = () => {
+    setIsOrderShipUpdateModalOpen(false);
+  };
   const handleShipModalClose = () => {
     setIsShipUpdateModalOpen(false);
   };
@@ -282,6 +309,12 @@ const Checkout: React.FC = ({}) => {
   const handleBillDeleteClose = () => {
     setIsBillDeleteModalOpen(false);
   };
+  const handleOrderBillDeleteClose = () => {
+    setIsOrderBillDeleteModalOpen(false);
+  };
+   const handleOrderShipDeleteClose = () => {
+     setIsOrderShipDeleteModalOpen(false);
+   };
   const totalPrice = product
     .reduce(
       (total, product) =>
@@ -289,6 +322,7 @@ const Checkout: React.FC = ({}) => {
       0
     )
     .toFixed(2);
+  console.log(orderMatches);
   return (
     <>
       <section className={styles.checkout}>
@@ -308,90 +342,18 @@ const Checkout: React.FC = ({}) => {
               </button>
             </div>
             <div className={styles.map}>
-              {userMatches.map((userMatch: any) => (
-                <>
-                  {userMatch?.addresses?.length > 0 &&
-                    userMatch.addresses.map((contactItem: any, _id: any) => (
-                      <div className={styles.billingInput}>
-                        <div className={styles.inputTop}>
-                          <h4>Billing</h4>
-                          <div className={styles.hoverButtons}>
-                            <button
-                              onClick={() =>
-                                handleBillUpdateClick(_id, contactItem)
-                              }
-                              className={styles.hoverPen}
-                            >
-                              <Image
-                                src="/icons/pen.svg"
-                                alt="pen"
-                                width={16}
-                                height={16}
-                              />
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleBillDeleteClick(_id, contactItem)
-                              }
-                              className={styles.hoverCross}
-                            >
-                              <Image
-                                src="/icons/cross.svg"
-                                alt="cross"
-                                width={16}
-                                height={16}
-                              />
-                            </button>
-                          </div>
-                        </div>
-                        <div className={styles.inputBottom}>
-                          <div key={_id}>
-                            <strong>Title:</strong> {contactItem.alias} <br />
-                            <strong>Street Address:</strong>{" "}
-                            {contactItem.details} <br />
-                            <strong>City:</strong> {contactItem.city} <br />
-                            <strong>Country:</strong> {contactItem.country}{" "}
-                            <br />
-                            <strong>Postal Code:</strong>{" "}
-                            {contactItem.postalCode} <br />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </>
-              ))}
-            </div>
-          </div>
-          <div className={styles.shipping}>
-            <div className={styles.shippingHeader}>
-              <div>
-                <span className={styles.serial}>3</span>
-                <span className={styles.title}>Shipping Address</span>
-              </div>
-
-              <button
-                onClick={handleShipAddClick}
-                className={styles.updateButton}
-              >
-                + Add
-              </button>
-            </div>
-            <div className={styles.map}>
-              {userMatches.map((userMatch: any, _id: any) => (
-                <>
-                  {userMatch?.addresses?.length > 0 &&
-                    userMatch.addresses.map(
-                      (contactItem: any, contactIndex: any) => (
-                        <div
-                          className={styles.shippingInput}
-                          key={contactIndex}
-                        >
+              {userMatches &&
+                userMatches.map((userMatch: any) => (
+                  <>
+                    {userMatch?.addresses?.length > 0 &&
+                      userMatch.addresses.map((contactItem: any, _id: any) => (
+                        <div className={styles.billingInput}>
                           <div className={styles.inputTop}>
-                            <h4>Shipping</h4>
+                            <h4>Billing</h4>
                             <div className={styles.hoverButtons}>
                               <button
                                 onClick={() =>
-                                  handleShipUpdateClick(_id, contactItem)
+                                  handleBillUpdateClick(_id, contactItem)
                                 }
                                 className={styles.hoverPen}
                               >
@@ -404,7 +366,7 @@ const Checkout: React.FC = ({}) => {
                               </button>
                               <button
                                 onClick={() =>
-                                  handleShipDeleteClick(_id, contactItem)
+                                  handleBillDeleteClick(_id, contactItem)
                                 }
                                 className={styles.hoverCross}
                               >
@@ -430,10 +392,191 @@ const Checkout: React.FC = ({}) => {
                             </div>
                           </div>
                         </div>
-                      )
-                    )}
-                </>
-              ))}
+                      ))}
+                  </>
+                ))}
+            </div>
+            <div className={styles.map}>
+              {orderMatches &&
+                orderMatches.map((orderMatch: any, _id: any) => (
+                  <div className={styles.billingInput} key={_id}>
+                    <div className={styles.inputTop}>
+                      <h4>Billing</h4>
+                      <div className={styles.hoverButtons}>
+                        <button
+                          onClick={() =>
+                            handleOrderBillUpdateClick(_id, orderMatch)
+                          }
+                          className={styles.hoverPen}
+                        >
+                          <Image
+                            src="/icons/pen.svg"
+                            alt="pen"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleOrderBillDeleteClick(_id, orderMatch)
+                          }
+                          className={styles.hoverCross}
+                        >
+                          <Image
+                            src="/icons/cross.svg"
+                            alt="cross"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    <div className={styles.inputBottom}>
+                      <div>
+                        <strong>Title:</strong> {orderMatch.orderNote} <br />
+                        <strong>Street Address:</strong>{" "}
+                        {orderMatch.billingAddress.details} <br />
+                        <strong>City:</strong> {orderMatch.billingAddress.city}{" "}
+                        <br />
+                        <strong>Country:</strong>{" "}
+                        {orderMatch.billingAddress.country} <br />
+                        <strong>Postal Code:</strong>{" "}
+                        {orderMatch.billingAddress.postalCode} <br />
+                        <strong>Email:</strong>
+                        {orderMatch.user.email}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className={styles.shipping}>
+            <div className={styles.shippingHeader}>
+              <div>
+                <span className={styles.serial}>3</span>
+                <span className={styles.title}>Shipping Address</span>
+              </div>
+
+              <button
+                onClick={handleShipAddClick}
+                className={styles.updateButton}
+              >
+                + Add
+              </button>
+            </div>
+            <div className={styles.map}>
+              {userMatches &&
+                userMatches.map((userMatch: any, _id: any) => (
+                  <>
+                    {userMatch?.addresses?.length > 0 &&
+                      userMatch.addresses.map(
+                        (contactItem: any, contactIndex: any) => (
+                          <div
+                            className={styles.shippingInput}
+                            key={contactIndex}
+                          >
+                            <div className={styles.inputTop}>
+                              <h4>Shipping</h4>
+                              <div className={styles.hoverButtons}>
+                                <button
+                                  onClick={() =>
+                                    handleShipUpdateClick(_id, contactItem)
+                                  }
+                                  className={styles.hoverPen}
+                                >
+                                  <Image
+                                    src="/icons/pen.svg"
+                                    alt="pen"
+                                    width={16}
+                                    height={16}
+                                  />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleShipDeleteClick(_id, contactItem)
+                                  }
+                                  className={styles.hoverCross}
+                                >
+                                  <Image
+                                    src="/icons/cross.svg"
+                                    alt="cross"
+                                    width={16}
+                                    height={16}
+                                  />
+                                </button>
+                              </div>
+                            </div>
+                            <div className={styles.inputBottom}>
+                              <div key={_id}>
+                                <strong>Title:</strong> {contactItem.alias}{" "}
+                                <br />
+                                <strong>Street Address:</strong>{" "}
+                                {contactItem.details} <br />
+                                <strong>City:</strong> {contactItem.city} <br />
+                                <strong>Country:</strong> {contactItem.country}{" "}
+                                <br />
+                                <strong>Postal Code:</strong>{" "}
+                                {contactItem.postalCode} <br />
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      )}
+                  </>
+                ))}
+            </div>
+            <div className={styles.map}>
+              {orderMatches &&
+                orderMatches.map((orderMatch: any, _id: number) => (
+                  <div className={styles.shippingInput} key={_id}>
+                    <div className={styles.inputTop}>
+                      <h4>Shipping</h4>
+                      <div className={styles.hoverButtons}>
+                        <button
+                          onClick={() =>
+                            handleOrderShipUpdateClick(_id, orderMatch)
+                          }
+                          className={styles.hoverPen}
+                        >
+                          <Image
+                            src="/icons/pen.svg"
+                            alt="pen"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleOrderShipDeleteClick(_id, orderMatch)
+                          }
+                          className={styles.hoverCross}
+                        >
+                          <Image
+                            src="/icons/cross.svg"
+                            alt="cross"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    <div className={styles.inputBottom}>
+                      <div>
+                        <strong>Title:</strong> {orderMatch.orderNote} <br />
+                        <strong>Street Address:</strong>{" "}
+                        {orderMatch.billingAddress.details} <br />
+                        <strong>City:</strong> {orderMatch.billingAddress.city}{" "}
+                        <br />
+                        <strong>Country:</strong>{" "}
+                        {orderMatch.billingAddress.country} <br />
+                        <strong>Postal Code:</strong>{" "}
+                        {orderMatch.billingAddress.postalCode} <br />
+                        <strong>Email:</strong>
+                        {orderMatch.user.email}
+                      </div>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
 
@@ -549,23 +692,44 @@ const Checkout: React.FC = ({}) => {
 
         {isBillUpdateModalOpen && (
           <BillUpdateModal
-         
             onClose={handleBillModalClose}
             selectedAddressId={selectedAddressId}
           />
         )}
+        {isOrderBillUpdateModalOpen && (
+          <OrderBillUpdateModal
+            onClose={handleOrderBillModalClose}
+            selectedOrderId={selectedOrderId}
+          />
+        )}
+        {isOrderShipUpdateModalOpen && (
+          <OrderShipUpdateModal
+            onClose={handleOrderShipModalClose}
+            selectedOrderId={selectedOrderId}
+          />
+        )}
         {isShipUpdateModalOpen && (
           <ShipUpdateModal
-          
             onClose={handleShipModalClose}
             selectedAddressId={selectedAddressId}
           />
         )}
         {isBillDeleteModalOpen && (
           <BillDeleteModal
-           
             onClose={handleBillDeleteClose}
             selectedAddressId={selectedAddressId}
+          />
+        )}
+        {isOrderBillDeleteModalOpen && (
+          <OrderBillDeleteModal
+            onClose={handleOrderBillDeleteClose}
+            selectedOrderId={selectedOrderId}
+          />
+        )}
+        {isOrderShipDeleteModalOpen && (
+          <OrderShipDeleteModal
+            onClose={handleOrderShipDeleteClose}
+            selectedOrderId={selectedOrderId}
           />
         )}
         {isShipDeleteModalOpen && (
