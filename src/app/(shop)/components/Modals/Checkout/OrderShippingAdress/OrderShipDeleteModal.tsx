@@ -22,7 +22,7 @@ const OrderShipDeleteModal: React.FC<BillDeleteModalProps> = ({
     userId && selectedOrderId
       ? `/api/v1/orders/${userId}/address/${selectedOrderId}`
       : null,
-    { revalidateOnFocus: true } // Yeniden çekmeyi odaklandığında gerçekleştir
+    { revalidateOnFocus: true } 
   );
 
   const handleDelete = useCallback(async () => {

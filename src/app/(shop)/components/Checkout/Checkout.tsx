@@ -107,7 +107,7 @@ const Checkout: React.FC = ({}) => {
           );
           console.log("Order matches:", orderMatches);
           setOrderMatches(orderMatches);
-          mutateOrder(orderData, false); // State'i güncelle, ancak veriyi tekrar getirme
+          mutateOrder(orderData, false); 
         } else {
           throw new Error("User ID not found");
         }
@@ -253,10 +253,10 @@ const Checkout: React.FC = ({}) => {
     setIsOrderBillUpdateModalOpen(true);
     setSelectedOrderId(orderMatch._id);
   };
-   const handleOrderShipUpdateClick = (_id: any, orderMatch: any) => {
-     setIsOrderShipUpdateModalOpen(true);
-     setSelectedOrderId(orderMatch._id);
-   };
+  const handleOrderShipUpdateClick = (_id: any, orderMatch: any) => {
+    setIsOrderShipUpdateModalOpen(true);
+    setSelectedOrderId(orderMatch._id);
+  };
   const handleShipUpdateClick = (_id: any, contactItem: any) => {
     setIsShipUpdateModalOpen(true);
     setSelectedAddressId(contactItem._id);
@@ -275,10 +275,10 @@ const Checkout: React.FC = ({}) => {
     setIsOrderBillDeleteModalOpen(true);
     setSelectedOrderId(orderMatch._id);
   };
-   const handleOrderShipDeleteClick = (_id: any, orderMatch: any) => {
-     setIsOrderShipDeleteModalOpen(true);
-     setSelectedOrderId(orderMatch._id);
-   };
+  const handleOrderShipDeleteClick = (_id: any, orderMatch: any) => {
+    setIsOrderShipDeleteModalOpen(true);
+    setSelectedOrderId(orderMatch._id);
+  };
 
   const handleShipDeleteClick = (_id: any, contactItem: any) => {
     setIsShipDeleteModalOpen(true);
@@ -312,9 +312,9 @@ const Checkout: React.FC = ({}) => {
   const handleOrderBillDeleteClose = () => {
     setIsOrderBillDeleteModalOpen(false);
   };
-   const handleOrderShipDeleteClose = () => {
-     setIsOrderShipDeleteModalOpen(false);
-   };
+  const handleOrderShipDeleteClose = () => {
+    setIsOrderShipDeleteModalOpen(false);
+  };
   const totalPrice = product
     .reduce(
       (total, product) =>
