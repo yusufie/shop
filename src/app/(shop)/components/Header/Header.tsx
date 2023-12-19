@@ -9,6 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link';
 import styles from './header.module.css'
 import Searchbar from '@/app/(shop)/components/Search/Searchbar/Searchbar';
+import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
   const pathname = usePathname();
@@ -20,6 +21,8 @@ const Header: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState(getSelectedItem(pathname)); // default selected item
 
   const [scrolled, setScrolled] = useState(false);
+
+  const route = useRouter();
 
   const handleScroll = () => {
     if (window.scrollY > 300) {
@@ -68,6 +71,8 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     userStore.setLoggedOut();
     setShowProfilemenu(false);
+    route.push('/');
+    
   };
 
   return (
