@@ -34,6 +34,8 @@ const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
       // Pass the category ID when clicked
       handleCategoryClick(categoryId);
     }
+
+    window.scrollTo({ top: 900, behavior: 'smooth' });
   };
 
   const renderCategories = (categories: Category[]) => {
