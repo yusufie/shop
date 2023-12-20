@@ -25,9 +25,10 @@ import OrderShipDeleteModal from "../Modals/Checkout/OrderShippingAdress/OrderSh
 
 interface User {
   _id: string;
+  
 }
 
-const Checkout: React.FC = ({}) => {
+const Checkout: React.FC = () => {
   // AÇMA KAPAMA STATELERİ
   const [isBillAddModalOpen, setIsBillAddModalOpen] = useState(false);
   const [isShipAddModalOpen, setIsShipAddModalOpen] = useState(false);
@@ -348,7 +349,10 @@ const Checkout: React.FC = ({}) => {
                   <>
                     {userMatch?.addresses?.length > 0 &&
                       userMatch.addresses.map((contactItem: any, _id: any) => (
-                        <div className={styles.billingInput}>
+                        <div
+                          key={contactItem._id}
+                          className={styles.billingInput}
+                        >
                           <div className={styles.inputTop}>
                             <h4>Billing</h4>
                             <div className={styles.hoverButtons}>
@@ -400,7 +404,7 @@ const Checkout: React.FC = ({}) => {
             <div className={styles.map}>
               {orderMatches &&
                 orderMatches.map((orderMatch: any, _id: any) => (
-                  <div className={styles.billingInput} key={_id}>
+                  <div className={styles.billingInput} key={orderMatch._id}>
                     <div className={styles.inputTop}>
                       <h4>Billing</h4>
                       <div className={styles.hoverButtons}>
@@ -474,7 +478,7 @@ const Checkout: React.FC = ({}) => {
                         (contactItem: any, contactIndex: any) => (
                           <div
                             className={styles.shippingInput}
-                            key={contactIndex}
+                            key={contactItem._id}
                           >
                             <div className={styles.inputTop}>
                               <h4>Shipping</h4>
@@ -529,7 +533,7 @@ const Checkout: React.FC = ({}) => {
             <div className={styles.map}>
               {orderMatches &&
                 orderMatches.map((orderMatch: any, _id: number) => (
-                  <div className={styles.shippingInput} key={_id}>
+                  <div className={styles.shippingInput} key={orderMatch._id}>
                     <div className={styles.inputTop}>
                       <h4>Shipping</h4>
                       <div className={styles.hoverButtons}>
