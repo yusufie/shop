@@ -53,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
         )}
       </div>
       <div className={styles.cardContent}>
-        <span className={styles.cardPrice}>${data.price}</span>
+        <span className={styles.cardPrice}>{data.price} kr</span>
         <p>{data.title}</p>
 
         {!addedItemCounts[data._id] ? (
