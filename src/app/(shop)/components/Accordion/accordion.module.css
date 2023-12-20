@@ -40,6 +40,10 @@
   color: rgb(75, 85, 99);
 }
 
+.accordionTitle>span:hover{
+  color: rgb(0, 159, 127) !important;
+}
+
 .subCategories {
   padding-left: 1rem;
   /* padding: 0.5rem 2.25rem; */
