@@ -1,12 +1,13 @@
 "use client";
 import { useUserStore } from "@/stores/userStore";
-import styles from "./profile.module.css";
+import { useRouter } from 'next/navigation';
 import useSWR from "swr";
 import UpdateAvatar from "@/app/(shop)/components/Forms/Profile/UpdateAvatar";
 import UpdateName from "@/app/(shop)/components/Forms/Profile/UpdateName";
 import UpdateEmail from "@/app/(shop)/components/Forms/Profile/UpdateEmail";
 import UpdateContact from "@/app/(shop)/components/Forms/Profile/UpdateContact";
 import UpdateAddress from "@/app/(shop)/components/Forms/Profile/UpdateAddress";
+import styles from "./profile.module.css";
 
 const fetcher = async (url: string, accessToken: string | null) => {
   const res = await fetch(url, {
@@ -25,10 +26,16 @@ const Profile: React.FC = () => {
   const userStore = useUserStore();
   const userId = userStore.user?._id;
   const accessToken = userStore.accessToken;
+  const route = useRouter();
+
+  // if there is no userId, navigate to home page
+  if (!userStore.user) {
+    route.push("/");
+  }
 
   const { data: userData, error } = useSWR(
     userId
-      ? `https://ecommerce-api-5ksa.onrender.com/api/v1/users/${userId}`
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${userId}`
       : null,
     (url) => (url ? fetcher(url, accessToken) : null)
   );

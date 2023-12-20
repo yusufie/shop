@@ -48,8 +48,9 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
       }
       console.log('Submitted Data:', userData);
 
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/login";
 
-      const response = await fetch('https://ecommerce-api-5ksa.onrender.com/api/v1/auth/login', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

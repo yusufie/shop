@@ -13,6 +13,7 @@ import useDeliveryStore from "@/stores/deliveryStore";
 import useShipAddressStore from "@/stores/shipaddressStore";
 import useAddressStore from "@/stores/addressStore";
 import { useUserStore } from "@/stores/userStore";
+import { useRouter } from 'next/navigation';
 import useSWR from "swr";
 import CheckoutBillAddModal from "../Modals/Checkout/BillingAdresss/CheckoutBillAddModal";
 import BillDeleteModal from "../Modals/Checkout/BillingAdresss/BillDeleteModal";
@@ -57,10 +58,16 @@ const Checkout: React.FC = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const addressData = useAddressStore((state) => state);
   const { user } = useUserStore();
+  const route = useRouter();
+  // if there is no userId, navigate to the home page
+  if (!user) {
+    route.push("/");
+  }
 
   const deliverySchedule = useDeliveryStore((state) =>
     state.getDeliverySchedule()
   );
+
   useEffect(() => {
     // console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
