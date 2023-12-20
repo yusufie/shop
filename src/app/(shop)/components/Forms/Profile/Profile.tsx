@@ -1,6 +1,5 @@
 "use client";
 import { useUserStore } from "@/stores/userStore";
-import { useRouter } from 'next/navigation';
 import useSWR from "swr";
 import UpdateAvatar from "@/app/(shop)/components/Forms/Profile/UpdateAvatar";
 import UpdateName from "@/app/(shop)/components/Forms/Profile/UpdateName";
@@ -26,12 +25,6 @@ const Profile: React.FC = () => {
   const userStore = useUserStore();
   const userId = userStore.user?._id;
   const accessToken = userStore.accessToken;
-  const route = useRouter();
-
-  // if there is no userId, navigate to home page
-  if (!userStore.user) {
-    route.push("/");
-  }
 
   const { data: userData, error } = useSWR(
     userId
