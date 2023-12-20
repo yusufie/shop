@@ -1,0 +1,74 @@
+/* styles.module.css */
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 3rem 4rem;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.butContainer {
+  display: flex;
+  gap: 2rem;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.trash{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 3rem;
+    margin-bottom: 2rem;
+}
+
+.checkButton1 {
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
+  background-color: rgb(0, 159, 127);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.checkButton1:hover {
+  background-color: rgba(1, 147, 118, 255);
+  cursor: pointer;
+}
+.checkButton2 {
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
+  background-color: rgb(184, 28, 54);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.checkButton2:hover {
+  background-color: rgb(190, 57, 80); ;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .modal {
+    padding: 2rem;
+  }
+}

@@ -8,14 +8,14 @@ const Searchbar: React.FC = () => {
   const { setSearchQuery, searchQuery } = useStore();
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // prevent the form from reloading the page 
-
+    e.preventDefault();
+    // prevent the form from reloading the page 
     setSearchQuery(searchQuery);
 
     // Scroll to the Filterbox component
-    const filterboxElement = document.getElementById('filterbox');
+    const filterboxElement = document.getElementById("filterbox");
     if (filterboxElement) {
-      filterboxElement.scrollIntoView({ behavior: 'smooth' });
+      filterboxElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 

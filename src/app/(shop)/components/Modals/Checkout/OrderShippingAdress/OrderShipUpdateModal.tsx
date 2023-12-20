@@ -1,16 +1,17 @@
 import React, { useState, useCallback } from "react";
-import styles from "./billupdatemodal.module.css";
+import styles from "./ordershipupdatemodal.module.css";
 import useSWR, { mutate } from "swr";
 
 interface BillUpdateModalProps {
   onClose: () => void;
-  selectedAddressId: any;
+  selectedOrderId: any;
 }
 
-const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
+const OrderShipUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
-  selectedAddressId,
+  selectedOrderId,
 }) => {
+  const [loading, setLoading] = useState(false);
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
     country: "",
@@ -18,13 +19,13 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
     postalCode: "",
     streetAddress: "",
   });
-
+  const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
   const userData = user ? JSON.parse(user) : null;
   const userId = userData ? userData._id : null;
   const { data: userResponseData } = useSWR(
-    selectedAddressId
-      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+    selectedOrderId
+      ? `/api/v1/orders/${userId}/address/${selectedOrderId}`
       : null
   );
 
@@ -44,13 +45,13 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
         userId = userData._id;
       }
 
-      if (!userId || !selectedAddressId) {
+      if (!userId || !selectedOrderId) {
         throw new Error("User ID or selected address ID not found");
       }
 
       const userResponse = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+          `/api/v1/orders/${userId}/address/${selectedOrderId}`,
         {
           method: "PATCH",
           headers: {
@@ -66,16 +67,15 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
           }),
         }
       );
-
+      setLoading(true);
       if (!userResponse.ok) {
         throw new Error(
           `User address update failed. HTTP error! Status: ${userResponse.status}`
         );
       }
 
-      
       mutate(
-        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        `/api/v1/orders/${userId}/address/${selectedOrderId}`,
         undefined,
         true
       );
@@ -83,6 +83,7 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
       onClose();
     } catch (error) {
       console.log("Error:", error);
+      setLoading(false);
     }
   };
 
@@ -168,8 +169,10 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
           x
         </button>
       </div>
+
+      {loading ? "Updating..." : "Update"}
     </section>
   );
 };
 
-export default BillUpdateModal;
+export default OrderShipUpdateModal;

@@ -11,21 +11,9 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.inputContainer {
+.butContainer {
   display: flex;
-}
-
-.updateInput {
-  flex: 1;
-  padding: 1rem;
-  border: none;
-  border-radius: 0.4rem;
-  background-color: rgb(243, 244, 246);
-  outline: none;
-}
-
-.updateInput:focus {
-  border: 1px solid rgb(0, 159, 127);
+  gap: 2rem;
 }
 
 .overlay {
@@ -40,11 +28,18 @@
   justify-content: center;
   z-index: 1000;
 }
+.trash{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 3rem;
+    margin-bottom: 2rem;
+}
 
-.checkButton {
-  padding: 0.5rem;
+.checkButton1 {
+  padding: 1rem 3rem;
   border: none;
-  border-radius: 0 0.4rem 0.4rem 0;
+  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
   background-color: rgb(0, 159, 127);
   color: #fff;
   font-size: 1rem;
@@ -52,16 +47,28 @@
   cursor: pointer;
 }
 
-.checkButton:hover {
+.checkButton1:hover {
   background-color: rgba(1, 147, 118, 255);
+  cursor: pointer;
+}
+.checkButton2 {
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
+  background-color: rgb(184, 28, 54);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.checkButton2:hover {
+  background-color: rgb(190, 57, 80); ;
   cursor: pointer;
 }
 
 @media screen and (max-width: 1024px) {
   .modal {
     padding: 2rem;
-  }
-  .updateInput {
-    padding: 0.5rem;
   }
 }

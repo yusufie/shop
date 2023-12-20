@@ -1,16 +1,16 @@
 import React, { useState, useCallback } from "react";
-import styles from "./billdeletemodal.module.css";
+import styles from "./orderbilldeletemodal.module.css";
 import Image from "next/image";
 import useSWR, { mutate } from "swr";
 
 interface BillDeleteModalProps {
   onClose: () => void;
-  selectedAddressId: any;
+  selectedOrderId: any;
 }
 
-const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
+const OrderBillDeleteModal: React.FC<BillDeleteModalProps> = ({
   onClose,
-  selectedAddressId,
+  selectedOrderId,
 }) => {
 
   const accessToken = localStorage.getItem("accessToken");
@@ -18,17 +18,16 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   const userData = user ? JSON.parse(user) : null;
   const userId = userData ? userData._id : null;
 
-
   const { data: deleteResponseData } = useSWR(
-    userId && selectedAddressId
-      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+    userId && selectedOrderId
+      ? `/api/v1/orders/${userId}/address/${selectedOrderId}`
       : null,
-    { revalidateOnFocus: true } 
+    { revalidateOnFocus: true }
   );
 
   const handleDelete = useCallback(async () => {
     try {
-      if (!selectedAddressId || !userId) {
+      if (!selectedOrderId || !userId) {
         console.log("No address selected for deletion or user ID not found.");
         onClose();
         return;
@@ -40,7 +39,7 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
 
       await fetch(
         process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+          `/api/v1/orders/${userId}/address/${selectedOrderId}`,
         {
           method: "DELETE",
           headers: {
@@ -49,7 +48,7 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
         }
       );
       mutate(
-        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        `/api/v1/orders/${userId}/address/${selectedOrderId}`,
         undefined,
         true
       );
@@ -58,7 +57,7 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
     } catch (error) {
       console.error("Error:", error);
     }
-  }, [selectedAddressId, userId, accessToken, onClose]);
+  }, [selectedOrderId, userId, accessToken, onClose]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -91,4 +90,4 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
   );
 };
 
-export default BillDeleteModal;
+export default OrderBillDeleteModal;

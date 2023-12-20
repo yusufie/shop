@@ -1,16 +1,17 @@
 import React, { useState, useCallback } from "react";
-import styles from "./billupdatemodal.module.css";
+import styles from "./orderbillupdatemodal.module.css";
 import useSWR, { mutate } from "swr";
 
 interface BillUpdateModalProps {
   onClose: () => void;
-  selectedAddressId: any;
+  selectedOrderId: any;
 }
 
-const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
+const OrderBillUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
-  selectedAddressId,
+  selectedOrderId,
 }) => {
+  console.log();
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
     country: "",
@@ -23,8 +24,8 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
   const userData = user ? JSON.parse(user) : null;
   const userId = userData ? userData._id : null;
   const { data: userResponseData } = useSWR(
-    selectedAddressId
-      ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
+    selectedOrderId
+      ? `/api/v1/orders/${userId}/address/${selectedOrderId}`
       : null
   );
 
@@ -44,13 +45,13 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
         userId = userData._id;
       }
 
-      if (!userId || !selectedAddressId) {
+      if (!userId || !selectedOrderId) {
         throw new Error("User ID or selected address ID not found");
       }
 
       const userResponse = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+          `/api/v1/orders/${userId}/address/${selectedOrderId}`,
         {
           method: "PATCH",
           headers: {
@@ -73,9 +74,8 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
         );
       }
 
-      
       mutate(
-        `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        `/api/v1/orders/${userId}/address/${selectedOrderId}`,
         undefined,
         true
       );
@@ -172,4 +172,4 @@ const BillUpdateModal: React.FC<BillUpdateModalProps> = ({
   );
 };
 
-export default BillUpdateModal;
+export default OrderBillUpdateModal;

@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useUserStore } from "@/stores/userStore";
 import countryCodes from "country-codes-list";
 import styles from "./profile.module.css";
+import { ToastContainer, toast } from "react-toastify";
 
 type FormValues = {
   contact: string;
@@ -17,13 +18,13 @@ interface UpdateProps {
 }
 
 const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
-  console.log("useData", userData);
+  // console.log("useData", userData);
   const userStore = useUserStore();
 
   // Destructuring user data for contact
-  const contact = userData.map((item:any)=>item.contact[0])
+  const contact = userData.map((item: any) => item.contact[0]);
   const defaultContact = contact.length > 0 ? contact[0] : {};
-  console.log("Contact:", contact);
+  // console.log("Contact:", contact);
 
   // Get country codes
   const countryList: any = countryCodes.customList(
@@ -85,10 +86,11 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Response Data:", responseData);
-        alert("Update successful");
+        toast.success("Update successful");
       } else {
         console.error("Failed to update. Status:", response.status);
-        alert("Update failed");
+
+        toast.error("Update failed");
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -145,6 +147,7 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
       {/* <button type="submit" value="submit" className={styles.updateButton}> */}
       {/* Update */}
       {/* </button> */}
+      <ToastContainer />
     </form>
   );
 };

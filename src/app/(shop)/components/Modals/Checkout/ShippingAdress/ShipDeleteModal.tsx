@@ -5,16 +5,13 @@ import useSWR, { mutate } from "swr";
 
 interface BillDeleteModalProps {
   onClose: () => void;
-  userMatches: any;
-  addressIdsToDelete: string[];
+  selectedAddressId: any;
 }
 
 const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
   onClose,
-  userMatches,
-  addressIdsToDelete,
+  selectedAddressId,
 }) => {
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>("");
   const [loading, setLoading] = useState(false);
   const accessToken = localStorage.getItem("accessToken");
   const user = localStorage.getItem("user");
@@ -28,10 +25,6 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
     { revalidateOnFocus: true } // Yeniden çekmeyi odaklandığında gerçekleştir
   );
 
-  const handleAddressSelection = useCallback((addressId: string) => {
-    setSelectedAddressId(addressId);
-  }, []);
-
   const handleDelete = useCallback(async () => {
     try {
       if (!selectedAddressId || !userId) {
@@ -44,7 +37,7 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
         throw new Error("Erişim token'ı bulunamadı");
       }
 
-      setLoading(true); // Set loading to true before making the API call
+      setLoading(true); 
 
       await fetch(
         process.env.NEXT_PUBLIC_API_URL +
@@ -63,11 +56,11 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
         true
       );
 
-      setLoading(false); // Set loading to false after the API call is complete
+      setLoading(false); 
       onClose();
     } catch (error) {
       console.error("Error:", error);
-      setLoading(false); // Set loading to false in case of an error
+      setLoading(false); 
     }
   }, [selectedAddressId, userId, accessToken, onClose]);
 
@@ -88,30 +81,7 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
             height={50}
           />
           <h1>Delete</h1>
-          <p>Select the address you want to delete:</p>
-          <ul>
-            {userMatches.map((userMatch: any) =>
-              userMatch?.addresses?.map((contactItem: any) => (
-                <li
-                  key={contactItem._id}
-                  onClick={() => handleAddressSelection(contactItem._id)}
-                  className={
-                    selectedAddressId === contactItem._id ? styles.selected : ""
-                  }
-                >
-                  <div
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    {contactItem.country && contactItem.city
-                      ? `${contactItem.country} ${contactItem.city}  ${contactItem._id}`
-                      : "Unknown Address"}
-                  </div>
-                </li>
-              ))
-            )}
-          </ul>
+         
         </div>
         <div className={styles.butContainer}>
           <button onClick={onClose} className={styles.checkButton1}>
@@ -120,7 +90,7 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
           <button
             onClick={handleDelete}
             className={styles.checkButton2}
-            disabled={loading} // Disable the button when loading
+            disabled={loading} 
           >
             {loading ? "Deleting..." : "Delete"}
           </button>
