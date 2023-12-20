@@ -220,6 +220,7 @@ const Checkout: React.FC = ({}) => {
     console.log(orderData);
     try {
       const response = await fetch(apiUrl, requestOptions);
+     
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -229,7 +230,7 @@ const Checkout: React.FC = ({}) => {
 
       console.log("Order created successfully:", responseData);
       console.log(orderData);
-
+     
       toast.success("Gratulations! Your order has been created successfully.");
     } catch (error: any) {
       console.error("Error creating order:", error.message);
