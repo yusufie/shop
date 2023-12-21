@@ -1,8 +1,48 @@
+"use client";
+import { useUserStore } from "@/stores/userStore";
+import useSWR from "swr";
+import { useRouter } from "next/navigation";
 import Image from 'next/image'
-import orders from '../../../../../public/datas/order.json'
+import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
 import styles from './orders.module.css'
 
+const fetcher = async (url: string, accessToken: string | null) => {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch user data");
+    }
+    return res.json();
+};
+
 const Orders: React.FC = () => {
+    const userStore = useUserStore();
+    const userId = userStore.user?._id;
+    const accessToken = userStore.accessToken;
+    const router = useRouter();
+
+    const { data: orderData, error } = useSWR(
+        userId
+          ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/orders/user/${userId}`
+          : null,
+        (url) => (url ? fetcher(url, accessToken) : null)
+    );
+      
+    // Check if the user is logged in
+    if (!userStore.isLoggedIn) {
+        // Display AuthModal if the user is not logged in
+        return <AuthModal onClose={() => router.push('/orders')} />;
+    }
+    
+    if (error) return <div>failed to load</div>;
+    // orderData will be undefined initially and will be updated once data is fetched
+    if (!orderData) return <div>loading...</div>;
+    
+    console.log("Order data:", orderData);
 
   return (
     <section className={styles.orders}>
@@ -10,13 +50,13 @@ const Orders: React.FC = () => {
         <div className={styles.myOrders}>
 
             <h2>My Orders</h2>
-            
-            {orders.map((order) => (
-                <div className={styles.ordersCard} key={order._id}>
+
+            {orderData?.map((order: any) => (
+                <div className={styles.ordersCard} key={order?._id}>
 
                     <div className={styles.cardHeader}>
-                        <span className={styles.orderNumber}>{order.orderNumber}</span>
-                        <span className={styles.orderStatus}>{order.status}</span>
+                        <span className={styles.orderNumber}>{order?._id}</span>
+                        <span className={styles.orderStatus}>{order?.status}</span>
                     </div>
 
                     <div className={styles.cardBody}>
@@ -24,30 +64,34 @@ const Orders: React.FC = () => {
                         <div className={styles.cardRow}>
                             <span>Order Date</span>
                             <span>:</span>
-                            <span>{order.orderDate}</span>
+                            <span>
+                                {new Date(order?.createdAt).toLocaleDateString()}
+                            </span>
                         </div>
 
                         <div className={styles.cardRow}>
                             <span>Delivery Time</span>
                             <span>:</span>
-                            <span>{order.deliveryTime}</span>
+                            <span>{order?.deliverySchedule}</span>
                         </div>
 
                         <div className={styles.cardRow}>
                             <span>Amount</span>
                             <span>:</span>
-                            <span>{order.amount}</span>
+                            <span>{order?.total}</span>
                         </div>
 
                         <div className={styles.cardRow}>
                             <span>Total Price</span>
                             <span>:</span>
-                            <span>{order.totalPrice}</span>
+                            <span>{order?.totalAfterDiscount}</span>
                         </div>
+
                     </div>
 
                 </div>
             ))}
+
         </div>
 
         <div className={styles.orderDetails}>
