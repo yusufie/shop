@@ -1,11 +1,13 @@
 "use client";
 import { useUserStore } from "@/stores/userStore";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 import UpdateAvatar from "@/app/(shop)/components/Forms/Profile/UpdateAvatar";
 import UpdateName from "@/app/(shop)/components/Forms/Profile/UpdateName";
 import UpdateEmail from "@/app/(shop)/components/Forms/Profile/UpdateEmail";
 import UpdateContact from "@/app/(shop)/components/Forms/Profile/UpdateContact";
 import UpdateAddress from "@/app/(shop)/components/Forms/Profile/UpdateAddress";
+import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
 import styles from "./profile.module.css";
 
 const fetcher = async (url: string, accessToken: string | null) => {
@@ -25,6 +27,7 @@ const Profile: React.FC = () => {
   const userStore = useUserStore();
   const userId = userStore.user?._id;
   const accessToken = userStore.accessToken;
+  const router = useRouter();
 
   const { data: userData, error } = useSWR(
     userId
@@ -32,6 +35,12 @@ const Profile: React.FC = () => {
       : null,
     (url) => (url ? fetcher(url, accessToken) : null)
   );
+  
+  // Check if the user is logged in
+  if (!userStore.isLoggedIn) {
+    // Display AuthModal if the user is not logged in
+    return <AuthModal onClose={() => router.push('/profile')} />;
+  }
 
   if (error) return <div>failed to load</div>;
   // userData will be undefined initially and will be updated once data is fetched

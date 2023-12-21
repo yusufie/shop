@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/userStore';
 import Navmenu from '@/app/(shop)/components/Dropdowns/Navmenu/Navmenu';
 import Profilemenu from '@/app/(shop)/components/Dropdowns/Profilemenu/Profilemenu';
@@ -9,7 +9,6 @@ import Image from 'next/image'
 import Link from 'next/link';
 import styles from './header.module.css'
 import Searchbar from '@/app/(shop)/components/Search/Searchbar/Searchbar';
-import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
   const pathname = usePathname();
@@ -97,6 +96,10 @@ const Header: React.FC = () => {
       </div>
 
       <div className={styles.right}>
+
+        <Link href={'/'}>
+          <button className={styles.pageButton}><span>Home</span></button>
+        </Link>
 
         <Link href={'/offers'}>
           <button className={styles.pageButton}><span>Offers</span></button>

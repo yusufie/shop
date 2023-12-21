@@ -5,10 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/utils/formSchema'
 import { useUserStore } from '@/stores/userStore';
 import Image from 'next/image';
+import Link from "next/link";
 import styles from './loginmodal.module.css'
-import { useRouter } from "next/navigation";
-// import ConfirmationModal from "@/components/Modal/ConfirmationModal";
-// import RegisterModal from '@/app/(shop)/components/Modals/Register/RegisterModal';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -23,7 +21,6 @@ type FormValues = {
 
 const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: LoginModalProps) => {
 
-  const route = useRouter();
   const userStore = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -75,7 +72,6 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
 
         // Close the modal or navigate to another page
         onClose();
-        route.push("/");
 
       } else {
         alert('Login failed');
@@ -92,14 +88,15 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
     <section className={styles.loginmodal}>
       <div className={styles.loginModalContent}>
 
-      {
+        <Link href="/">
           <Image
             className={styles.logo}
             src={"/images/grand.png"}
             alt="logo"
             width={163} height={45}
           />
-        }
+        </Link>
+        
         <p>Login with your email & password</p>
 
         <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>

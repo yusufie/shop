@@ -23,6 +23,7 @@ import OrderBillUpdateModal from "../Modals/Checkout/OrderBillingAdress/OrderBil
 import OrderBillDeleteModal from "../Modals/Checkout/OrderBillingAdress/OrderBillDeleteModal";
 import OrderShipUpdateModal from "../Modals/Checkout/OrderShippingAdress/OrderShipUpdateModal";
 import OrderShipDeleteModal from "../Modals/Checkout/OrderShippingAdress/OrderShipDeleteModal";
+import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
 
 interface User {
   _id: string;
@@ -58,11 +59,8 @@ const Checkout: React.FC = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const addressData = useAddressStore((state) => state);
   const { user } = useUserStore();
-  const route = useRouter();
-  // if there is no userId, navigate to the home page
-  if (!user) {
-    route.push("/");
-  }
+  const userStore = useUserStore();
+  const router = useRouter();
 
   const deliverySchedule = useDeliveryStore((state) =>
     state.getDeliverySchedule()
@@ -144,6 +142,13 @@ const Checkout: React.FC = () => {
     }
     return response.json();
   });
+
+  // Check if the user is logged in
+  if (!userStore.isLoggedIn) {
+    // Display AuthModal if the user is not logged in
+    return <AuthModal onClose={() => router.push('/checkout')} />;
+  }
+
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
   mutate(datas);
