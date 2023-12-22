@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./shipupdatemodal.module.css";
 import useSWR, { mutate } from "swr";
-
+import { ToastContainer, toast } from "react-toastify";
 interface BillUpdateModalProps {
   onClose: () => void;
   selectedAddressId: any;
@@ -75,10 +75,11 @@ const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
           body: JSON.stringify(newContactNumber),
         }
       );
-
+      toast.success("Update successful");
       if (!userResponse.ok) {
         throw new Error(
           `User address update failed. HTTP error! Status: ${userResponse.status}`
+          
         );
       }
 
@@ -91,6 +92,7 @@ const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
       onClose();
     } catch (error) {
       console.error("Error:", error);
+        toast.error("Update failed");
     }
   };
 
@@ -176,6 +178,7 @@ const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
           x
         </button>
       </div>
+      <ToastContainer />
     </section>
   );
 };
