@@ -454,7 +454,7 @@ const Checkout: React.FC = () => {
             <div className={styles.noteInput}>
               <textarea
                 rows={8}
-                placeholder="Sipariş notunuzu buraya yazın..."
+                placeholder="Write Your Order Note Here...."
                 value={orderNote}
                 onChange={handleNoteChange}
               ></textarea>
@@ -471,9 +471,14 @@ const Checkout: React.FC = () => {
             {product.map((item: any) => (
               <div key={item._id} className={styles.orderItem}>
                 <span>
-                  {addedItemCounts[item._id]} x {item.description} | 1lb
+                  <span style={{ fontWeight: "bold" }}>
+                    {addedItemCounts[item._id]}
+                  </span>{" "}
+                  x {item.description} | 1lb
                 </span>
-                <span>${item.price.toFixed(2)}</span>
+                <span style={{ fontWeight: "bold" }}>
+                  NOK{item.price.toFixed(2)}
+                </span>
               </div>
             ))}
             <span style={{ fontWeight: "bold" }}>
