@@ -1,33 +1,55 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./shipupdatemodal.module.css";
 import useSWR, { mutate } from "swr";
 
 interface BillUpdateModalProps {
   onClose: () => void;
   selectedAddressId: any;
+  contactItem: any;
 }
 
 const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
   onClose,
   selectedAddressId,
+  contactItem,
 }) => {
-  const [loading, setLoading] = useState(false)
   const [newContactNumber, setNewContactNumber] = useState({
     alias: "",
     country: "",
     city: "",
     postalCode: "",
-    streetAddress: "",
+    details: "",
   });
-  const accessToken = localStorage.getItem("accessToken");
+
   const user = localStorage.getItem("user");
   const userData = user ? JSON.parse(user) : null;
   const userId = userData ? userData._id : null;
-  const { data: userResponseData } = useSWR(
+
+  const { data: addressData } = useSWR(
     selectedAddressId
       ? `/api/v1/orders/${userId}/address/${selectedAddressId}`
       : null
   );
+
+  useEffect(() => {
+    if (addressData) {
+      setNewContactNumber({
+        alias: addressData.alias,
+        country: addressData.country,
+        city: addressData.city,
+        postalCode: addressData.postalCode,
+        details: addressData.details,
+      });
+    } else if (contactItem) {
+      setNewContactNumber({
+        alias: contactItem.alias,
+        country: contactItem.country,
+        city: contactItem.city,
+        postalCode: contactItem.postalCode,
+        details: contactItem.details,
+      });
+    }
+  }, [addressData, contactItem]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,53 +60,37 @@ const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
         throw new Error("Erişim token'ı bulunamadı");
       }
 
-      const user = localStorage.getItem("user");
-      let userId;
-      if (user) {
-        const userData = JSON.parse(user);
-        userId = userData._id;
-      }
-
       if (!userId || !selectedAddressId) {
         throw new Error("User ID or selected address ID not found");
       }
-  
+
       const userResponse = await fetch(
-        process.env.NEXT_PUBLIC_API_URL +
-          `/api/v1/orders/${userId}/address/${selectedAddressId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/orders/${userId}/address/${selectedAddressId}`,
         {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            alias: newContactNumber.alias,
-            country: newContactNumber.country,
-            city: newContactNumber.city,
-            postalCode: newContactNumber.postalCode,
-            streetAddress: newContactNumber.streetAddress,
-          }),
+          body: JSON.stringify(newContactNumber),
         }
       );
-          setLoading(true);
+
       if (!userResponse.ok) {
         throw new Error(
           `User address update failed. HTTP error! Status: ${userResponse.status}`
         );
       }
 
-    
       mutate(
         `/api/v1/orders/${userId}/address/${selectedAddressId}`,
         undefined,
         true
       );
-  
+
       onClose();
     } catch (error) {
-      console.log("Error:", error);
-      setLoading(false);
+      console.error("Error:", error);
     }
   };
 
@@ -153,11 +159,11 @@ const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
             </div>
           </div>
           <div className={styles.textarea}>
-            <label htmlFor="streetAddress">Street Address</label>
+            <label htmlFor="details">Street Address</label>
             <textarea
-              id="streetAddress"
-              name="streetAddress"
-              value={newContactNumber.streetAddress}
+              id="details"
+              name="details"
+              value={newContactNumber.details}
               onChange={handleInputChange}
             />
           </div>
@@ -170,8 +176,6 @@ const ShipUpdateModal: React.FC<BillUpdateModalProps> = ({
           x
         </button>
       </div>
-
-      {loading ? "Updating..." : "Update"}
     </section>
   );
 };

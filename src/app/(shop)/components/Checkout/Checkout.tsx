@@ -6,28 +6,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import ShipUpdateModal from "../Modals/Checkout/ShippingAdress/ShipUpdateModal";
 import ShipDeleteModal from "../Modals/Checkout/ShippingAdress/ShipDeleteModal";
-import CheckoutShipAddModal from "../Modals/Checkout/ShippingAdress/CheckoutShipAddModal";
 import useBasketStore from "@/stores/basketStore";
 import useNoteStore from "@/stores/noteStore";
 import useDeliveryStore from "@/stores/deliveryStore";
-import useShipAddressStore from "@/stores/shipaddressStore";
-import useAddressStore from "@/stores/addressStore";
 import { useUserStore } from "@/stores/userStore";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
-import CheckoutBillAddModal from "../Modals/Checkout/BillingAdresss/CheckoutBillAddModal";
 import BillDeleteModal from "../Modals/Checkout/BillingAdresss/BillDeleteModal";
 import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
 import UpdateContact from "./UpdateContact";
-import OrderBillUpdateModal from "../Modals/Checkout/OrderBillingAdress/OrderBillUpdateModal";
-import OrderBillDeleteModal from "../Modals/Checkout/OrderBillingAdress/OrderBillDeleteModal";
-import OrderShipUpdateModal from "../Modals/Checkout/OrderShippingAdress/OrderShipUpdateModal";
-import OrderShipDeleteModal from "../Modals/Checkout/OrderShippingAdress/OrderShipDeleteModal";
 import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
 
 interface User {
   _id: string;
-  
 }
 
 const Checkout: React.FC = () => {
@@ -38,26 +29,15 @@ const Checkout: React.FC = () => {
   const [isBillDeleteModalOpen, setIsBillDeleteModalOpen] = useState(false);
   const [isShipUpdateModalOpen, setIsShipUpdateModalOpen] = useState(false);
   const [isShipDeleteModalOpen, setIsShipDeleteModalOpen] = useState(false);
-  const [isOrderBillUpdateModalOpen, setIsOrderBillUpdateModalOpen] =
-    useState(false);
-  const [isOrderBillDeleteModalOpen, setIsOrderBillDeleteModalOpen] =
-    useState(false);
-  const [isOrderShipUpdateModalOpen, setIsOrderShipUpdateModalOpen] =
-    useState(false);
-  const [isOrderShipDeleteModalOpen, setIsOrderShipDeleteModalOpen] =
-    useState(false);
+  const [contactItem, setContactItem] = useState();
 
   // ZUSTAND STORELAR
   const product = useBasketStore((state) => state.items);
   const addedItemCounts = useBasketStore((state) => state.addedItemCounts);
   const { selectedButtons, handleButtonClick } = useDeliveryStore();
   const { orderNote, setOrderNote } = useNoteStore();
-  const [orderMatches, setOrderMatches] = useState([]);
   const noteData = useNoteStore((state) => state);
-  const shipAddressData = useShipAddressStore((state) => state);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const addressData = useAddressStore((state) => state);
   const { user } = useUserStore();
   const userStore = useUserStore();
   const router = useRouter();
@@ -69,58 +49,6 @@ const Checkout: React.FC = () => {
   useEffect(() => {
     // console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
-  // *!!!-------------------------------------GET ORDERS---------------------------------------!!!!*
-
-  const {
-    data: orderData,
-    error: orderError,
-    mutate: mutateOrder,
-  } = useSWR(
-    process.env.NEXT_PUBLIC_API_URL + "/api/v1/orders",
-    async (url) => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        throw new Error("Access token not found");
-      }
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
-      }
-      return response.json();
-    },
-    {
-      refreshInterval: 1000,
-    }
-  );
-
-  useEffect(() => {
-    if (orderError) {
-      console.error("Order loading failed:", orderError);
-    }
-    if (orderData) {
-      console.log("Order data:", orderData);
-      const userString = localStorage.getItem("user");
-      if (userString) {
-        const userData: User = JSON.parse(userString);
-        const userId = userData._id;
-        if (userId) {
-          const orderMatches = orderData.filter(
-            (siparis: any) => siparis.user._id === userId
-          );
-          console.log("Order matches:", orderMatches);
-          setOrderMatches(orderMatches);
-          mutateOrder(orderData, false); 
-        } else {
-          throw new Error("User ID not found");
-        }
-      }
-    }
-  }, [orderData, orderError, setOrderMatches, mutateOrder]);
-
   // *!!!-------------------------------------GET USER---------------------------------------!!!!*
   const {
     data: datas,
@@ -146,7 +74,7 @@ const Checkout: React.FC = () => {
   // Check if the user is logged in
   if (!userStore.isLoggedIn) {
     // Display AuthModal if the user is not logged in
-    return <AuthModal onClose={() => router.push('/checkout')} />;
+    return <AuthModal onClose={() => router.push("/checkout")} />;
   }
 
   if (error) return <div>Loading failed</div>;
@@ -168,12 +96,13 @@ const Checkout: React.FC = () => {
   // Use filter with the correct type for item
   const userMatches = datas.data.filter((item: User) => item._id === userId);
 
-  console.log("userMatches", userMatches);
+  // console.log("userMatches", userMatches);
 
-  // const addressIdsToDelete = userMatches.flatMap(
-  // (userMatch: any) =>
-  // userMatch?.addresses?.map((address: any) => address?._id) || []
-  // );
+  const addressIdsTo = userMatches.flatMap(
+    (userMatch: any) =>
+      userMatch?.addresses?.map((address: any) => address) || []
+  );
+  // console.log(addressIdsTo[0].alias);
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -203,21 +132,22 @@ const Checkout: React.FC = () => {
             }))
           : []
       ),
-
       billingAddress: {
-        alias: addressData.alias,
-        details: addressData.details,
-        city: addressData.city,
-        postalCode: addressData.postalCode,
-        country: addressData.country,
+        alias: addressIdsTo[0].alias,
+        details: addressIdsTo[0].details,
+        city: addressIdsTo[0].city,
+        postalCode: addressIdsTo[0].postalCode,
+        country: addressIdsTo[0].country,
       },
+
       shippingAddress: {
-        alias: shipAddressData.alias,
-        details: shipAddressData.details,
-        city: shipAddressData.city,
-        postalCode: shipAddressData.postalCode,
-        country: shipAddressData.country,
+        alias: addressIdsTo[0].alias,
+        details: addressIdsTo[0].details,
+        city: addressIdsTo[0].city,
+        postalCode: addressIdsTo[0].postalCode,
+        country: addressIdsTo[0].country,
       },
+
       deliverySchedule: deliverySchedule,
       orderNote: noteData.orderNote,
     };
@@ -233,7 +163,6 @@ const Checkout: React.FC = () => {
     console.log(orderData);
     try {
       const response = await fetch(apiUrl, requestOptions);
-     
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -243,7 +172,7 @@ const Checkout: React.FC = () => {
 
       console.log("Order created successfully:", responseData);
       console.log(orderData);
-     
+
       toast.success("Gratulations! Your order has been created successfully.");
     } catch (error: any) {
       console.error("Error creating order:", error.message);
@@ -260,38 +189,21 @@ const Checkout: React.FC = () => {
   // AÇMA KAPAMA
 
   const handleBillUpdateClick = (_id: any, contactItem: any) => {
+    setContactItem(contactItem);
     setIsBillUpdateModalOpen(true);
     setSelectedAddressId(contactItem._id);
+    console.log(contactItem);
   };
-  const handleOrderBillUpdateClick = (_id: any, orderMatch: any) => {
-    setIsOrderBillUpdateModalOpen(true);
-    setSelectedOrderId(orderMatch._id);
-  };
-  const handleOrderShipUpdateClick = (_id: any, orderMatch: any) => {
-    setIsOrderShipUpdateModalOpen(true);
-    setSelectedOrderId(orderMatch._id);
-  };
+
   const handleShipUpdateClick = (_id: any, contactItem: any) => {
     setIsShipUpdateModalOpen(true);
     setSelectedAddressId(contactItem._id);
+    setContactItem(contactItem);
   };
-  const handleBillAddClick = () => {
-    setIsBillAddModalOpen(true);
-  };
-  const handleShipAddClick = () => {
-    setIsShipAddModalOpen(true);
-  };
+
   const handleBillDeleteClick = (_id: any, contactItem: any) => {
     setIsBillDeleteModalOpen(true);
     setSelectedAddressId(contactItem._id);
-  };
-  const handleOrderBillDeleteClick = (_id: any, orderMatch: any) => {
-    setIsOrderBillDeleteModalOpen(true);
-    setSelectedOrderId(orderMatch._id);
-  };
-  const handleOrderShipDeleteClick = (_id: any, orderMatch: any) => {
-    setIsOrderShipDeleteModalOpen(true);
-    setSelectedOrderId(orderMatch._id);
   };
 
   const handleShipDeleteClick = (_id: any, contactItem: any) => {
@@ -299,21 +211,10 @@ const Checkout: React.FC = () => {
     setSelectedAddressId(contactItem._id);
   };
 
-  const handleBillAddModalClose = () => {
-    setIsBillAddModalOpen(false);
-  };
-  const handleShipAddModalClose = () => {
-    setIsShipAddModalOpen(false);
-  };
   const handleBillModalClose = () => {
     setIsBillUpdateModalOpen(false);
   };
-  const handleOrderBillModalClose = () => {
-    setIsOrderBillUpdateModalOpen(false);
-  };
-  const handleOrderShipModalClose = () => {
-    setIsOrderShipUpdateModalOpen(false);
-  };
+
   const handleShipModalClose = () => {
     setIsShipUpdateModalOpen(false);
   };
@@ -323,12 +224,7 @@ const Checkout: React.FC = () => {
   const handleBillDeleteClose = () => {
     setIsBillDeleteModalOpen(false);
   };
-  const handleOrderBillDeleteClose = () => {
-    setIsOrderBillDeleteModalOpen(false);
-  };
-  const handleOrderShipDeleteClose = () => {
-    setIsOrderShipDeleteModalOpen(false);
-  };
+
   const totalPrice = product
     .reduce(
       (total, product) =>
@@ -336,7 +232,7 @@ const Checkout: React.FC = () => {
       0
     )
     .toFixed(2);
-  console.log(orderMatches);
+
   return (
     <>
       <section className={styles.checkout}>
@@ -348,12 +244,6 @@ const Checkout: React.FC = () => {
                 <span className={styles.serial}>2</span>
                 <span className={styles.title}>Billing Address</span>
               </div>
-              <button
-                onClick={handleBillAddClick}
-                className={styles.updateButton}
-              >
-                + Add
-              </button>
             </div>
             <div className={styles.map}>
               {userMatches &&
@@ -413,59 +303,6 @@ const Checkout: React.FC = () => {
                   </>
                 ))}
             </div>
-            <div className={styles.map}>
-              {orderMatches &&
-                orderMatches.map((orderMatch: any, _id: any) => (
-                  <div className={styles.billingInput} key={orderMatch._id}>
-                    <div className={styles.inputTop}>
-                      <h4>Billing</h4>
-                      <div className={styles.hoverButtons}>
-                        <button
-                          onClick={() =>
-                            handleOrderBillUpdateClick(_id, orderMatch)
-                          }
-                          className={styles.hoverPen}
-                        >
-                          <Image
-                            src="/icons/pen.svg"
-                            alt="pen"
-                            width={16}
-                            height={16}
-                          />
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleOrderBillDeleteClick(_id, orderMatch)
-                          }
-                          className={styles.hoverCross}
-                        >
-                          <Image
-                            src="/icons/cross.svg"
-                            alt="cross"
-                            width={16}
-                            height={16}
-                          />
-                        </button>
-                      </div>
-                    </div>
-                    <div className={styles.inputBottom}>
-                      <div>
-                        <strong>Title:</strong> {orderMatch.orderNote} <br />
-                        <strong>Street Address:</strong>{" "}
-                        {orderMatch.billingAddress.details} <br />
-                        <strong>City:</strong> {orderMatch.billingAddress.city}{" "}
-                        <br />
-                        <strong>Country:</strong>{" "}
-                        {orderMatch.billingAddress.country} <br />
-                        <strong>Postal Code:</strong>{" "}
-                        {orderMatch.billingAddress.postalCode} <br />
-                        <strong>Email:</strong>
-                        {orderMatch.user.email}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
           </div>
           <div className={styles.shipping}>
             <div className={styles.shippingHeader}>
@@ -473,13 +310,6 @@ const Checkout: React.FC = () => {
                 <span className={styles.serial}>3</span>
                 <span className={styles.title}>Shipping Address</span>
               </div>
-
-              <button
-                onClick={handleShipAddClick}
-                className={styles.updateButton}
-              >
-                + Add
-              </button>
             </div>
             <div className={styles.map}>
               {userMatches &&
@@ -540,59 +370,6 @@ const Checkout: React.FC = () => {
                         )
                       )}
                   </>
-                ))}
-            </div>
-            <div className={styles.map}>
-              {orderMatches &&
-                orderMatches.map((orderMatch: any, _id: number) => (
-                  <div className={styles.shippingInput} key={orderMatch._id}>
-                    <div className={styles.inputTop}>
-                      <h4>Shipping</h4>
-                      <div className={styles.hoverButtons}>
-                        <button
-                          onClick={() =>
-                            handleOrderShipUpdateClick(_id, orderMatch)
-                          }
-                          className={styles.hoverPen}
-                        >
-                          <Image
-                            src="/icons/pen.svg"
-                            alt="pen"
-                            width={16}
-                            height={16}
-                          />
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleOrderShipDeleteClick(_id, orderMatch)
-                          }
-                          className={styles.hoverCross}
-                        >
-                          <Image
-                            src="/icons/cross.svg"
-                            alt="cross"
-                            width={16}
-                            height={16}
-                          />
-                        </button>
-                      </div>
-                    </div>
-                    <div className={styles.inputBottom}>
-                      <div>
-                        <strong>Title:</strong> {orderMatch.orderNote} <br />
-                        <strong>Street Address:</strong>{" "}
-                        {orderMatch.billingAddress.details} <br />
-                        <strong>City:</strong> {orderMatch.billingAddress.city}{" "}
-                        <br />
-                        <strong>Country:</strong>{" "}
-                        {orderMatch.billingAddress.country} <br />
-                        <strong>Postal Code:</strong>{" "}
-                        {orderMatch.billingAddress.postalCode} <br />
-                        <strong>Email:</strong>
-                        {orderMatch.user.email}
-                      </div>
-                    </div>
-                  </div>
                 ))}
             </div>
           </div>
@@ -699,7 +476,9 @@ const Checkout: React.FC = () => {
                 <span>${item.price.toFixed(2)}</span>
               </div>
             ))}
-            <span>SubTotal:${totalPrice}</span>
+            <span style={{ fontWeight: "bold" }}>
+              SubTotal: {totalPrice} NOK
+            </span>
           </div>
 
           <button onClick={handleCheckout} className={styles.availableButton}>
@@ -711,24 +490,15 @@ const Checkout: React.FC = () => {
           <BillUpdateModal
             onClose={handleBillModalClose}
             selectedAddressId={selectedAddressId}
+            contactItem={contactItem}
           />
         )}
-        {isOrderBillUpdateModalOpen && (
-          <OrderBillUpdateModal
-            onClose={handleOrderBillModalClose}
-            selectedOrderId={selectedOrderId}
-          />
-        )}
-        {isOrderShipUpdateModalOpen && (
-          <OrderShipUpdateModal
-            onClose={handleOrderShipModalClose}
-            selectedOrderId={selectedOrderId}
-          />
-        )}
+
         {isShipUpdateModalOpen && (
           <ShipUpdateModal
             onClose={handleShipModalClose}
             selectedAddressId={selectedAddressId}
+            contactItem={contactItem}
           />
         )}
         {isBillDeleteModalOpen && (
@@ -737,29 +507,12 @@ const Checkout: React.FC = () => {
             selectedAddressId={selectedAddressId}
           />
         )}
-        {isOrderBillDeleteModalOpen && (
-          <OrderBillDeleteModal
-            onClose={handleOrderBillDeleteClose}
-            selectedOrderId={selectedOrderId}
-          />
-        )}
-        {isOrderShipDeleteModalOpen && (
-          <OrderShipDeleteModal
-            onClose={handleOrderShipDeleteClose}
-            selectedOrderId={selectedOrderId}
-          />
-        )}
+
         {isShipDeleteModalOpen && (
           <ShipDeleteModal
             onClose={handleShipDeleteClose}
             selectedAddressId={selectedAddressId}
           />
-        )}
-        {isBillAddModalOpen && (
-          <CheckoutBillAddModal onClose={handleBillAddModalClose} />
-        )}
-        {isShipAddModalOpen && (
-          <CheckoutShipAddModal onClose={handleShipAddModalClose} />
         )}
       </section>
       <ToastContainer />

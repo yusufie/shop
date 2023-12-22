@@ -66,9 +66,9 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
         return;
       }
 
-      console.log("Submitted Data:", userData);
-      console.log("User ID:", userId);
-      console.log("Access token:", accessToken);
+      // console.log("Submitted Data:", userData);
+      // console.log("User ID:", userId);
+      // console.log("Access token:", accessToken);
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/contact/${userId}`;
 
