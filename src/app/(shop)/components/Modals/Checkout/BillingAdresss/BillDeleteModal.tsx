@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import styles from "./billdeletemodal.module.css";
 import Image from "next/image";
 import useSWR, { mutate } from "swr";
-
+import { ToastContainer, toast } from "react-toastify";
 interface BillDeleteModalProps {
   onClose: () => void;
   selectedAddressId: any;
@@ -53,10 +53,11 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
         undefined,
         true
       );
-
+      toast.success("Delete successful");
       onClose();
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Delete failed");
     }
   }, [selectedAddressId, userId, accessToken, onClose]);
 
@@ -87,6 +88,7 @@ const BillDeleteModal: React.FC<BillDeleteModalProps> = ({
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

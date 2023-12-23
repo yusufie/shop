@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import styles from "./shipdeletemodal.module.css";
 import Image from "next/image";
 import useSWR, { mutate } from "swr";
-
+import { ToastContainer, toast } from "react-toastify";
 interface BillDeleteModalProps {
   onClose: () => void;
   selectedAddressId: any;
@@ -55,12 +55,13 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
         undefined,
         true
       );
-
+      toast.success("Delete successful");
       setLoading(false); 
       onClose();
     } catch (error) {
       console.error("Error:", error);
       setLoading(false); 
+         toast.error("Delete failed");
     }
   }, [selectedAddressId, userId, accessToken, onClose]);
 
@@ -81,7 +82,6 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
             height={50}
           />
           <h1>Delete</h1>
-         
         </div>
         <div className={styles.butContainer}>
           <button onClick={onClose} className={styles.checkButton1}>
@@ -90,12 +90,13 @@ const ShipDeleteModal: React.FC<BillDeleteModalProps> = ({
           <button
             onClick={handleDelete}
             className={styles.checkButton2}
-            disabled={loading} 
+            disabled={loading}
           >
             {loading ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
