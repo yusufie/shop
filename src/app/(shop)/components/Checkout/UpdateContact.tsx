@@ -22,9 +22,10 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
   const userStore = useUserStore();
 
   // Destructuring user data for contact
-  const contact = userData.map((item: any) => item.contact[0]);
-  const defaultContact = contact.length > 0 ? contact[0] : {};
-  // console.log("Contact:", contact);
+  const contact = userData.contact[0] ;
+  console.log("contact",contact);
+  const defaultContact = contact.phone.number;
+  console.log("defaultContact:", defaultContact);
 
   // Get country codes
   const countryList: any = countryCodes.customList(
@@ -138,7 +139,7 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
           <input
             {...register("contact")}
             id="contact"
-            defaultValue={defaultContact?.phone?.number || ""}
+            defaultValue={defaultContact || ""}
             className={styles.contactinput}
           />
         </>
