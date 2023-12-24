@@ -50,59 +50,62 @@ const Checkout: React.FC = () => {
     // console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
   // *!!!-------------------------------------GET USER---------------------------------------!!!!*
+  const userString = localStorage.getItem("user");
+  let userId: string | undefined;
+  if (userString) {
+    const userData: User = JSON.parse(userString);
+    userId = userData._id;
+  }
+  if (!userId) {
+    throw new Error("User ID bulunamadı");
+  }
   const {
     data: datas,
     error,
     mutate,
-  } = useSWR(process.env.NEXT_PUBLIC_API_URL + `/api/v1/users`, async (url) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      throw new Error("Access token not found");
-    }
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  } = useSWR(
+    process.env.NEXT_PUBLIC_API_URL + `/api/v1/users/${userId}  `,
+    async (url) => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        throw new Error("Access token not found");
+      }
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.status}`);
+      }
+      return response.json();
     }
-    return response.json();
-  });
+  );
 
   // Check if the user is logged in
   if (!userStore.isLoggedIn) {
     // Display AuthModal if the user is not logged in
-    return <AuthModal onClose={() => router.push("/checkout")} />;
+    return <AuthModal onClose={() => router.push("/")} />;
   }
 
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
   mutate(datas);
-  const userString = localStorage.getItem("user");
-  let userId: string | undefined;
-
-  if (userString) {
-    const userData: User = JSON.parse(userString);
-
-    userId = userData._id;
-  }
-
-  if (!userId) {
-    throw new Error("User ID bulunamadı");
-  }
 
   // Use filter with the correct type for item
-  const userMatches = datas.data.filter((item: User) => item._id === userId);
+  const userMatches = datas;
 
-  // console.log("userMatches", userMatches);
+  console.log("userMatches", userMatches);
 
-  const addressIdsTo = userMatches.flatMap(
-    (userMatch: any) =>
-      userMatch?.addresses?.map((address: any) => address) || []
-  );
+  const addressIdsTo =
+    userMatches.addresses?.map((address: any) => address) || [];
+
   // console.log(addressIdsTo[0].alias);
+
+  // slice  the userMaches addresses array to get the first item
+  const firstAddress = userMatches.addresses.slice(0, 1);
+  console.log("firstadress", firstAddress);
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -122,16 +125,16 @@ const Checkout: React.FC = () => {
 
       coupon: null,
       discount: 0,
-      contact: userMatches.flatMap((userMatch: any) =>
-        userMatch?.contact?.length > 0
-          ? userMatch.contact.map((contactItem: any, contactIndex: any) => ({
+      contact:
+        userMatches?.contact?.length > 0
+          ? userMatches.contact.map((contactItem: any, contactIndex: any) => ({
               phone: {
                 countryCode: contactItem.phone.countryCode,
                 number: contactItem.phone.number,
               },
             }))
-          : []
-      ),
+          : [],
+
       billingAddress: {
         alias: addressIdsTo[0].alias,
         details: addressIdsTo[0].details,
@@ -246,62 +249,55 @@ const Checkout: React.FC = () => {
               </div>
             </div>
             <div className={styles.map}>
-              {userMatches &&
-                userMatches.map((userMatch: any) => (
-                  <>
-                    {userMatch?.addresses?.length > 0 &&
-                      userMatch.addresses.map((contactItem: any, _id: any) => (
-                        <div
-                          key={contactItem._id}
-                          className={styles.billingInput}
-                        >
-                          <div className={styles.inputTop}>
-                            <h4>Billing</h4>
-                            <div className={styles.hoverButtons}>
-                              <button
-                                onClick={() =>
-                                  handleBillUpdateClick(_id, contactItem)
-                                }
-                                className={styles.hoverPen}
-                              >
-                                <Image
-                                  src="/icons/pen.svg"
-                                  alt="pen"
-                                  width={16}
-                                  height={16}
-                                />
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleBillDeleteClick(_id, contactItem)
-                                }
-                                className={styles.hoverCross}
-                              >
-                                <Image
-                                  src="/icons/cross.svg"
-                                  alt="cross"
-                                  width={16}
-                                  height={16}
-                                />
-                              </button>
-                            </div>
-                          </div>
-                          <div className={styles.inputBottom}>
-                            <div key={_id}>
-                              <strong>Title:</strong> {contactItem.alias} <br />
-                              <strong>Street Address:</strong>{" "}
-                              {contactItem.details} <br />
-                              <strong>City:</strong> {contactItem.city} <br />
-                              <strong>Country:</strong> {contactItem.country}{" "}
-                              <br />
-                              <strong>Postal Code:</strong>{" "}
-                              {contactItem.postalCode} <br />
-                            </div>
-                          </div>
+              <>
+                {userMatches?.addresses?.length > 0 &&
+                  firstAddress.map((contactItem: any, _id: any) => (
+                    <div key={contactItem._id} className={styles.billingInput}>
+                      <div className={styles.inputTop}>
+                        <h4>Billing</h4>
+                        <div className={styles.hoverButtons}>
+                          <button
+                            onClick={() =>
+                              handleBillUpdateClick(_id, contactItem)
+                            }
+                            className={styles.hoverPen}
+                          >
+                            <Image
+                              src="/icons/pen.svg"
+                              alt="pen"
+                              width={16}
+                              height={16}
+                            />
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleBillDeleteClick(_id, contactItem)
+                            }
+                            className={styles.hoverCross}
+                          >
+                            <Image
+                              src="/icons/cross.svg"
+                              alt="cross"
+                              width={16}
+                              height={16}
+                            />
+                          </button>
                         </div>
-                      ))}
-                  </>
-                ))}
+                      </div>
+                      <div className={styles.inputBottom}>
+                        <div key={_id}>
+                          <strong>Title:</strong> {contactItem.alias} <br />
+                          <strong>Street Address:</strong> {contactItem.details}{" "}
+                          <br />
+                          <strong>City:</strong> {contactItem.city} <br />
+                          <strong>Country:</strong> {contactItem.country} <br />
+                          <strong>Postal Code:</strong> {contactItem.postalCode}{" "}
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </>
             </div>
           </div>
           <div className={styles.shipping}>
@@ -312,65 +308,56 @@ const Checkout: React.FC = () => {
               </div>
             </div>
             <div className={styles.map}>
-              {userMatches &&
-                userMatches.map((userMatch: any, _id: any) => (
-                  <>
-                    {userMatch?.addresses?.length > 0 &&
-                      userMatch.addresses.map(
-                        (contactItem: any, contactIndex: any) => (
-                          <div
-                            className={styles.shippingInput}
-                            key={contactItem._id}
+              <>
+                {userMatches?.addresses?.length > 0 &&
+                  firstAddress.map((contactItem: any, _id: any) => (
+                    <div className={styles.shippingInput} key={contactItem._id}>
+                      <div className={styles.inputTop}>
+                        <h4>Shipping</h4>
+                        <div className={styles.hoverButtons}>
+                          <button
+                            onClick={() =>
+                              handleShipUpdateClick(_id, contactItem)
+                            }
+                            className={styles.hoverPen}
                           >
-                            <div className={styles.inputTop}>
-                              <h4>Shipping</h4>
-                              <div className={styles.hoverButtons}>
-                                <button
-                                  onClick={() =>
-                                    handleShipUpdateClick(_id, contactItem)
-                                  }
-                                  className={styles.hoverPen}
-                                >
-                                  <Image
-                                    src="/icons/pen.svg"
-                                    alt="pen"
-                                    width={16}
-                                    height={16}
-                                  />
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleShipDeleteClick(_id, contactItem)
-                                  }
-                                  className={styles.hoverCross}
-                                >
-                                  <Image
-                                    src="/icons/cross.svg"
-                                    alt="cross"
-                                    width={16}
-                                    height={16}
-                                  />
-                                </button>
-                              </div>
-                            </div>
-                            <div className={styles.inputBottom}>
-                              <div key={_id}>
-                                <strong>Title:</strong> {contactItem.alias}{" "}
-                                <br />
-                                <strong>Street Address:</strong>{" "}
-                                {contactItem.details} <br />
-                                <strong>City:</strong> {contactItem.city} <br />
-                                <strong>Country:</strong> {contactItem.country}{" "}
-                                <br />
-                                <strong>Postal Code:</strong>{" "}
-                                {contactItem.postalCode} <br />
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      )}
-                  </>
-                ))}
+                            <Image
+                              src="/icons/pen.svg"
+                              alt="pen"
+                              width={16}
+                              height={16}
+                            />
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleShipDeleteClick(_id, contactItem)
+                            }
+                            className={styles.hoverCross}
+                          >
+                            <Image
+                              src="/icons/cross.svg"
+                              alt="cross"
+                              width={16}
+                              height={16}
+                            />
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.inputBottom}>
+                        <div key={_id}>
+                          <strong>Title:</strong> {contactItem.alias}
+                          <br />
+                          <strong>Street Address:</strong> {contactItem.details}{" "}
+                          <br />
+                          <strong>City:</strong> {contactItem.city} <br />
+                          <strong>Country:</strong> {contactItem.country} <br />
+                          <strong>Postal Code:</strong> {contactItem.postalCode}{" "}
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </>
             </div>
           </div>
 
