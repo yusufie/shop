@@ -453,7 +453,7 @@
   color: rgb(22, 22, 22);
 }
 
-.basketItem {
+.basketItems {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -463,7 +463,7 @@
   border-bottom: 1px solid rgb(229, 231, 235);
 }
 
-.basketItemLeft {
+.basketItemLefts {
   display: flex;
   flex-direction: row;
   justify-content: center;

@@ -459,9 +459,9 @@ const Checkout: React.FC = () => {
                 <span>No products found</span>
               </div>
             ) : (
-              product.map((item) => (
-                <div className={styles.basketItem} key={item._id}>
-                  <div className={styles.basketItemLeft}>
+              product.map((item,_id) => (
+                <div className={styles.basketItems} key={item._id}>
+                  <div className={styles.basketItemLefts}>
                     <span className={styles.basketItemQuantityValue}>
                       {addedItemCounts[item._id]} x 
                     </span>
