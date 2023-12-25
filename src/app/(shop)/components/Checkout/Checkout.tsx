@@ -50,6 +50,10 @@ const Checkout: React.FC = () => {
     // console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
   // *!!!-------------------------------------GET USER---------------------------------------!!!!*
+  if (!userStore.isLoggedIn) {
+    // Display AuthModal if the user is not logged in
+    return <AuthModal onClose={() => router.push("/")} />;
+  }
   const userString = localStorage.getItem("user");
   let userId: string | undefined;
   if (userString) {
@@ -59,6 +63,7 @@ const Checkout: React.FC = () => {
   if (!userId) {
     throw new Error("User ID bulunamadı");
   }
+
   const {
     data: datas,
     error,
@@ -84,10 +89,6 @@ const Checkout: React.FC = () => {
   );
 
   // Check if the user is logged in
-  if (!userStore.isLoggedIn) {
-    // Display AuthModal if the user is not logged in
-    return <AuthModal onClose={() => router.push("/")} />;
-  }
 
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
@@ -101,13 +102,14 @@ const Checkout: React.FC = () => {
   const addressIdsTo =
     userMatches.addresses?.map((address: any) => address) || [];
 
-  // console.log(addressIdsTo[0].alias);
+  console.log(addressIdsTo[0].alias);
 
   // slice  the userMaches addresses array to get the first item
+
   const firstAddress = userMatches.addresses.slice(0, 1);
   console.log("firstadress", firstAddress);
 
-  // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
+  // *!!!------------------------------POST FUNCTİON------------------!!!!*
 
   const handleCheckout = async () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/v1/orders";
@@ -150,7 +152,6 @@ const Checkout: React.FC = () => {
         postalCode: addressIdsTo[0].postalCode,
         country: addressIdsTo[0].country,
       },
-
       deliverySchedule: deliverySchedule,
       orderNote: noteData.orderNote,
     };
@@ -228,13 +229,8 @@ const Checkout: React.FC = () => {
     setIsBillDeleteModalOpen(false);
   };
 
-  const totalPrice = product
-    .reduce(
-      (total, product) =>
-        total + product.price * (addedItemCounts[product._id] || 0),
-      0
-    )
-    .toFixed(2);
+  const totalPrice = product.reduce(
+  (total, product) => total + product.price * (addedItemCounts[product._id] || 0), 0).toFixed(2);
 
   return (
     <>
@@ -449,33 +445,62 @@ const Checkout: React.FC = () => {
           </div>
         </div>
 
-        <div className={styles.checkoutCalculate}>
-          <div className={styles.orderHeader}>
-            <h4>Your Order</h4>
-          </div>
-
-          <div className={styles.orderItems}>
-            {product.map((item: any) => (
-              <div key={item._id} className={styles.orderItem}>
-                <span>
-                  <span style={{ fontWeight: "bold" }}>
-                    {addedItemCounts[item._id]}
-                  </span>{" "}
-                  x {item.description} | 1lb
-                </span>
-                <span style={{ fontWeight: "bold" }}>
-                  NOK{item.price.toFixed(2)}
-                </span>
+        <div>
+          <div className={styles.modalBody}>
+            <h1 className={styles.modalTitle}>Your Order</h1>
+            {product.length === 0 ? (
+              <div className={styles.emptyBag}>
+                <Image
+                  src="/images/carrier.png"
+                  alt="carrier"
+                  width={140}
+                  height={176}
+                />
+                <span>No products found</span>
               </div>
-            ))}
-            <span style={{ fontWeight: "bold" }}>
-              SubTotal: {totalPrice} NOK
-            </span>
+            ) : (
+              product.map((item) => (
+                <div className={styles.basketItem} key={item._id}>
+                  <div className={styles.basketItemLeft}>
+                    <span className={styles.basketItemQuantityValue}>
+                      {addedItemCounts[item._id]} x 
+                    </span>
+
+                    <div className={styles.basketItemImage}>
+                      <Image
+                        src={item.images[0]}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                      />
+                    </div>
+                    <div className={styles.basketItemDetails}>
+                      <p className={styles.basketItemName}>{item.title}</p>
+                      <span className={styles.basketItemPrice}>
+                        ${item.price}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
-          <button onClick={handleCheckout} className={styles.availableButton}>
-            Place Order
-          </button>
+          <div className={styles.modalFooter}>
+            <strong> SubTotal</strong>
+            <p>${totalPrice}</p>
+          </div>
+          <div className={styles.modalFooter}>
+            <strong> Total</strong>
+            <p>${totalPrice}</p>
+          </div>
+
+          <div>
+            <button onClick={handleCheckout} className={styles.checkoutButton}>
+              <span>Place Order</span>
+              <span className={styles.checkoutPrice}>${totalPrice}</span>
+            </button>
+          </div>
         </div>
 
         {isBillUpdateModalOpen && (
