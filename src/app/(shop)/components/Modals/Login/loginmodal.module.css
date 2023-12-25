@@ -226,3 +226,15 @@
   font-size: small;
   color: tomato;
 }
+.eyePassword{
+  position: absolute;
+  right: 3rem;
+  top: 18rem;
+  cursor: pointer;
+
+}
+.passwordHidden[type=password]::-ms-reveal,
+.passwordHidden[type=password]::-ms-clear
+{
+    display: none;
+}
