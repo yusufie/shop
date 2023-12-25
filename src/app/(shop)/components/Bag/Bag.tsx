@@ -31,7 +31,7 @@ const Bag: React.FC = () => {
           <Image src="/images/bag.png" alt="Bag" width={14} height={16} />
           <span>{items.length} Item</span>
         </div>
-        <span className={styles.price}>${totalPrice}</span>
+        <span className={styles.price}>{totalPrice}kr</span>
       </button>
       
       {isBasketOpen && <BasketModal onClose={handleBasketClose} />}

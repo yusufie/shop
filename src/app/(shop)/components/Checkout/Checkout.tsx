@@ -94,8 +94,6 @@ const Checkout: React.FC = () => {
   // Use filter with the correct type for item
   const userMatches = datas;
 
-  console.log("userMatches", userMatches);
-
   const addressIdsTo =
     userMatches.addresses?.map((address: any) => address) || [];
 
@@ -103,7 +101,6 @@ const Checkout: React.FC = () => {
 
   // slice  the userMaches addresses array to get the first item
   const firstAddress = userMatches.addresses.slice(0, 1);
-  console.log("firstadress", firstAddress);
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -232,6 +229,11 @@ const Checkout: React.FC = () => {
         total + product.price * (addedItemCounts[product._id] || 0),
       0
     )
+    .toFixed(2);
+  // get All products  discount and reduce discounts to get total discount
+  const totalDiscount = product
+    .map((dis: any) => dis.discount * (addedItemCounts[dis._id] || 0))
+    .reduce((total, discount) => total + discount, 0)
     .toFixed(2);
 
   return (
@@ -446,34 +448,68 @@ const Checkout: React.FC = () => {
             </div>
           </div>
         </div>
-
-        <div className={styles.checkoutCalculate}>
-          <div className={styles.orderHeader}>
-            <h4>Your Order</h4>
-          </div>
-
-          <div className={styles.orderItems}>
-            {product.map((item: any) => (
-              <div key={item._id} className={styles.orderItem}>
-                <span>
-                  <span style={{ fontWeight: "bold" }}>
-                    {addedItemCounts[item._id]}
-                  </span>{" "}
-                  x {item.description} | 1lb
-                </span>
-                <span style={{ fontWeight: "bold" }}>
-                  NOK{item.price.toFixed(2)}
-                </span>
+        <div>
+          <div className={styles.modalBody}>
+            <h1 className={styles.modalTitle}>Your Order</h1>
+            {product.length === 0 ? (
+              <div className={styles.emptyBag}>
+                <Image
+                  src="/images/carrier.png"
+                  alt="carrier"
+                  width={140}
+                  height={176}
+                />
+                <span>No products found</span>
               </div>
-            ))}
-            <span style={{ fontWeight: "bold" }}>
-              SubTotal: {totalPrice} NOK
-            </span>
+            ) : (
+              product.map((item: any) => (
+                <div className={styles.basketItems} key={item._id}>
+                  <div className={styles.basketItemLefts}>
+                    <span className={styles.basketItemQuantityValue}>
+                      {addedItemCounts[item._id]} x
+                    </span>
+
+                    <div className={styles.basketItemImage}>
+                      <Image
+                        src={item.images[0]}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                      />
+                    </div>
+                    <div className={styles.basketItemDetails}>
+                      <p className={styles.basketItemName}>{item.title}</p>
+                      <span className={styles.basketItemPrice}>
+                        {item.price} kr
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
-          <button onClick={handleCheckout} className={styles.availableButton}>
-            Place Order
-          </button>
+          <div className={styles.modalFooter}>
+            <strong> SubTotal</strong>
+            <p>{totalPrice} kr </p>
+          </div>
+
+          <div className={styles.modalFooter}>
+            <strong> Discount</strong>
+            <p>{totalDiscount} kr </p>
+          </div>
+
+          <div className={styles.modalFooter}>
+            <strong> Total</strong>
+            <p>{totalPrice} kr </p>
+          </div>
+
+          <div>
+            <button onClick={handleCheckout} className={styles.checkoutButton}>
+              <span>Place Order</span>
+              <span className={styles.checkoutPrice}>{totalPrice} kr </span>
+            </button>
+          </div>
         </div>
 
         {isBillUpdateModalOpen && (

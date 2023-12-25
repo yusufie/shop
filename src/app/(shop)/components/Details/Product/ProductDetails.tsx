@@ -118,7 +118,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
                     </div>
 
                     <div className={styles.infoPrice}>
-                        <span>${responseData.price}</span>
+                        <span>{responseData.price} kr </span>
                     </div>
 
                     <div className={styles.infoCart}>

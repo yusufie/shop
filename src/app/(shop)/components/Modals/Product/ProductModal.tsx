@@ -105,7 +105,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
 
             <div className={styles.infoPrice}>
-              <span>${selectedProduct.price}</span>
+              <span>{selectedProduct.price}kr</span>
             </div>
 
             <div className={styles.infoCart}>
