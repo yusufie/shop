@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from '@/utils/formSchema'
 import Image from 'next/image';
 import styles from './registermodal.module.css'
+import eye from "../../../../../../public/icons/eye.svg";
+import closedeye from "../../../../../../public/icons/eye-closed.svg";
 
 interface RegisterModalProps {
   onClose: () => void;
@@ -18,9 +20,25 @@ type FormValues = {
   passwordConfirmation: string;
 };
 
+type EyeStates = {
+  password: boolean;
+  confirmPassword: boolean;
+};
+
 const RegisterModal = ({ onClose }: RegisterModalProps) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState<EyeStates>({
+    password: true,
+    confirmPassword: true,
+  });
+
+  const togglePasswordVisibility = (field: keyof EyeStates) => {
+    setPasswordVisibility({
+      ...passwordVisibility,
+      [field]: !passwordVisibility[field],
+    });
+  };
 
   const {
     register,
@@ -114,13 +132,15 @@ const RegisterModal = ({ onClose }: RegisterModalProps) => {
 
           <div className={styles.password}>
             <label htmlFor="password">Password:</label>
-            <input {...register("password")} id="password" placeholder="Enter your password..."/>
+            <input {...register("password")} id="password" placeholder="Enter your password..." type={passwordVisibility.password ? "password" : "text"} />
+            <Image onClick={() =>togglePasswordVisibility('password')} className={styles.eyeIcons} src={passwordVisibility.password ? closedeye : eye} alt="eye"/>
             {errors.password && <span className={styles.error}>{errors.password.message}</span>}
           </div>
 
           <div className={styles.password}>
             <label htmlFor="passwordConfirmation">Confirm Password:</label>
-            <input {...register("passwordConfirmation")} id="passwordConfirmation" placeholder="Confirm your password..."/>
+            <input {...register("passwordConfirmation")} id="passwordConfirmation" placeholder="Confirm your password..." type={passwordVisibility.confirmPassword ? "password" : "text"} />
+            <Image onClick={() => togglePasswordVisibility('confirmPassword')} className={styles.eyeIcons} src={passwordVisibility.confirmPassword ? closedeye : eye} alt="eye"/>
             {errors.passwordConfirmation && <span className={styles.error}>{errors.passwordConfirmation.message}</span>}
           </div>
 
