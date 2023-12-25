@@ -446,34 +446,62 @@ const Checkout: React.FC = () => {
             </div>
           </div>
         </div>
-
-        <div className={styles.checkoutCalculate}>
-          <div className={styles.orderHeader}>
-            <h4>Your Order</h4>
-          </div>
-
-          <div className={styles.orderItems}>
-            {product.map((item: any) => (
-              <div key={item._id} className={styles.orderItem}>
-                <span>
-                  <span style={{ fontWeight: "bold" }}>
-                    {addedItemCounts[item._id]}
-                  </span>{" "}
-                  x {item.description} | 1lb
-                </span>
-                <span style={{ fontWeight: "bold" }}>
-                  NOK{item.price.toFixed(2)}
-                </span>
+        <div>
+          <div className={styles.modalBody}>
+            <h1 className={styles.modalTitle}>Your Order</h1>
+            {product.length === 0 ? (
+              <div className={styles.emptyBag}>
+                <Image
+                  src="/images/carrier.png"
+                  alt="carrier"
+                  width={140}
+                  height={176}
+                />
+                <span>No products found</span>
               </div>
-            ))}
-            <span style={{ fontWeight: "bold" }}>
-              SubTotal: {totalPrice} NOK
-            </span>
+            ) : (
+              product.map((item:any) => (
+                <div className={styles.basketItems} key={item._id}>
+                  <div className={styles.basketItemLefts}>
+                    <span className={styles.basketItemQuantityValue}>
+                      {addedItemCounts[item._id]} x
+                    </span>
+
+                    <div className={styles.basketItemImage}>
+                      <Image
+                        src={item.images[0]}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                      />
+                    </div>
+                    <div className={styles.basketItemDetails}>
+                      <p className={styles.basketItemName}>{item.title}</p>
+                      <span className={styles.basketItemPrice}>
+                        ${item.price}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
-          <button onClick={handleCheckout} className={styles.availableButton}>
-            Place Order
-          </button>
+          <div className={styles.modalFooter}>
+            <strong> SubTotal</strong>
+            <p>${totalPrice}</p>
+          </div>
+          <div className={styles.modalFooter}>
+            <strong> Total</strong>
+            <p>${totalPrice}</p>
+          </div>
+
+          <div>
+            <button onClick={handleCheckout} className={styles.checkoutButton}>
+              <span>Place Order</span>
+              <span className={styles.checkoutPrice}>${totalPrice}</span>
+            </button>
+          </div>
         </div>
 
         {isBillUpdateModalOpen && (
