@@ -35,8 +35,20 @@
   display: flex;
   flex-direction: column;
   text-align: left;
+  position: relative;
 }
 
+.password input[type=password]::-ms-reveal,
+.password input[type=password]::-ms-clear
+{
+    display: none;
+}
+
+.password .eyeIcons{
+position: absolute;
+right: 1rem ;
+top: 3rem;
+}
 .registerModalContent label {
   font-size: small;
   font-weight: bold;
