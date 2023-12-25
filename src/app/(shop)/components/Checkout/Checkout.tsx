@@ -94,8 +94,6 @@ const Checkout: React.FC = () => {
   // Use filter with the correct type for item
   const userMatches = datas;
 
-  console.log("userMatches", userMatches);
-
   const addressIdsTo =
     userMatches.addresses?.map((address: any) => address) || [];
 
@@ -103,7 +101,6 @@ const Checkout: React.FC = () => {
 
   // slice  the userMaches addresses array to get the first item
   const firstAddress = userMatches.addresses.slice(0, 1);
-  console.log("firstadress", firstAddress);
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -232,6 +229,11 @@ const Checkout: React.FC = () => {
         total + product.price * (addedItemCounts[product._id] || 0),
       0
     )
+    .toFixed(2);
+  // get All products  discount and reduce discounts to get total discount
+  const totalDiscount = product
+    .map((dis: any) => dis.discount * (addedItemCounts[dis._id] || 0))
+    .reduce((total, discount) => total + discount, 0)
     .toFixed(2);
 
   return (
@@ -460,7 +462,7 @@ const Checkout: React.FC = () => {
                 <span>No products found</span>
               </div>
             ) : (
-              product.map((item:any) => (
+              product.map((item: any) => (
                 <div className={styles.basketItems} key={item._id}>
                   <div className={styles.basketItemLefts}>
                     <span className={styles.basketItemQuantityValue}>
@@ -478,7 +480,7 @@ const Checkout: React.FC = () => {
                     <div className={styles.basketItemDetails}>
                       <p className={styles.basketItemName}>{item.title}</p>
                       <span className={styles.basketItemPrice}>
-                        ${item.price}
+                        {item.price} kr
                       </span>
                     </div>
                   </div>
@@ -489,17 +491,23 @@ const Checkout: React.FC = () => {
 
           <div className={styles.modalFooter}>
             <strong> SubTotal</strong>
-            <p>${totalPrice}</p>
+            <p>{totalPrice} kr </p>
           </div>
+
+          <div className={styles.modalFooter}>
+            <strong> Discount</strong>
+            <p>{totalDiscount} kr </p>
+          </div>
+
           <div className={styles.modalFooter}>
             <strong> Total</strong>
-            <p>${totalPrice}</p>
+            <p>{totalPrice} kr </p>
           </div>
 
           <div>
             <button onClick={handleCheckout} className={styles.checkoutButton}>
               <span>Place Order</span>
-              <span className={styles.checkoutPrice}>${totalPrice}</span>
+              <span className={styles.checkoutPrice}>{totalPrice} kr </span>
             </button>
           </div>
         </div>

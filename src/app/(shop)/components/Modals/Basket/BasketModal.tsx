@@ -74,7 +74,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
 
                   <div className={styles.basketItemDetails}>
                     <p className={styles.basketItemName}>{item.name}</p>
-                    <span className={styles.basketItemPrice}>${item.price}</span>
+                    <span className={styles.basketItemPrice}>{item.price} kr </span>
                   </div>
                 </div>
                 
@@ -82,7 +82,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
 
                   <div className={styles.basketItemTotal}>
                     <span className={styles.basketItemTotalPrice}>
-                      ${item.price * addedItemCounts[item._id]}
+                      {item.price * addedItemCounts[item._id]} kr
                     </span>
                   </div>
                   
@@ -99,7 +99,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
             <Link href="/checkout">
             <button className={styles.checkoutButton}>
               <span>Checkout</span>
-              <span className={styles.checkoutPrice}>${totalPrice}</span>
+              <span className={styles.checkoutPrice}>{totalPrice} kr </span>
             </button>
           </Link>
         </div>

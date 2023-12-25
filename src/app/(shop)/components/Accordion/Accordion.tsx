@@ -52,7 +52,7 @@ const Accordion: React.FC<AccordionProps> = ({ tree, handleCategoryClick }) => {
             handleAccordionClick(category?._id);
             handleCategoryClick(category?._id);
           }}
-        >
+        > 
           <div className={styles.accordionTitle}>
             {/* <Image src={category.coverImage} alt={category.title} width={20} height={20} /> */}
             <span

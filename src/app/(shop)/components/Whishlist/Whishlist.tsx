@@ -68,7 +68,7 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
           <div className={styles.itemsRight}>
 
             <span className={styles.itemsPrice}>
-              ${getLikedProductDetails(productId)?.price}
+              {getLikedProductDetails(productId)?.price} kr
             </span>
 
             <div className={styles.itemsButtons}>
