@@ -56,9 +56,7 @@ const Checkout: React.FC = () => {
     const userData: User = JSON.parse(userString);
     userId = userData._id;
   }
-  if (!userId) {
-    throw new Error("User ID bulunamadı");
-  }
+
   const {
     data: datas,
     error,
