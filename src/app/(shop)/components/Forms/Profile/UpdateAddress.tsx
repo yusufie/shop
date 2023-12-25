@@ -129,48 +129,49 @@ const UpdateAddress: React.FC<UpdateAddressProps> = ({ userData }) => {
                 onSubmit={(event) => onUpdate(event, address._id)}
                 className={styles.addressForm}
               >
+                <label htmlFor="alias">Title</label>
                 <input
+                  className={styles.input}
+                  placeholder="Home, Office, etc."
                   value={address.alias}
-                  onChange={(e) =>
-                    handleFieldChange(address._id, "alias", e.target.value)
-                  }
-                  className={styles.input}
+                  onChange={(e) => handleFieldChange(address._id, "alias", e.target.value) }
                 />
 
+                <label htmlFor="details">Details</label>
                 <input
+                  className={styles.input}
+                  placeholder="Street, building, floor, etc."
                   value={address.details}
-                  onChange={(e) =>
-                    handleFieldChange(address._id, "details", e.target.value)
-                  }
-                  className={styles.input}
+                  onChange={(e) => handleFieldChange(address._id, "details", e.target.value) }
                 />
 
+                <label htmlFor="city">City</label>
                 <input
-                  value={address.country}
-                  onChange={(e) =>
-                    handleFieldChange(address._id, "country", e.target.value)
-                  }
                   className={styles.input}
-                />
-
-                <input
+                  placeholder="City"
                   value={address.city}
-                  onChange={(e) =>
-                    handleFieldChange(address._id, "city", e.target.value)
-                  }
-                  className={styles.input}
+                  onChange={(e) => handleFieldChange(address._id, "city", e.target.value) }
                 />
 
+                <label htmlFor="postalCode">Postal Code</label>
                 <input
-                  value={address.postalCode}
-                  onChange={(e) =>
-                    handleFieldChange(address._id, "postalCode", e.target.value)
-                  }
                   className={styles.input}
+                  placeholder="Postal Code"
+                  value={address.postalCode}
+                  onChange={(e) => handleFieldChange(address._id, "postalCode", e.target.value) }
+                />
+
+                <label htmlFor="country">Country</label>
+                <input
+                  className={styles.input}
+                  placeholder="Country"
+                  value={address.country}
+                  onChange={(e) => handleFieldChange(address._id, "country", e.target.value) }
                 />
 
                 <button type="submit" className={styles.updateButton}>Update Address</button>
               </form>
+              
               <button onClick={() => onDelete(address._id)} 
                 className={styles.deleteButton}>
                 X

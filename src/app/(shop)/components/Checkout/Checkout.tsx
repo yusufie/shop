@@ -60,9 +60,12 @@ const Checkout: React.FC = () => {
     const userData: User = JSON.parse(userString);
     userId = userData._id;
   }
+
   if (!userId) {
     throw new Error("User ID bulunamadı");
   }
+
+
 
   const {
     data: datas,
@@ -89,6 +92,13 @@ const Checkout: React.FC = () => {
   );
 
   // Check if the user is logged in
+
+
+  if (!userStore.isLoggedIn) {
+    // Display AuthModal if the user is not logged in
+    return <AuthModal onClose={() => router.push("/checkout")} />;
+  }
+
 
   if (error) return <div>Loading failed</div>;
   if (!datas) return <div>Loading...</div>;
