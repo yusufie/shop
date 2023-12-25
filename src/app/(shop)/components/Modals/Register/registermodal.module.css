@@ -48,6 +48,7 @@
 position: absolute;
 right: 1rem ;
 top: 3rem;
+cursor: pointer;
 }
 .registerModalContent label {
   font-size: small;
