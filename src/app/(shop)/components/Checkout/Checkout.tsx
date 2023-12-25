@@ -84,7 +84,7 @@ const Checkout: React.FC = () => {
   // Check if the user is logged in
   if (!userStore.isLoggedIn) {
     // Display AuthModal if the user is not logged in
-    return <AuthModal onClose={() => router.push("/")} />;
+    return <AuthModal onClose={() => router.push("/checkout")} />;
   }
 
   if (error) return <div>Loading failed</div>;
