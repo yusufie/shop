@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/utils/formSchema'
 import { useUserStore } from '@/stores/userStore';
-import Image from 'next/image';
 import Link from "next/link";
 import styles from './loginmodal.module.css'
+import Image from "next/image";
+import eye from "../../../../../../public/icons/eye.svg";
+import closedeye from "../../../../../../public/icons/eye-closed.svg";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -23,6 +25,7 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
 
   const userStore = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordHidden, setPasswordHidden] = useState(true);
 
   const {
     register,
@@ -118,8 +121,10 @@ const LoginModal = ({onClose, openRegisterModal, openForgotPasswordModal}: Login
             </span>
           </div>
 
-          <input {...register("password")} id="password" placeholder="Enter your password..."/>
-          {errors.password && <span className={styles.error}>{errors.password.message}</span>}
+
+          <input className={styles.passwordHidden} {...register("password")} id="password" placeholder="Enter your password..." type={passwordHidden ? "password" : "text" } />
+          <Image onClick={() => setPasswordHidden(!passwordHidden)} className={styles.eyePassword} src={passwordHidden ? closedeye : eye} alt="eye"  />
+          {errors.password && <span className={styles.error}>{errors.password.message}</span>}          
         </div>
 
           <button type="submit" value="submit" disabled={isSubmitting}
