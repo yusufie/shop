@@ -18,60 +18,47 @@ const Navmenu: React.FC<NavmenuProps> = ({ handleSelection, selectedItem }) => {
         <section className={styles.navmenu}>
     
           <Link href="/grocery">
-            <button onClick={() => handleButtonClick('Grocery')}>
+            <button onClick={() => handleButtonClick('Oslo')}>
               <Image src="/icons/apple.svg" alt="Grocery" width={16} height={20} />
-              <span className={selectedItem === 'Grocery' ? styles.active : ''}>Grocery</span>
+              <span className={selectedItem === 'Oslo' ? styles.active : ''}>Oslo</span>
             </button>
           </Link>
     
           <Link href="/bakery">
-            <button onClick={() => handleButtonClick('Bakery')}>
+            <button onClick={() => handleButtonClick('Sandnes')}>
               <Image src="/icons/bakery.svg" alt="Bakery" width={16} height={20} />
-              <span className={selectedItem === 'Bakery' ? styles.active : ''}>Bakery</span>
+              <span className={selectedItem === 'Sandnes' ? styles.active : ''}>Sandnes</span>
             </button>
           </Link>
     
           <Link href="/makeup">
-            <button onClick={() => handleButtonClick('Makeup')}>
+            <button onClick={() => handleButtonClick('Vestfold')}>
               <Image src="/icons/makeup.svg" alt="Makeup" width={16} height={20} />
-              <span className={selectedItem === 'Makeup' ? styles.active : ''}>Makeup</span>
+              <span className={selectedItem === 'Vestfold' ? styles.active : ''}>Vestfold</span>
             </button>
           </Link>
     
           <Link href="/bags">
-            <button onClick={() => handleButtonClick('Bags')}>
+            <button onClick={() => handleButtonClick('Nordland')}>
               <Image src="/icons/suitcase.svg" alt="Bags" width={16} height={20} />
-              <span className={selectedItem === 'Bags' ? styles.active : ''}>Bags</span>
+              <span className={selectedItem === 'Nordland' ? styles.active : ''}>Nordland</span>
             </button>
           </Link>
     
           <Link href="/clothing">
-            <button onClick={() => handleButtonClick('Clothing')}>
+            <button onClick={() => handleButtonClick('Telemark')}>
               <Image src="/icons/cloth.svg" alt="Clothing" width={16} height={20} />
-              <span className={selectedItem === 'Clothing' ? styles.active : ''}>Clothing</span>
+              <span className={selectedItem === 'Telemark' ? styles.active : ''}>Telemark</span>
             </button>
           </Link>
     
           <Link href="/furniture">
-            <button onClick={() => handleButtonClick('Furniture')}>
+            <button onClick={() => handleButtonClick('Finmark')}>
               <Image src="/icons/furniture.svg" alt="Furniture" width={16} height={20} />
-              <span className={selectedItem === 'Furniture' ? styles.active : ''}>Furniture</span>
+              <span className={selectedItem === 'Finmark' ? styles.active : ''}>Finmark</span>
             </button>
           </Link>
-    
-          <Link href="/daily">
-            <button onClick={() => handleButtonClick('Daily')}>
-              <Image src="/icons/apple.svg" alt="Daily" width={16} height={20} />
-              <span className={selectedItem === 'Daily' ? styles.active : ''}>Daily</span>
-            </button>
-          </Link>
-    
-          <Link href="/books">
-            <button onClick={() => handleButtonClick('Books')}>
-              <Image src="/icons/book.svg" alt="Books" width={16} height={20} />
-              <span className={selectedItem === 'Books' ? styles.active : ''}>Books</span>
-            </button>
-          </Link>
+
         </section>
       )
     }

@@ -17,8 +17,8 @@ const OrderCard: React.FC<CardProps> = ({ order, handleOrderDetails, isSelected 
       onClick={() => handleOrderDetails(order)}
     >
       <div className={styles.cardHeader}>
-        <span className={styles.orderNumber}>{order?._id}</span>
         <span className={styles.orderStatus}>{order?.status}</span>
+        <span className={styles.orderNumber}>{order?._id}</span>
       </div>
 
       <div className={styles.cardBody}>

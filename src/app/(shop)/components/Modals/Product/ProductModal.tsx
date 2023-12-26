@@ -33,9 +33,11 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const removeItem = useBasketStore((state) => state.removeItem);
 
   const handleAddToBasket = (data: any) => {
+    if (selectedProduct.stock > 0) {
     // Check if the quantity in the basket is less than the available stock
     if (!addedItemCounts[selectedProductId] || addedItemCounts[selectedProductId] < selectedProduct.stock) {
       addItem(data);
+    }
     }
   };
 
@@ -109,7 +111,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
 
             <div className={styles.infoCart}>
-              {!addedItemCounts[selectedProductId] ? (
+            {selectedProduct.stock > 0 ? (
+              !addedItemCounts[selectedProductId] ? (
                 <button className={styles.beforeButton} onClick={() => handleAddToBasket(selectedProduct)}>
                   {addedItemCounts[selectedProductId] || 'Add To Shopping Cart'}
                 </button>
@@ -119,7 +122,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
                   <span>{addedItemCounts[selectedProductId]}</span>
                   <button onClick={() => handleAddToBasket(selectedProduct)}>+</button>
                 </div>
+                )
+              ) : (
+                <button className={styles.beforeButton} disabled>
+                  Out of Stock
+                </button>
               )}
+            
               <span className={styles.available}>{selectedProduct.stock} pieces available</span>
             </div>
 

@@ -1,6 +1,6 @@
 
 "use client";
-import React from "react"
+import React from 'react';
 import useBasketStore from '@/stores/basketStore';
 import Image from 'next/image';
 import animateFlyImage from '@/utils/animation';
@@ -24,7 +24,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
   };
 
   const handleAddToBasket = (data: any, e: any) => {
-    addItem(data);
+    if (data.stock > 0) {
+      // Check if the quantity in the basket is less than the available stock
+      if (!addedItemCounts[data._id] || addedItemCounts[data._id] < data.stock) {
+        addItem(data);
+      }
+    }
     setShowImage(true);
     setAddedItem(data);
 
@@ -56,7 +61,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
         <span className={styles.cardPrice}>{data.price} kr</span>
         <p>{data.title}</p>
 
-        {!addedItemCounts[data._id] ? (
+        {data.stock > 0 ? (
+        !addedItemCounts[data._id] ? (
           <button className={styles.beforeButton} onClick={(e) => handleAddToBasket(data, e)}>
             <span>{addedItemCounts[data._id] || 'Add'}</span>
             <span>+</span>
@@ -65,9 +71,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
           <div className={styles.afterButton}>
             <button onClick={() => handleDecrease(data)}>-</button>
             <span>{addedItemCounts[data._id]}</span>
-            <button onClick={() => addItem(data)}>+</button>
+            <button onClick={(e) => handleAddToBasket(data, null)}>+</button>
           </div>
+          )
+        ) : (
+          <button className={styles.beforeButton} disabled>
+            Out of stock
+          </button>
         )}
+
       </div>
     </div>
   );

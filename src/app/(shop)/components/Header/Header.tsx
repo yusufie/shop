@@ -54,14 +54,13 @@ const Header: React.FC = () => {
 
   function getSelectedItem(path: string) {
     // Get the selected item with first letter in uppercase
-    return path.substring(1).charAt(0).toUpperCase() + path.substring(2) || 'Grocery';
+    return path.substring(1).charAt(0).toUpperCase() + path.substring(2) || 'Oslo';
   }
 
   const handleAuthModal = () => {
     if (userStore.isLoggedIn) {
-      console.log('Navigate to profile page');
       // navigate to the profile page or handle accordingly
-
+      console.log('Navigate to profile page');
     } else {
       setLoginModal(!loginModal);
     }

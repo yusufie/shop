@@ -27,8 +27,11 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
   const removeItem = useBasketStore((state) => state.removeItem);
 
   const handleAddToBasket = (data: any) => {
+    if (data.stock > 0) {
+    // Check if the quantity in the basket is less than the available stock
     if (data && (!addedItemCounts[data._id] || addedItemCounts[data._id] < data.stock)) {
       addItem(data);
+    }
     }
   };
   
@@ -72,8 +75,8 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
             </span>
 
             <div className={styles.itemsButtons}>
-
-              {!addedItemCounts[productId] ? (
+              {getLikedProductDetails(productId)?.stock > 0 ? (
+              !addedItemCounts[productId] ? (
                 <button className={styles.addButton}
                   onClick={() => handleAddToBasket(getLikedProductDetails(productId))} >
                   {addedItemCounts[productId] || 'Add To Cart'}
@@ -84,7 +87,13 @@ const Whishlist: React.FC<WhishlistProps> = ({products}) => {
                   <span>{addedItemCounts[productId]}</span>
                   <button onClick={() => handleAddToBasket(getLikedProductDetails(productId))}>+</button>
                 </div>
-              )}      
+              )
+              ) : (
+                <button className={styles.addButton} disabled>
+                  Out of Stock
+                </button>
+              )
+            }
 
               <button className={styles.removeButton} onClick={() => handleRemove(productId)}>
                 Remove
