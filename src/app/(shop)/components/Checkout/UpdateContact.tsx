@@ -17,22 +17,36 @@ interface UpdateProps {
   userData: any;
 }
 
-const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
+interface CountryList {
+  [key: string]: string;
+}
+
+const Contact: React.FC<UpdateProps> = ({ userData }) => {
   // console.log("useData", userData);
   const userStore = useUserStore();
 
   // Destructuring user data for contact
-  const contact = userData.contact[0] ;
-  console.log("contact",contact);
+  const contact = userData.contact[0];
   const defaultContact = contact.phone.number;
+  
+  console.log("contact", contact);
   console.log("defaultContact:", defaultContact);
 
   // Get country codes
-  const countryList: any = countryCodes.customList(
+  const countryList: CountryList = countryCodes.customList(
     "countryCode" as any,
     "[{countryCode}] +{countryCallingCode}"
-  ); // Generating the country code list
-  // console.log("Country List:", countryList);
+  );
+
+  // Access the country code directly from userData if available
+  const defaultCountryCode = userData.contact[0]?.phone?.countryCode || "+672";
+
+  const getSelectedCountryCode = () => {
+    const selectedCode = Object.entries(countryList).find(([key, value]) =>
+      value.includes(defaultCountryCode)
+    );
+    return selectedCode ? selectedCode[0] : "";
+  };
 
   const {
     register,
@@ -47,13 +61,16 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
   const onSubmit = async (data: FormValues) => {
     try {
       // Extracting only the numeric part from the countryCode
-      const countryCodeNumber = data.countryCode.split(" ")[1];
+      const selectedCountryCode = data.countryCode;
+      const selectedCountryCallingCode = countryList[
+        selectedCountryCode
+      ].replace(`[${selectedCountryCode}] +`, "+");
 
       const userData = {
         contact: {
           type: "string", // Update type based on your schema
           phone: {
-            countryCode: countryCodeNumber, // Sending only the numeric part of the country code
+            countryCode: selectedCountryCallingCode, // Sending only the numeric part of the country code
             number: data.contact,
           },
         },
@@ -106,7 +123,7 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
           <span className={styles.title}>Contact Number</span>
         </div>
         <button type="submit" value="submit" className={styles.addButton}>
-          + Update
+          Update
         </button>
 
         {/* <button className={styles.addButton}> +Update</button> */}
@@ -118,16 +135,16 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
           <Controller
             name="countryCode"
             control={control}
-            defaultValue={defaultContact?.phone?.countryCode || ""}
+            defaultValue={getSelectedCountryCode()}
             render={({ field }) => (
               <select
                 id="countryCode"
                 {...field}
                 className={styles.countrySelect}
               >
-                {Object.keys(countryList).map((code) => (
-                  <option key={code} value={code.split(" ")[1]}>
-                    {countryList[code]}
+                {Object.entries(countryList).map(([code, label]) => (
+                  <option key={code} value={code}>
+                    {label}
                   </option>
                 ))}
               </select>
@@ -135,22 +152,17 @@ const UpdateContact: React.FC<UpdateProps> = ({ userData }) => {
           />
         </div>
 
-        <>
-          <input
-            {...register("contact")}
-            id="contact"
-            defaultValue={defaultContact || ""}
-            className={styles.contactinput}
-          />
-        </>
+        <input
+          {...register("contact")}
+          id="contact"
+          defaultValue={defaultContact || ""}
+          className={styles.contactinput}
+        />
       </div>
 
-      {/* <button type="submit" value="submit" className={styles.updateButton}> */}
-      {/* Update */}
-      {/* </button> */}
       <ToastContainer />
     </form>
   );
 };
 
-export default UpdateContact;
+export default Contact;
