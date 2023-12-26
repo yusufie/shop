@@ -18,6 +18,10 @@ interface UpdateProps {
   userData: any;
 }
 
+interface CountryList {
+  [key: string]: string;
+}
+
 const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
 
   const userStore = useUserStore();
@@ -25,14 +29,18 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
   // Destructuring user data for contact
   const { contact = [] } = userData || {};
   const defaultContact = contact.length > 0 ? contact[0] : {};
-  // console.log("Contact:", contact);
+
+  // console.log("Default Contact:", defaultContact);
+  // console.log("Country Code:", defaultContact?.phone?.countryCode);
 
   // Get country codes
-  const countryList: any = countryCodes.customList(
-    'countryCode' as any,
-    '[{countryCode}] +{countryCallingCode}'
-  ); // Generating the country code list
-  // console.log("Country List:", countryList);
+  const countryList:CountryList = countryCodes.customList('countryCode' as any, '[{countryCode}] +{countryCallingCode}');
+
+  const getSelectedCountryCode = () => {
+    const selectedCountryCode = defaultContact?.phone?.countryCode || '+672'; // Set a default value if not available
+    const selectedCode = Object.entries(countryList).find(([key, value]) => value.includes(selectedCountryCode));
+    return selectedCode ? selectedCode[0] : '';
+  };
 
   const {
     register,
@@ -48,13 +56,14 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
     try {
 
       // Extracting only the numeric part from the countryCode
-      const countryCodeNumber = data.countryCode.split(' ')[1];
+      const selectedCountryCode = data.countryCode;
+      const selectedCountryCallingCode = countryList[selectedCountryCode].replace(`[${selectedCountryCode}] +`, '+');
 
       const userData = {
         contact: {
           type: 'string', // Update type based on your schema
           phone: {
-            countryCode: countryCodeNumber, // Sending only the numeric part of the country code
+            countryCode: selectedCountryCallingCode, 
             number: data.contact,
           },
         },
@@ -71,7 +80,6 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
 
       console.log("Submitted Data:", userData);
       console.log("User ID:", userId);
-      console.log("Access token:", accessToken);
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/contact/${userId}`;
 
@@ -114,30 +122,28 @@ const UpdateContact: React.FC<UpdateProps> = ({userData}) => {
         <div>
           {/* <label htmlFor="countryCode">Country Code:</label> */}
           <Controller
-            name="countryCode"
-            control={control}
-            defaultValue={defaultContact?.phone?.countryCode || ''}
-            render={({ field }) => (
-              <select id="countryCode" {...field} className={styles.countrySelect}>
-                {Object.keys(countryList).map((code) => (
-                  <option key={code} value={code.split(' ')[1]}>
-                    {countryList[code]}
-                  </option>
-                ))}
-              </select>
-            )}
-          />
+              name="countryCode"
+              control={control}
+              defaultValue={getSelectedCountryCode()}
+              render={({ field }) => (
+                <select id="countryCode" {...field} className={styles.countrySelect}>
+                  {Object.entries(countryList).map(([code, label]) => (
+                    <option key={code} value={code}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
 
         </div>
 
-        <>
             <input 
               {...register("contact")} 
               id="contact" 
               defaultValue={defaultContact?.phone?.number || ''}
               className={styles.contactinput} 
             />
-        </>
 
       </div>
         
