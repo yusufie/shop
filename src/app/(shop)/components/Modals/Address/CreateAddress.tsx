@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "@/stores/userStore";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,7 +20,9 @@ interface UpdateProps {
 }
 
 const CreateAddress: React.FC<UpdateProps> = ({ userData, onClose }) => {
+
   const userStore = useUserStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   console.log("User Data:", userData);
 
@@ -31,7 +33,10 @@ const CreateAddress: React.FC<UpdateProps> = ({ userData, onClose }) => {
   } = useForm<FormValues>();
 
   const onSubmit = async (data: FormValues) => {
+
     try {
+      setIsSubmitting(true);
+
       const userData = {
         address: {
           alias: data.alias,
@@ -71,6 +76,8 @@ const CreateAddress: React.FC<UpdateProps> = ({ userData, onClose }) => {
       }
     } catch (error) {
       console.error("Error occurred:", error);
+    } finally {
+      setIsSubmitting(false); // Re-enable submit button
     }
   };
 
@@ -117,9 +124,18 @@ const CreateAddress: React.FC<UpdateProps> = ({ userData, onClose }) => {
             />
           </div>
 
-          <button type="submit" value="submit" className={styles.createButton}>
-            Create Address
+          <button type="submit" value="submit" disabled={isSubmitting}
+              className={`${styles.createButton} ${isSubmitting ? styles.loading : ''}`}>
+                {isSubmitting ? (
+                  <>
+                    <span className={styles.spinner} /> {/* spinner */}
+                    <span>Creating...</span> {/* while submitting */}
+                  </>
+                ) : (
+                  <span>Create Address</span>
+                )}
           </button>
+
         </form>
 
         <button onClick={onClose} className={styles.closeLogin}>x</button>

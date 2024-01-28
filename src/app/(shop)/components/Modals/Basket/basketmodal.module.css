@@ -8,7 +8,7 @@
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
   transform: translateX(100%);
-  z-index: 9999;
+  z-index: 3;
 }
 
 .open {
@@ -223,5 +223,29 @@
   border-radius: 2rem;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
+  .basketmodal {
+    width: 16rem;
+  }
+
+  .basketItem {
+    padding: 1rem 0.5rem;
+  }
+
+  .basketItemImage img {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .basketItemLeft {
+    gap: 0.25rem;
+  }
+  
+  .basketItemDetails {
+    gap: 0rem;
+  }
+
+  .modalFooter {
+    padding: 1.5rem 0.5rem;
+  }
 }

@@ -8,7 +8,7 @@
 .myOrders {
   display: flex;
   flex-direction: column;
-  width: 33.33%;
+  width: 34%;
 
   /* scroll starts */
   height: 80vh;
@@ -44,3 +44,35 @@
 }
 
 /* Scrollbar ends */
+
+/* Media queries  start */
+@media screen and (max-width: 1440px) {
+  .orders {
+    gap: 1rem;
+  }
+
+  .myOrders {  
+    padding: 2rem 0.5rem;
+  }
+
+}
+
+@media screen and (max-width: 1280px) {
+  .orders {
+    margin-bottom: 2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .orders {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .myOrders {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Media queries  end */

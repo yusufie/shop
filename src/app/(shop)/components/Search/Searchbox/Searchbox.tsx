@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from 'react';
 import { useStore } from '@/stores/SearchStore';
 import Image from 'next/image'
 import styles from './searchbox.module.css'
@@ -6,11 +7,14 @@ import styles from './searchbox.module.css'
 const Searchbox: React.FC = () => {
 
   const { setSearchQuery, searchQuery } = useStore();
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // prevent the form from reloading the page 
+    e.preventDefault(); // prevent from reloading the page 
+    setSearchQuery(inputValue);
 
-    setSearchQuery(searchQuery);
+    // Reset the input value
+    setInputValue('');
 
     // Scroll to the Filterbox component
     const filterboxElement = document.getElementById('filterbox');
@@ -20,7 +24,7 @@ const Searchbox: React.FC = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    setInputValue(e.target.value);
   };
 
   return (
@@ -30,8 +34,8 @@ const Searchbox: React.FC = () => {
             <input 
               className={styles.searchInput} 
               type="text" 
-              placeholder="Search your products from here"
-              value={searchQuery}
+              placeholder="Search your products..."
+              value={inputValue}
               onChange={handleInputChange}
             />
             <button className={styles.searchButton} type="submit">

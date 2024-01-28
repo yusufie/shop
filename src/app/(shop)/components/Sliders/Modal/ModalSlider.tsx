@@ -54,8 +54,11 @@ const responsive = {
 const ModalSlider: React.FC<ModalSliderProps> = ({ selectedProduct }) => {
 
   let deviceType = 'desktop'; // Default device type
-  // console.log(selectedProduct)
 
+  /* if selected images array has null object display default image */
+  selectedProduct.images = selectedProduct?.images?.filter((image: string) => image !== null);
+  // console.log(selectedProduct?.images)
+  
   return (
 
     <Carousel
@@ -75,7 +78,7 @@ const ModalSlider: React.FC<ModalSliderProps> = ({ selectedProduct }) => {
       itemClass="custom-carousel-item-modal "
     >
 
-    {selectedProduct.images.map((image: string, index: number) => (
+    {selectedProduct.images?.map((image: string, index: number) => (
       <div key={index} className={styles.modalslider}>
         <Image
           src={image}

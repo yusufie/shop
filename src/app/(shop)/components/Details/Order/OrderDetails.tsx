@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./OrderDetails.module.css";
+import Bag from "@/app/assets/bag.png";
+
 
 interface DetailsProps {
   selectedOrder: any;
@@ -14,7 +16,7 @@ const OrderDetails: React.FC<DetailsProps> = ({ selectedOrder }) => {
       {selectedOrder && (
         <>
           <div className={styles.detailsHeader}>
-            <h3>Order Details - {selectedOrder._id}</h3>
+            <h3>Order Details: <span>{selectedOrder._id}</span> </h3>
             <div className={styles.eye}>
               <Image
                 src="/icons/eye-green.svg"
@@ -26,12 +28,12 @@ const OrderDetails: React.FC<DetailsProps> = ({ selectedOrder }) => {
 
           <div className={styles.detailStatus}>
             <div className={styles.statusOrder}>
-              <p>Order Status :</p>
+              <p>Order Status:</p>
               <span>{selectedOrder.status}</span>
             </div>
 
             <div className={styles.statusPayment}>
-              <p>Payment Status :</p>
+              <p>Payment Status:</p>
               <span>{selectedOrder.paymentMethod}</span>
             </div>
           </div>
@@ -90,37 +92,38 @@ const OrderDetails: React.FC<DetailsProps> = ({ selectedOrder }) => {
           <div className={styles.detailsItems}>
             <table className={styles.itemsTable}>
               <thead>
-                <tr className={styles.itemsTableHeader}>
-                  <th>Product</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                </tr>
+              <tr className={styles.itemsTableHeader}>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
               </thead>
               <tbody className={styles.itemsTableBody}>
-                {selectedOrder?.products?.map((item: any) => (
+              {selectedOrder?.products?.map((item:any) => (
                   <tr key={item?._id} className={styles.itemsTableData}>
                     <td className={styles.firstDataCell}>
                       <Image
-                        src={item?.product?.images[0]}
-                        alt={item?.name} width={80} height={80}
+                          src={(item?.product?.images && item.product.images[0]) ? item.product.images[0] : Bag} // Updated check for valid image
+                          alt={item?.product?.title || 'Product image'}
+                          width={80} height={80}
                       />
 
                       <div className={styles.cellDiv}>
                         <Link href={`/products/${item?.product?._id}`}>
-                          <span className={styles.cellDivTitle}>
-                            {item?.product?.title}
-                          </span>
+            <span className={styles.cellDivTitle}>
+              {item?.product?.title}
+            </span>
                         </Link>
                         <span className={styles.cellDivPrice}>
-                          {item?.product?.price} kr
-                        </span>
+            {item?.product?.price} kr
+          </span>
                       </div>
                     </td>
 
                     <td>{item?.quantity}</td>
                     <td>{item?.price} kr</td>
                   </tr>
-                ))}
+              ))}
               </tbody>
             </table>
           </div>

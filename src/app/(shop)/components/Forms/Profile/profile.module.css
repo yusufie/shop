@@ -111,25 +111,52 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  cursor: pointer;
+
+  height: 3rem;
+  padding: 0 1.25rem;
+  margin-left: auto;
+
+  border: none;
+  border-radius: 0.375rem;
+  background-color: rgb(0, 159, 127);
+  color: #fff;
   font-weight: 600;
   line-height: 1;
-  border-radius: 0.375rem;
   outline: none;
   transition: all 0.3s ease-in-out;
-  cursor: pointer;
-  text-decoration: none;
-  user-select: none;
-  border: none;
-  padding: 0 1.25rem;
-  height: 3rem;
-  margin-left: auto;
-  color: #fff;
-  background-color: rgb(0, 159, 127);
+  z-index: 1;
 }
 
 .personal .saveButton:hover {
   background-color: rgba(1, 147, 118, 255);
+}
+
+.personal .saveButton:disabled {
+  background-color: #048e72;
+  cursor: not-allowed;
+}
+
+.saveButton.loading::after {
+  content: '';
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+/* animation for the spinner */
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
 }
 
 .emailField {
@@ -167,25 +194,52 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  cursor: pointer;
+
+  height: 3rem;
+  padding: 0 1.25rem;
+  margin-left: auto;
+  
+  border: none;
+  border-radius: 0.375rem;
+  background-color: rgb(0, 159, 127);
+  color: #fff;
   font-weight: 600;
   line-height: 1;
-  border-radius: 0.375rem;
   outline: none;
   transition: all 0.3s ease-in-out;
-  cursor: pointer;
-  text-decoration: none;
-  user-select: none;
-  border: none;
-  padding: 0 1.25rem;
-  height: 3rem;
-  margin-left: auto;
-  color: #fff;
-  background-color: rgb(0, 159, 127);
+  z-index: 1;
 }
 
 .emailField .updateButton:hover {
   background-color: rgba(1, 147, 118, 255);
+}
+
+.emailField .updateButton:disabled {
+  background-color: #048e72;
+  cursor: not-allowed;
+}
+
+.updateButton.loading::after {
+  content: '';
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+/* animation for the spinner */
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
 }
 
 .contactField {
@@ -242,10 +296,12 @@
 
 .contactField .countrySelect {
   display: flex;
-  width: 100%;
   align-items: center;
+
   padding: 0.5rem;
   height: 2.75rem;
+  width: 6rem;
+
   outline: none;
   border-radius: 0.25rem;
   border: 1px solid rgb(209, 213, 219);
@@ -261,21 +317,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  cursor: pointer;
+
+  height: 3rem;
+  padding: 0 1.25rem;
+  margin-left: auto;
+ 
+  border: none;
+  border-radius: 0.375rem;
+  background-color: rgb(0, 159, 127);
+  color: #fff;
   font-weight: 600;
   line-height: 1;
-  border-radius: 0.375rem;
   outline: none;
   transition: all 0.3s ease-in-out;
-  cursor: pointer;
-  text-decoration: none;
-  user-select: none;
-  border: none;
-  padding: 0 1.25rem;
-  height: 3rem;
-  margin-left: auto;
-  color: #fff;
-  background-color: rgb(0, 159, 127);
+  z-index: 1;
 }
 
 .contactField .updateButton:hover {
@@ -406,8 +462,41 @@
   background-color: rgb(0, 159, 127);
   color: #fff;
   transition: all 0.3s ease-in-out;
+  z-index: 1;
 }
 
 .updateButton:hover {
   background-color: rgba(1, 147, 118, 255);
 }
+
+/* media queries start */
+
+@media screen and (max-width: 1280px) {
+  .profile {
+    gap: 1.5rem;
+  }
+
+  .addressField {
+    padding: 2rem 2rem;
+  }
+}
+
+@media screen and (max-width: 725px) {
+  .personal {
+    padding: 1rem 1rem;
+  }
+
+  .emailField {
+    padding: 1rem 1rem;
+  }
+
+  .contactField {
+    padding: 1rem 1rem;
+  }
+
+  .addressField {
+    padding: 1rem 1rem;
+  }
+}
+
+/* media queries end */

@@ -1,0 +1,74 @@
+.skeleton_cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  background-color: rgb(243, 244, 246);
+}
+
+.skeleton_card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+
+  gap: 1rem;
+  height: 24rem;
+
+  border-radius: 0.4rem;
+  border: 1px solid rgb(229, 231, 235);
+  background-color: #fff; /* for the skeleton */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  animation: loading 1.5s infinite; /* Add a loading animation */
+}
+
+.skeleton_cardImage {
+  width: 100%;
+  height: 13.5rem;
+  border-radius: 0.4rem;
+  background-color: rgb(246, 246, 246); /*for the skeleton */
+}
+
+.skeleton_cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.skeleton_cardPrice {
+  width: 20%;
+  height: 1.25rem;
+  border-radius: 0.4rem;
+  background-color: rgb(229, 231, 235); /*for the skeleton */
+}
+
+.skeleton_cardTitle {
+  width: 60%;
+  height: 1rem;
+  border-radius: 0.4rem;
+  background-color: rgb(229, 231, 235); /*for the skeleton */
+}
+
+.skeleton_beforeButton {
+  width: 100%;
+  height: 2.25rem;
+  border-radius: 0.4rem;
+  background-color: rgb(229, 231, 235); /* for the skeleton */
+}
+
+/* Add keyframe animation for the loading effect */
+@keyframes loading {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}

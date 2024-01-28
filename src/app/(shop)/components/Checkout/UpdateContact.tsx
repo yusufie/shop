@@ -27,7 +27,7 @@ const Contact: React.FC<UpdateProps> = ({ userData }) => {
 
   // Destructuring user data for contact
   const contact = userData.contact[0];
-  const defaultContact = contact.phone.number;
+  const defaultContact = contact?.phone.number;
   
   console.log("contact", contact);
   console.log("defaultContact:", defaultContact);

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Fruits & Vegetables",
+    "contents": ["Fruits", "Vegetables"],
+    "image": "/icons/apple.svg"
+  },
+  {
+    "id": 2,
+    "title": "Meat & Fish",
+    "contents": ["Fresh Fish", "Meat"],
+    "image": "/icons/meat.svg"
+  },
+  {
+    "id": 3,
+    "title": "Snacks",
+    "contents": [ "Nuts & Biscuits", "Chocolates", "Crips", "Noodles & Pasta", "Sauce", "Soup" ],
+    "image": "/icons/coffee.svg"
+  },
+  {
+    "id": 4,
+    "title": "Pet Care",
+    "contents": ["Cat Food", "Dog Food", "Accessories"],
+    "image": "/icons/feed.svg"
+  },
+  {
+    "id": 5,
+    "title": "Home & Cleaning",
+    "contents": [ "Air Freshener", "Cleaning Products", "Kitchen Accessories", "Laundry" ],
+    "image": "/icons/spray.svg"
+  },
+  {
+    "id": 6,
+    "title": "Dairy",
+    "contents": ["Milk", "Butter", "Egg", "Yogurt"],
+    "image": "/icons/bottle.svg"
+  },
+  {
+    "id": 7,
+    "title": "Cooking",
+    "contents": ["Oil", "Rice", "Salt & Sugar", "Spices"],
+    "image": "/icons/pan.svg"
+  },
+  {
+    "id": 8,
+    "title": "Breakfast",
+    "contents": ["Bread", "Cereal", "Jam"],
+    "image": "/icons/cake.svg"
+  },
+  {
+    "id": 9,
+    "title": "Beverage",
+    "contents": ["Coffee", "Energy Drinks", "Juice", "Fizzy Drinks", "Tea"],
+    "image": "/icons/goblet.svg"
+  },
+  {
+    "id": 10,
+    "title": "Health & Beauty",
+    "contents": [ "Bath", "Cream", "Deodorant", "Face Care", "Oral Care", "Shaving Needs" ],
+    "image": "/icons/mirror.svg"
+  }
+]

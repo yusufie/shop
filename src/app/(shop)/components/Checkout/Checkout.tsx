@@ -12,10 +12,13 @@ import useDeliveryStore from "@/stores/deliveryStore";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
-import BillDeleteModal from "../Modals/Checkout/BillingAdresss/BillDeleteModal";
-import BillUpdateModal from "../Modals/Checkout/BillingAdresss/BillUpdateModal";
+import LoadingModal from "@/app/(shop)/components/Modals/Loading/LoadingModal";
+import BillDeleteModal from "@/app/(shop)/components/Modals/Checkout/BillingAdresss/BillDeleteModal";
+import BillUpdateModal from "@/app/(shop)/components/Modals/Checkout/BillingAdresss/BillUpdateModal";
 import UpdateContact from "./UpdateContact";
 import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
+import Bag from "@/app/assets/bag.png";
+
 
 interface User {
   _id: string;
@@ -41,21 +44,21 @@ const Checkout: React.FC = () => {
   const { user } = useUserStore();
   const userStore = useUserStore();
   const router = useRouter();
+  const [userId, setUserId] = useState<string | undefined>();
 
   const deliverySchedule = useDeliveryStore((state) =>
     state.getDeliverySchedule()
   );
 
+
   useEffect(() => {
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const userData: User = JSON.parse(userString);
+      setUserId(userData._id);
+    }
     // console.log("Delivery schedule updated:", deliverySchedule);
   }, [deliverySchedule]);
-  // *!!!-------------------------------------GET USER---------------------------------------!!!!*
-  const userString = localStorage.getItem("user");
-  let userId: string | undefined;
-  if (userString) {
-    const userData: User = JSON.parse(userString);
-    userId = userData._id;
-  }
 
   const {
     data: datas,
@@ -88,7 +91,7 @@ const Checkout: React.FC = () => {
   }
 
   if (error) return <div>Loading failed</div>;
-  if (!datas) return <div>Loading...</div>;
+  if (!datas) return <LoadingModal />;
   mutate(datas);
 
   // Use filter with the correct type for item
@@ -101,6 +104,45 @@ const Checkout: React.FC = () => {
 
   // slice  the userMaches addresses array to get the first item
   const firstAddress = userMatches.addresses.slice(0, 1);
+  // *!!---------------GET PRODUCTS------------------------!*
+  // const products = product.map((item) => ({
+  // product: item._id,
+  // addedItemCounts: addedItemCounts[item._id],
+  // }));
+  // console.log(products);
+
+  //  Warn if addedItemCounts is greater than stock according to current stock status
+  // const fetchApi = async () => {
+  // const accessToken = localStorage.getItem("accessToken");
+  // if (!accessToken) {
+  // throw new Error("Access token not found");
+  // }
+
+  // try {
+  // // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/products/${product[0]._id}`,
+  // {
+  // method: "GET",
+  // headers: {
+  // Authorization: `Bearer ${accessToken}`,
+  // },
+  // }
+  // );
+
+  // if (!response.ok) {
+  // throw new Error(`HTTP error! Status: ${response.status}`);
+  // }
+
+  // const responseData = await response.json();
+  // setResponseData(responseData);
+  // console.log("Product data:", responseData);
+  // } catch (error) {
+  // console.error("Error fetching product:", error.message);
+  // Handle the error
+  // }
+
+  // }
+  // fetchApi()
+  //
 
   // *!!!111!------------------------------POST FUNCTİON------------------!!!!*
 
@@ -121,14 +163,14 @@ const Checkout: React.FC = () => {
       coupon: null,
       discount: 0,
       contact:
-        userMatches?.contact?.length > 0
-          ? userMatches.contact.map((contactItem: any, contactIndex: any) => ({
-              phone: {
-                countryCode: contactItem.phone.countryCode,
-                number: contactItem.phone.number,
-              },
-            }))
-          : [],
+          userMatches?.contact?.length > 0
+              ? userMatches.contact.map((contactItem:any) => ({
+                phone: contactItem.phone ? {
+                  countryCode: contactItem?.phone.countryCode,
+                  number: contactItem?.phone.number,
+                } : null,
+              }))
+              : [],
 
       billingAddress: {
         alias: addressIdsTo[0].alias,
@@ -304,7 +346,7 @@ const Checkout: React.FC = () => {
             <div className={styles.shippingHeader}>
               <div>
                 <span className={styles.serial}>3</span>
-                <span className={styles.title}>Shipping Address</span>
+                <span className={styles.title}>Shiping Address</span>
               </div>
             </div>
             <div className={styles.map}>
@@ -365,7 +407,7 @@ const Checkout: React.FC = () => {
             <div className={styles.deliveryHeader}>
               <div>
                 <span className={styles.serial}>4</span>
-                <span className={styles.title}>Delivery Schedule</span>
+                <span className={styles.title}>Delivery Schdule</span>
               </div>
             </div>
             <div className={styles.deliveryInput}>
@@ -452,42 +494,43 @@ const Checkout: React.FC = () => {
           <div className={styles.modalBody}>
             <h1 className={styles.modalTitle}>Your Order</h1>
             {product.length === 0 ? (
-              <div className={styles.emptyBag}>
-                <Image
-                  src="/images/carrier.png"
-                  alt="carrier"
-                  width={140}
-                  height={176}
-                />
-                <span>No products found</span>
-              </div>
-            ) : (
-              product.map((item: any) => (
-                <div className={styles.basketItems} key={item._id}>
-                  <div className={styles.basketItemLefts}>
-                    <span className={styles.basketItemQuantityValue}>
-                      {addedItemCounts[item._id]} x
-                    </span>
-
-                    <div className={styles.basketItemImage}>
-                      <Image
-                        src={item.images[0]}
-                        alt={item.name}
-                        width={80}
-                        height={80}
-                      />
-                    </div>
-                    <div className={styles.basketItemDetails}>
-                      <p className={styles.basketItemName}>{item.title}</p>
-                      <span className={styles.basketItemPrice}>
-                        {item.price} kr
-                      </span>
-                    </div>
-                  </div>
+                <div className={styles.emptyBag}>
+                  <Image
+                      src="/images/carrier.png"
+                      alt="carrier"
+                      width={140}
+                      height={176}
+                  />
+                  <span>No products found</span>
                 </div>
-              ))
+            ) : (
+                product.map((item: any) => (
+                    <div className={styles.basketItems} key={item._id}>
+                      <div className={styles.basketItemLefts}>
+          <span className={styles.basketItemQuantityValue}>
+            {addedItemCounts[item._id]} x
+          </span>
+
+                        <div className={styles.basketItemImage}>
+                          <Image
+                              src={item.images && item.images[0] ? item.images[0] : Bag} // Replace with your default image path
+                              alt={item.name || "Product image"}
+                              width={80}
+                              height={80}
+                          />
+                        </div>
+                        <div className={styles.basketItemDetails}>
+                          <p className={styles.basketItemName}>{item.title}</p>
+                          <span className={styles.basketItemPrice}>
+              {item.price} kr
+            </span>
+                        </div>
+                      </div>
+                    </div>
+                ))
             )}
           </div>
+
 
           <div className={styles.modalFooter}>
             <strong> SubTotal</strong>
@@ -513,35 +556,35 @@ const Checkout: React.FC = () => {
         </div>
 
         {isBillUpdateModalOpen && (
-          <BillUpdateModal
-            onClose={handleBillModalClose}
-            selectedAddressId={selectedAddressId}
-            contactItem={contactItem}
-          />
+            <BillUpdateModal
+                onClose={handleBillModalClose}
+                selectedAddressId={selectedAddressId}
+                contactItem={contactItem}
+            />
         )}
 
         {isShipUpdateModalOpen && (
-          <ShipUpdateModal
-            onClose={handleShipModalClose}
-            selectedAddressId={selectedAddressId}
-            contactItem={contactItem}
-          />
+            <ShipUpdateModal
+                onClose={handleShipModalClose}
+                selectedAddressId={selectedAddressId}
+                contactItem={contactItem}
+            />
         )}
         {isBillDeleteModalOpen && (
-          <BillDeleteModal
-            onClose={handleBillDeleteClose}
-            selectedAddressId={selectedAddressId}
-          />
+            <BillDeleteModal
+                onClose={handleBillDeleteClose}
+                selectedAddressId={selectedAddressId}
+            />
         )}
 
         {isShipDeleteModalOpen && (
-          <ShipDeleteModal
-            onClose={handleShipDeleteClose}
-            selectedAddressId={selectedAddressId}
-          />
+            <ShipDeleteModal
+                onClose={handleShipDeleteClose}
+                selectedAddressId={selectedAddressId}
+            />
         )}
       </section>
-      <ToastContainer />
+      <ToastContainer/>
     </>
   );
 };

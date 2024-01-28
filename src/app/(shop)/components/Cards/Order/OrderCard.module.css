@@ -53,3 +53,22 @@
   width: 10rem;
   text-align: end;
 }
+
+
+/* Media queries  start */
+@media screen and (max-width: 1440px) {
+  .ordersCard {  
+    padding: 0.25rem 0.75rem 1rem 0.75rem ;
+  }
+
+}
+
+@media screen and (max-width: 1280px) {
+  .ordersCard {
+    padding: 0.25rem 0.5rem 1rem 0.5rem ;
+    font-size: 0.875rem;
+  }
+  
+}
+
+/* Media queries  end */

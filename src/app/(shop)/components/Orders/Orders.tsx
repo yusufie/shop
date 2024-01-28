@@ -7,6 +7,7 @@ import OrderCard from "@/app/(shop)/components/Cards/Order/OrderCard";
 import OrderDetails from "@/app/(shop)/components/Details/Order/OrderDetails";
 import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
 import styles from "./orders.module.css";
+import CardLoading from '../Modals/Loading/CardLoading';
 
 const fetcher = async (url: string, accessToken: string | null) => {
   const res = await fetch(url, {
@@ -51,18 +52,16 @@ const Orders: React.FC = () => {
 
   if (error) return <div>failed to load</div>;
   // orderData will be undefined initially and will be updated once data is fetched
-  if (!orderData) return <div>loading...</div>;
+  if (!orderData) return <CardLoading/>;
 
   const handleOrderDetails = (order: any) => {
     setSelectedOrder(order);
   };
 
-//   console.log("Order data:", orderData);
-
   return (
     <section className={styles.orders}>
       <div className={styles.myOrders}>
-        <h2>My Orders</h2>
+        <h3>My Orders</h3>
         {orderData?.map((order: any) => (
           <OrderCard
             key={order?._id}

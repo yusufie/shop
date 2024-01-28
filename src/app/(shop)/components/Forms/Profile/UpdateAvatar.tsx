@@ -42,7 +42,7 @@ const UpdateAvatar: React.FC<UpdateProps> = ({ userData }) => {
       }
 
       const data = await response.json();
-      return data.result.url; // Return the uploaded image URL
+      return data.url; // Return the uploaded image URL
     } catch (error) {
       console.error("Error occurred during image upload", error);
       toast.error("Image upload failed. Please try again.");

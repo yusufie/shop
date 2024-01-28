@@ -5,6 +5,9 @@ import useBasketStore from '@/stores/basketStore';
 import Image from 'next/image';
 import animateFlyImage from '@/utils/animation';
 import styles from './productcard.module.css'
+import Bag from "@/app/assets/bag.png";
+import {images} from "next/dist/build/webpack/config/blocks/images";
+
 
 type ProductCardProps = {
   data: any;
@@ -35,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
 
     const flyImage = document.createElement('div');
     flyImage.classList.add(styles.flyImage);
-    flyImage.style.backgroundImage = `url(${data.images[0]})`;
+    flyImage.style.backgroundImage = `url(${data?.images[0] ? data?.images[0] : '/images/bag.png'})`;
     document.body.appendChild(flyImage);
 
     const cardRect = e.currentTarget.parentElement.parentElement.getBoundingClientRect();
@@ -44,22 +47,31 @@ const ProductCard: React.FC<ProductCardProps> = ({ data, handleProductModal }) =
   };
 
   return (
-    <div className={styles.card} key={data._id}>
+    <div className={styles.card} key={data?._id}>
       <div
         className={styles.cardImage}
         onClick={() => handleProductModal(data._id)}
         onKeyDown={() => handleProductModal(data._id)}
       >
-        <Image src={data.images[0]} alt={data.name} width={216} height={216} />
-        {showImage && addedItem?._id === data._id && (
+        <Image 
+          src={data?.images && data?.images[0] ? data?.images[0] : Bag}
+          alt={data?.name ? data.name : "image"} width={216} height={216} 
+        />
+
+        {showImage && addedItem?._id === data?._id && (
           <div className={styles.flyImage}>
-            <Image src={data.images[0]} alt={data.name} width={112} height={112} />
+            <Image 
+              src={data?.images[0] ? data?.images[0] : '/images/bag.png'} 
+              alt={data?.name ? data.name : "image"} width={112} height={112} 
+            />
           </div>
         )}
+
       </div>
+      
       <div className={styles.cardContent}>
-        <span className={styles.cardPrice}>{data.price} kr</span>
-        <p>{data.title}</p>
+        <span className={styles.cardPrice}>{data?.price ? data.price : "0"} kr</span>
+        <p>{data?.title ? data.title : "title"}</p>
 
         {data.stock > 0 ? (
         !addedItemCounts[data._id] ? (

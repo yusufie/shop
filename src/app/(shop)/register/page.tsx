@@ -42,10 +42,9 @@ const RegisterPage = () => {
           <div className={styles.modalContent}>
             <Image
               className={styles.logo}
-              src={"/images/logo.png"}
+              src={"/images/grand.png"}
               alt="logo"
-              width={160}
-              height={26}
+              width={163} height={45}
             />
             <p>Login to admin</p>
             <form action="">
@@ -84,10 +83,9 @@ const RegisterPage = () => {
           <div className={styles.modalContent}>
             <Image
               className={styles.logo}
-              src={"/images/logo.png"}
+              src={"/images/grand.png"}
               alt="logo"
-              width={160}
-              height={26}
+              width={163} height={45}
             />
             <p>Register new account</p>
             <form action="">
@@ -122,10 +120,9 @@ const RegisterPage = () => {
           <div className={styles.modalContent}>
             <Image
               className={styles.logo}
-              src={"/images/logo.png"}
+              src={"/images/grand.png"}
               alt="logo"
-              width={160}
-              height={26}
+              width={163} height={45}
             />
             <p>Forgot password</p>
             <form action="">

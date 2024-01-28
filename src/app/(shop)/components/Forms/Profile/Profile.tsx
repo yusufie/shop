@@ -2,6 +2,7 @@
 import { useUserStore } from "@/stores/userStore";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
+
 import UpdateAvatar from "@/app/(shop)/components/Forms/Profile/UpdateAvatar";
 import UpdateName from "@/app/(shop)/components/Forms/Profile/UpdateName";
 import UpdateEmail from "@/app/(shop)/components/Forms/Profile/UpdateEmail";
@@ -9,6 +10,7 @@ import UpdateContact from "@/app/(shop)/components/Forms/Profile/UpdateContact";
 import UpdateAddress from "@/app/(shop)/components/Forms/Profile/UpdateAddress";
 import AuthModal from "@/app/(shop)/components/Modals/Authorization/AuthModal";
 import styles from "./profile.module.css";
+import CardLoading from "../../Modals/Loading/CardLoading";
 
 const fetcher = async (url: string, accessToken: string | null) => {
   const res = await fetch(url, {
@@ -44,9 +46,7 @@ const Profile: React.FC = () => {
 
   if (error) return <div>failed to load</div>;
   // userData will be undefined initially and will be updated once data is fetched
-  if (!userData) return <div>loading...</div>;
-
-  // console.log("User data:", userData);
+  if (!userData) return <CardLoading />;
 
   return (
     <section className={styles.profile}>

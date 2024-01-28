@@ -10,7 +10,7 @@
   padding: 0 2rem;
   z-index: 3;
   background-color: #fff;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .headerScrolled {
@@ -37,10 +37,14 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+
+  width: 15rem;
+  max-width: 100%;
+  padding: 0.75rem 1rem;
+
   background-color: transparent;
   border: 1px solid lightgray;
   border-radius: 0.4rem;
-  padding: 0.75rem 1rem;
   cursor: pointer;
 }
 
@@ -49,6 +53,11 @@
   font-weight: bold;
   font-size: 1rem;
   margin-right: 1rem;
+
+  /* ellipsis when it overflows the width */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .right {
@@ -112,16 +121,23 @@
 /* media query */
 
 @media screen and (max-width: 1280px) {
+  .header {
+    z-index: 2;
+  }
+
   .left .selection {
     display: none;
+  }
+
+  .right {
+    gap: 1rem;
   }
 }
 
 @media screen and (max-width: 1024px) {
   .header {
-    height: 7rem;
+    height: 9rem;
     background-color: #fff;
-    z-index: 2;
   }
 
   .right {

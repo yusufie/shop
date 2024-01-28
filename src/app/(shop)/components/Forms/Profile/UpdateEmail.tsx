@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { registerSchema } from '@/utils/formSchema'
@@ -19,6 +19,7 @@ interface UpdateProps {
 const UpdateEmail: React.FC<UpdateProps> = ({userData}) => {
 
   const userStore = useUserStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Destructuring user data for email
   const { email = "" } = userData || {};
@@ -33,7 +34,10 @@ const UpdateEmail: React.FC<UpdateProps> = ({userData}) => {
 
   // send data to the "/api/v1/profile/email/{userId}" route
   const onSubmit = async (data: FormValues) => {
+
     try {
+      setIsSubmitting(true);
+
       const userData = {
         email: data.email,
       };
@@ -68,6 +72,8 @@ const UpdateEmail: React.FC<UpdateProps> = ({userData}) => {
       }
     } catch (error) {
       console.error("Error occurred:", error);
+    } finally {
+      setIsSubmitting(false); // Re-enable submit button
     }
   };
 
@@ -85,7 +91,17 @@ const UpdateEmail: React.FC<UpdateProps> = ({userData}) => {
             />
         </div>
 
-        <button type="submit" value="submit" className={styles.updateButton}>Update</button>
+        <button type="submit" value="submit" disabled={isSubmitting}
+            className={`${styles.updateButton} ${isSubmitting ? styles.loading : ''}`}>
+              {isSubmitting ? (
+                <>
+                  <span className={styles.spinner} /> {/* spinner */}
+                  <span>Updating...</span> {/* while submitting */}
+                </>
+              ) : (
+                <span>Update</span>
+              )}
+        </button>
 
     </form>
     <ToastContainer />

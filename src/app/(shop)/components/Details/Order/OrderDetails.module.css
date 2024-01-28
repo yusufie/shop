@@ -1,7 +1,7 @@
 .orderDetails {
   display: flex;
   flex-direction: column;
-  width: 66.66%;
+  width: 66%;
 
   border-radius: 0.3rem;
   border: 1px solid rgb(229, 231, 235);
@@ -36,7 +36,7 @@
   color: rgb(31, 41, 55);
 }
 
-.detailsHeader span {
+.eye span {
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -48,6 +48,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
@@ -292,3 +293,86 @@
   line-height: 1.25rem;
   color: rgb(0, 159, 127);
 }
+
+
+/* media queries start */
+
+@media screen and (max-width: 1280px) {
+  .statusOrder {
+    gap: 0.5rem;
+  }
+
+  .statusPayment {
+    gap: 0.5rem;
+  }
+
+  .detailsHeader h3 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    color: rgb(31, 41, 55);
+  }
+  
+  .detailsHeader span {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    color: rgb(31, 41, 55);
+  }
+
+  .detailsHeader .eye {
+    gap: 0.25rem;
+  }
+  
+  
+  .statusOrder p {
+    font-size: 0.9rem;
+    line-height: 0.875rem;
+    font-weight: 700;
+  }
+  
+  .statusOrder span {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 0.875rem;
+    font-weight: 700;
+  }
+
+  
+  .statusPayment p {
+    font-size: 0.9rem;
+    line-height: 0.875rem;
+    font-weight: 700;
+  }
+  
+  .statusPayment span {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 0.875rem;
+    font-weight: 700;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .orderDetails {
+    width: 100%;
+  }
+
+  .detailsInfo {
+    flex-direction: column;
+  }
+
+  .addressInfo {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgb(229, 231, 235);
+  }
+
+  .calculateInfo {
+    width: 100%;
+  }
+
+}
+
+/* media queries end */

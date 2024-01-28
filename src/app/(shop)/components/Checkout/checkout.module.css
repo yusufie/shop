@@ -51,6 +51,7 @@
   font-size: 1.5rem;
   line-height: 1.75rem;
   color: rgb(31, 41, 55);
+  width: 8rem;
 }
 
 .checkoutInfo .updateButton {
@@ -61,6 +62,7 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: rgb(0, 159, 127);
+  border: 2px solid red;
 }
 
 .checkoutInfo .contact {
@@ -72,6 +74,7 @@
   padding: 2rem;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 16px;
   background-color: rgb(255, 255, 255);
+  border: 2px solid red;
 }
 
 .contact .contactHeader {
@@ -408,6 +411,14 @@
   .checkout {
     flex-direction: column;
   }
+  .checkoutInfo .title {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: rgb(31, 41, 55);
+    /* border: 2px solid red; */
+    width: 5rem;
+  }
 
   .checkoutCalculate {
     display: flex;
@@ -421,6 +432,15 @@
     display: flex;
     gap: 10rem;
     flex-wrap: wrap;
+  }
+  .delivery .deliveryInput {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    /* border: 2px solid red; */
   }
 }
 
@@ -523,7 +543,7 @@
   font-weight: 800;
   color: rgb(31, 41, 55);
 }
-.modalFooter{
+.modalFooter {
   display: flex;
   justify-content: space-between;
   padding: 1rem;

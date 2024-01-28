@@ -26,10 +26,12 @@
   width: 100%;
 }
 
-.contactHeader p {
-  font-size: 1.25rem;
+.contactHeader .title {
+  font-weight: 500;
+  font-size: 1.5rem;
   line-height: 1.75rem;
   color: rgb(31, 41, 55);
+  width: 8rem;
 }
 
 .contactField .contactinput {
@@ -105,38 +107,10 @@
   background-color: transparent;
   color: rgb(0, 159, 127);
   cursor: pointer;
+  margin-top: 0;
 }
 
 /* !!*---------Checkout------------*!! */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .serial {
   display: inline-flex;
@@ -516,18 +490,26 @@
   .checkout {
     flex-direction: column;
   }
-
-  .checkoutCalculate {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 42rem;
-    width: 100%;
-    margin: 0 auto;
+  .contactHeader .title {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    color: rgb(31, 41, 55);
+    /* border: 2px solid red; */
+    width: 5rem;
   }
-  .map {
+  .addButton {
     display: flex;
-    gap: 10rem;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 600;
+    line-height: 1;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: rgb(0, 159, 127);
+    cursor: pointer;
+    margin-top: 0.5rem;
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from 'react-hook-form';
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { registerSchema } from '@/utils/formSchema'
@@ -20,6 +20,7 @@ interface UpdateProps {
 const UpdateName: React.FC<UpdateProps> = ({userData}) => {
 
   const userStore = useUserStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Destructuring user data for first name and last name
   const { firstName = '', lastName = '' } = userData || {};
@@ -36,6 +37,7 @@ const UpdateName: React.FC<UpdateProps> = ({userData}) => {
   const onSubmit = async (data: FormValues,) => {
 
     try {
+      setIsSubmitting(true);
 
       const userData = {
         firstName: data.firstName,
@@ -68,6 +70,8 @@ const UpdateName: React.FC<UpdateProps> = ({userData}) => {
       }
     } catch (error) {
       console.error('Error occurred:', error);
+    } finally {
+      setIsSubmitting(false); // Re-enable submit button
     }
   };
 
@@ -97,8 +101,16 @@ const UpdateName: React.FC<UpdateProps> = ({userData}) => {
                 {/* {errors.lastName && <span>{errors.lastName.message}</span>} */}
             </div>
 
-            <button type="submit" value="submit" className={styles.saveButton}>
-              Update
+            <button type="submit" value="submit" disabled={isSubmitting}
+              className={`${styles.saveButton} ${isSubmitting ? styles.loading : ''}`}>
+                {isSubmitting ? (
+                  <>
+                    <span className={styles.spinner} /> {/* spinner */}
+                    <span>Updating...</span> {/* while submitting */}
+                  </>
+                ) : (
+                  <span>Update</span>
+                )}
             </button>
 
         </form>

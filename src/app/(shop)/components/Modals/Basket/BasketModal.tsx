@@ -2,6 +2,7 @@ import useBasketStore from "@/stores/basketStore";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./basketmodal.module.css";
+import Bag from "@/app/assets/bag.png";
 
 interface BasketModalProps {
   onClose: () => void;
@@ -68,17 +69,22 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
                     </button>
                   </div>
 
-                  <div className={styles.basketItemImage}>
-                    <Image src={item.images[0]} alt={item.name} width={80} height={80} />
-                  </div>
+                    <div className={styles.basketItemImage}>
+                        <Image
+                            src={(item.images && item.images[0]) ? item.images[0] : Bag} // Check if item.images[0] is truthy
+                            alt={item.name || "Product image"}
+                            width={80}
+                            height={80}
+                        />
+                    </div>
 
-                  <div className={styles.basketItemDetails}>
-                    <p className={styles.basketItemName}>{item.name}</p>
-                    <span className={styles.basketItemPrice}>{item.price} kr </span>
-                  </div>
+                    <div className={styles.basketItemDetails}>
+                        <p className={styles.basketItemName}>{item.name}</p>
+                        <span className={styles.basketItemPrice}>{item.price} kr </span>
+                    </div>
                 </div>
-                
-                <div className={styles.basketItemRight}>
+
+                  <div className={styles.basketItemRight}>
 
                   <div className={styles.basketItemTotal}>
                     <span className={styles.basketItemTotalPrice}>

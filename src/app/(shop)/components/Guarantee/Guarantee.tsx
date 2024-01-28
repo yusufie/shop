@@ -6,7 +6,7 @@ const Guarantee: React.FC = () => {
   return (
     <section className={styles.guarantee} >
 
-      <div className={styles.guaranteeCard}>
+      <div className={styles.guaranteeBody}>
 
         <div className={styles.guaranteeHeader}>
           <Link href={'/'}>
@@ -14,8 +14,28 @@ const Guarantee: React.FC = () => {
           </Link>
         </div>
 
-        <div className={styles.guaranteeBody}>
-          <Image src="/images/guarantee.webp" alt="guarantee" width={1024} height={384} />
+        <div className={styles.guaranteeCards}>
+
+          <div className={styles.guaranteeCard}>
+            <Image src="/images/guarantee-1.png" alt="guarantee" width={125} height={80} />
+            <span className={styles.cardText}>Grand Bazaar - Norges storste utvalg av matvarer</span>
+          </div>
+
+          <div className={styles.guaranteeCard}>
+            <Image src="/images/guarantee-2.png" alt="guarantee" width={125} height={80} />
+            <span className={styles.cardText}>Alltid ferskest</span>
+          </div>
+
+          <div className={styles.guaranteeCard}>
+            <Image src="/images/guarantee-3.png" alt="guarantee" width={125} height={80} />
+            <span className={styles.cardText}>Vare beste priser</span>
+          </div>
+
+          <div className={styles.guaranteeCard}>
+            <Image src="/images/guarantee-4.png" alt="guarantee" width={125} height={80} />
+            <span className={styles.cardText}>Alltid punktlig</span>
+          </div>
+
         </div>
 
         <div className={styles.guaranteeFooter} >

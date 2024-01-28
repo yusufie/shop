@@ -40,3 +40,23 @@
 .pointsBody .values:last-child {
   border-right: none;
 }
+
+
+/* Media queries  start */
+@media screen and (max-width: 1440px) {
+  .pointsContainer {
+    width: 19rem;
+    padding: 2rem 2rem;
+  }
+
+}
+
+@media screen and (max-width: 1280px) {
+  .pointsContainer {
+    width: 18rem;
+    padding: 2rem 1.5rem;
+  }
+
+}
+
+/* Media queries  end */

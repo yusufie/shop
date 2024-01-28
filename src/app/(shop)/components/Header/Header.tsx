@@ -1,16 +1,19 @@
 "use client"
-import React, { useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import { usePathname, useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/userStore';
+import Image from 'next/image'
+import Link from 'next/link';
+
 import Navmenu from '@/app/(shop)/components/Dropdowns/Navmenu/Navmenu';
 import Profilemenu from '@/app/(shop)/components/Dropdowns/Profilemenu/Profilemenu';
 import AuthModal from '@/app/(shop)/components/Modals/Authorization/AuthModal';
-import Image from 'next/image'
-import Link from 'next/link';
-import styles from './header.module.css'
 import Searchbar from '@/app/(shop)/components/Search/Searchbar/Searchbar';
+import GoogleTranslate from '@/utils/GoogleTranslate';
+import styles from './header.module.css'
 
 const Header: React.FC = () => {
+  const navMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const userStore = useUserStore();
 
@@ -22,6 +25,25 @@ const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 
   const route = useRouter();
+
+
+  
+
+  useEffect(() => {
+    const handleClickOutside = (event:any) => {
+      if (navMenuRef.current && !navMenuRef.current.contains(event.target)) {
+        setShowNavmenu(false);
+      }
+    };
+
+    // Attach the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      // Clean up the event listener
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [navMenuRef]);
 
   const handleScroll = () => {
     if (window.scrollY > 300) {
@@ -92,6 +114,7 @@ const Header: React.FC = () => {
 
         <Searchbar />
 
+
       </div>
 
       <div className={styles.right}>
@@ -112,6 +135,8 @@ const Header: React.FC = () => {
           <button className={styles.pageButton}><span>Contact</span></button>
         </Link>
 
+        <GoogleTranslate />
+        
         {userStore.isLoggedIn && (
           <>
             {userStore.user?.role === 'ADMIN' && (
@@ -145,7 +170,7 @@ const Header: React.FC = () => {
 
       </div>
 
-      {showNavmenu && <Navmenu handleSelection={handleSelection} selectedItem={selectedItem} />}
+      {showNavmenu && (<Navmenu ref={navMenuRef} handleSelection={handleSelection} selectedItem={selectedItem} />)}
 
       {showProfilemenu && <Profilemenu handleLogout={handleLogout} closeMenu={closeProfileMenu} />}
 

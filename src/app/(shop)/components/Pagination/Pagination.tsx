@@ -1,5 +1,7 @@
+"use client";
 import Image from "next/image";
 import styles from "./pagination.module.css";
+import { useEffect } from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -56,7 +58,14 @@ const Pagination: React.FC<PaginationProps> = ({
     }
     return buttons;
   };
+  const filterboxElement = document.getElementById('filterbox');
 
+  useEffect(() => {
+    if (filterboxElement) {
+      filterboxElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentPage, filterboxElement]);
+  
   return (
     <div className={styles.pagination}>
       {pageNumbers > 1 && (

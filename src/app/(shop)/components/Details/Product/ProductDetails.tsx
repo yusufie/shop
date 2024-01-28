@@ -4,12 +4,17 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 import Image from "next/image";
 import Link from "next/link";
+import { useUserStore } from '@/stores/userStore';
 import useBasketStore from '@/stores/basketStore';
 import useLikeStore from "@/stores/likeStore";
-import styles from "./productdetails.module.css";
+
 import DetailSlider from "../../Sliders/Detail/DetailSlider";
 import ProductCard from "@/app/(shop)/components/Cards/Product/ProductCard";
 import ProductModal from '@/app/(shop)/components/Modals/Product/ProductModal';
+import LoadingModal from "@/app/(shop)/components/Modals/Loading/LoadingModal";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import styles from "./productdetails.module.css";
 
 interface ProductDetailsProps {
     products: any;
@@ -21,13 +26,50 @@ const fetcher = (url: any) => fetch(url).then((res) => res.json());
 const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) => {
 
     const { id } = useParams();
-    const { data: responseData, error } = useSWR(process.env.NEXT_PUBLIC_API_URL+`/api/v1/products/${id}`, fetcher);
+    const { data: responseData, error: productError } = useSWR(process.env.NEXT_PUBLIC_API_URL+`/api/v1/products/${id}`, fetcher);
+    const { data: relatedProducts, error: relatedError } = useSWR(process.env.NEXT_PUBLIC_API_URL+`/api/v1/products/related/${id}`, fetcher);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const userStore = useUserStore();
     const toggleLikeProduct = useLikeStore((state) => state.toggleLikeProduct);
     const likedProducts = useLikeStore((state) => state.likedProducts);
   
-    const handleLikeProduct = (productId: string) => {
-      toggleLikeProduct(productId);
+    const handleLikeProduct = async (productId: string) => {
+        // Check if the user is logged in
+        if (!userStore?.user?._id || !userStore?.accessToken) {
+          toast.info('Please login to add products to your wishlist');
+          return;
+        }
+    
+        try {
+            setIsSubmitting(true);
+          const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/wishlist/toggle/${userStore.user?._id}`;
+    
+          const response = await fetch(apiUrl, {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${userStore.accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId }),
+          });
+    
+          if (response.ok) {
+            const responseData = await response.json();
+            // console.log('Response Data:', responseData.message);
+            toast.success(responseData.message);
+            toggleLikeProduct(productId);
+          } else {
+            console.error('Failed to update wishlist');
+            toast.error('Failed to update wishlist');
+          }
+    
+        } catch (error) {
+          console.error('Error occurred while updating wishlist:', error);
+          toast.error('Error occurred while updating wishlist');
+        } finally {
+            setIsSubmitting(false); // Re-enable submit button
+        }
     };
 
     const addItem = useBasketStore((state) => state.addItem);
@@ -58,8 +100,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
     const selectedProductId = responseData?._id;
     const selectedProduct = responseData;
 
-    if (error) return <div>failed to load</div>;
-    if (!responseData) return <div>loading...</div>;
+    if (productError) return <div>failed to load</div>;
+    if (!responseData) return <LoadingModal />;
+
+    if (relatedError) return <div>failed to load</div>;
+    if (!relatedProducts) return <LoadingModal />;
 
     // Find the selected product's category object from the categories array
     const selectedProductCategory = categories?.categories?.find((category:any) => 
@@ -71,18 +116,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
     category?._id === selectedProductCategory?.parent?._id
   );
 
-    // Extract the category ID from the selectedProduct
-    const selectedProductCategoryId = selectedProduct.category._id;
-
-    // Filter products based on the selectedProduct's category ID
-    const relatedProducts = products.products.filter((product: any) => {
-        // Extract the category ID from the product
-        const productCategoryId = product.category?._id;
-        // Check if the product's category matches the selectedProduct's category
-        return productCategoryId === selectedProductCategoryId;
-    });
-
   return (
+    <>
     <section className={styles.productdetails}>
 
         <div className={styles.detailsContent}>
@@ -106,11 +141,18 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
 
                         <h2>{responseData.title}</h2>
 
-                        <button className={styles.heartButton} onClick={() => handleLikeProduct(selectedProductId)}>
-                            <Image 
-                            src={likedProducts.includes(selectedProductId) ? '/icons/heart-filled.svg' : '/icons/heart.svg'} 
-                            alt="heart" 
-                            width={21} height={21}/>
+                        <button onClick={() => handleLikeProduct(selectedProductId)} disabled={isSubmitting}
+                            className={`${styles.heartButton} ${isSubmitting ? styles.loading : ''}`}>
+
+                            {isSubmitting ? (
+                                <>
+                                <span className={styles.spinner} /> {/* spinner */}
+                                </>
+                            ) : (
+                                <Image 
+                                src={likedProducts.includes(selectedProductId) ? '/icons/heart-filled.svg' : '/icons/heart.svg'} 
+                                alt="heart" width={21} height={21}/>
+                            )}
                         </button>
 
                     </div>
@@ -158,7 +200,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
                     </div>
 
                 </div>
-
             </div>
 
             <div className={styles.detailsMiddle} >
@@ -169,7 +210,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
             <div className={styles.detailsBottom} >
                 <h4>Related Products</h4>
                 <div className={styles.relatedGrid}>
-                    {relatedProducts.map((product:any) => (
+                    {/* if there is no related products do not render the ProductCard */}
+                    {relatedProducts?.length > 0 && relatedProducts?.map((product:any) => (
                         <ProductCard
                             key={product._id}
                             data={product}
@@ -191,6 +233,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({products, categories }) 
 
         </div>
     </section>
+    <ToastContainer />
+    </>
   );
 };
 

@@ -13,12 +13,16 @@ const NavModal: React.FC<NavModalProps> = ({onClose}) => {
 
         <div className={styles.modalTop}>
           <Link href={"/"}>
-            <Image src="/images/logo.png" alt="Bag" width={160} height={26} />
+            <Image src="/images/grand.png" alt="logo" width={163} height={45} />
           </Link>
           <button className={styles.closeButton} onClick={onClose}>x</button>
         </div>
 
         <nav className={styles.navButtons}>
+
+          <Link href={"/"}>
+            <button className={styles.navButton}>Home</button>
+          </Link>
 
           <Link href={"/offers"}>
             <button className={styles.navButton}>Offers</button>
